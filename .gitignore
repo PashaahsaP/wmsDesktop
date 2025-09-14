@@ -1,0 +1,67 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+Generated\ Files/
+*.generated.cs
+*.g.i.cs
+*_i.c
+*_p.c
+*.ilk
+*.meta
+
+# Backup & build artifacts
+*.obj
+*.pdb
+*.idb
+*.log
+*.tlog
+*.tmp
+*.cache
+*.bak
+*.exe
+*.dll
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Publish
+publish/
+*.publish.xml
+
+# Other
+_ReSharper*/
+*.resharper
+*.DotSettings.user
+
+# Rider
+.idea/
+*.sln.iml
+
+# Windows image cache
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# WPF specific
+*.g.cs
+*.baml
+*.xaml.cs
