@@ -54,3 +54,5 @@ C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\GeneratedInternalType
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\bin\Debug\Microsoft.Xaml.Behaviors.dll
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\bin\Debug\Microsoft.Xaml.Behaviors.pdb
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\Styles\Colors.baml
+C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\App.baml

@@ -7,125 +7,174 @@
         xmlns:local="clr-namespace:WmsDesktop"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
         Loaded="Window_Loaded">
     <Window.Resources>
+        
         <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
         <local:CatalogToBackgroundColorConverter x:Key="CatalogToBackgroundColorConverter"/>
     </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+            CaptionHeight="{Binding CaptionHeight}"
+            ResizeBorderThickness="{Binding ResizeBorderThickness}"
+            GlassFrameThickness="0"
+            CornerRadius="0"
+            UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
 <!--
     <Window.DataContext>
        <local:MainViewModel/>
     </Window.DataContext>
+    
+     <Border.Clip>
+     <RectangleGeometry RadiusX="10" RadiusY="10" Rect="0,0,800,450"/>
+ </Border.Clip>
     -->
-    <Grid x:Name="Main">
-        <Grid Grid.Column="1" Background="AliceBlue">
-            <TabControl>
-                <TabItem x:Name="Adding" 
-                         Header="Добавление заказа">
-                    <ScrollViewer x:Name="SWCreatingAssembly" Visibility="Visible">
-                        <StackPanel>
-                            <StackPanel 
-                                Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibilityConverter}}"
-                                x:Name="GridContainer"
-                                >
-                                <RadioButton Command="{Binding selectAtomy}" IsChecked="True">Atomy</RadioButton>
-                                <RadioButton Command="{Binding selectBork}" x:Name="radioBork" >Bork</RadioButton>
+    <!--outer border and shadow-->
+    <Border  CornerRadius="{Binding WindowRadiusCornerRadius}" 
+            Padding="{Binding OuterMarginThickness, FallbackValue=10}"   >
+       
+        <Grid   x:Name="Main">
+            
+            <Border Background="#ffffff" CornerRadius="{Binding WindowRadiusCornerRadius, FallbackValue=6}">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
+                </Border.Effect>    
+                
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="{Binding CaptionGridLength, FallbackValue=40}"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--Top line-->
+                    <Grid Background="{StaticResource RegularBlueBrush}"
+                          Grid.Row="0">
+                        
+                    </Grid>
+                    <!--Main content-->
+                    <Grid Visibility="Visible" 
+                          Grid.Row="1" 
+                          Background="AliceBlue"
+                          Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding BarWidhtLength, FallbackValue=150}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TabControl Padding="10"
+                                             Grid.Column="1">
+                            <TabItem  x:Name="Adding" 
+                                 Header="Добавление заказа"
+                                     >
+                                <ScrollViewer x:Name="SWCreatingAssembly" Visibility="Visible">
+                                    <StackPanel>
+                                        <StackPanel 
+                                        Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibilityConverter}}"
+                                        x:Name="GridContainer"
+                                        >
+                                            <RadioButton Command="{Binding selectAtomy}" IsChecked="True">Atomy</RadioButton>
+                                            <RadioButton Command="{Binding selectBork}" x:Name="radioBork" >Bork</RadioButton>
 
-                                <WrapPanel
-                                    Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
-                                    Name="PanelDnD"
-                                    DragDrop.Drop="WrapPanel_Drop"
-                                    AllowDrop="True"
-                                    Background="LightBlue">
-                                </WrapPanel>
-                            </StackPanel>
-                            <Grid  >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                    <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                            <Border CornerRadius="15" >
-                                                <Grid Margin="10" Background="{Binding Catalog, Converter={StaticResource CatalogToBackgroundColorConverter}}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                            <i:InvokeCommandAction 
-                                                                    Command="{Binding DataContext.callBorkDialog, 
-                                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                                    CommandParameter="{Binding}" />         
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="3*"/>
-                                                        <ColumnDefinition Width="2*"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Padding="10" Text="{Binding Left}" Grid.Column="0"></TextBlock>
-                                                    <TextBlock Padding="10" Text="{Binding Center}" Grid.Column="1"></TextBlock>
-                                                    <TextBlock Padding="10" Text="{Binding Right}" Grid.Column="2" HorizontalAlignment="Right"></TextBlock>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
-                                    <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
+                                            <WrapPanel
+                                            Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
+                                            Name="PanelDnD"
+                                            DragDrop.Drop="WrapPanel_Drop"
+                                            AllowDrop="True"
+                                            Background="LightBlue">
+                                            </WrapPanel>
+                                        </StackPanel>
+                                        <Grid  >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border CornerRadius="15" >
+                                                            <Grid Margin="10" Background="{Binding Catalog, Converter={StaticResource CatalogToBackgroundColorConverter}}">
+                                                                <i:Interaction.Triggers>
+                                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                                        <i:InvokeCommandAction 
+                                                                            Command="{Binding DataContext.callBorkDialog, 
+                                                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                            CommandParameter="{Binding}" />
+                                                                    </i:EventTrigger>
+                                                                </i:Interaction.Triggers>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="3*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Padding="10" Text="{Binding Left}" Grid.Column="0"></TextBlock>
+                                                                <TextBlock Padding="10" Text="{Binding Center}" Grid.Column="1"></TextBlock>
+                                                                <TextBlock Padding="10" Text="{Binding Right}" Grid.Column="2" HorizontalAlignment="Right"></TextBlock>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
+                                                <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem Header="Добавить товар">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel
+                                    Width="200"
+                                    >
+                                        <StackPanel 
+                                        Margin="5"
+                                        Orientation="Horizontal">
+                                            <TextBlock Margin="5">Имя</TextBlock>
+                                            <TextBox x:Name="tbName" Width="150"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel  Margin="5"
+                                        Orientation="Horizontal">
+                                            <TextBlock Margin="5"> ШК</TextBlock>
+                                            <TextBox x:Name="tbBarcode" Width="150"></TextBox>
+                                        </StackPanel>
+                                        <Button x:Name="btnCatalogBorkAdd" 
+                                            Height="30" 
+                                            Width="120"
+                                            Click="btnCatalogBorkAdd_Click">Добавить</Button>
+                                        <TextBlock x:Name="tbError"></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox x:Name="textBoxSearhc" TextChanged="textBoxSearhc_TextChanged" 
+                                            Padding="5"
+                                            Margin="5"
+                                            Width="200"></TextBox>
+
+                                        </StackPanel>
+                                        <ListBox
+                                            Width="600" 
+                                            Height="380"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                                                x:Name="listItems"
+                                                                SelectionChanged="listItems_SelectionChanged">
+
+                                        </ListBox>
+                                    </StackPanel>
                                 </StackPanel>
-                            </Grid>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Добавить товар">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel
-                            Width="200"
-                            >
-                            <StackPanel 
-                                Margin="5"
-                                Orientation="Horizontal">
-                                <TextBlock Margin="5">Имя</TextBlock>
-                                <TextBox x:Name="tbName" Width="150"></TextBox>
-                            </StackPanel>
-                            <StackPanel  Margin="5"
-                                Orientation="Horizontal">
-                                <TextBlock Margin="5"> ШК</TextBlock>
-                                <TextBox x:Name="tbBarcode" Width="150"></TextBox>
-                            </StackPanel>
-                            <Button x:Name="btnCatalogBorkAdd" 
-                                    Height="30" 
-                                    Width="120"
-                                    Click="btnCatalogBorkAdd_Click">Добавить</Button>
-                            <TextBlock x:Name="tbError"></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="textBoxSearhc" TextChanged="textBoxSearhc_TextChanged" 
-                                    Padding="5"
-                                    Margin="5"
-                                    Width="200"></TextBox>
-
-                            </StackPanel>
-                            <ListBox
-                                    Width="600" 
-                                    Height="380"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                                                        x:Name="listItems"
-                                                        SelectionChanged="listItems_SelectionChanged">
-
-                            </ListBox>
-                        </StackPanel>
-                    </StackPanel>
-                </TabItem>
-            </TabControl>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
 
-    </Grid>
-
-
+    </Border>
 
 
 

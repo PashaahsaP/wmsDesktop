@@ -123,7 +123,7 @@ namespace WmsDesktop
         public List<OrderItem> ItemsList { get; set; }
         public MainWindow()
         {
-            vm = new MainViewModel();
+            vm = new MainViewModel(this);
             vm.MainWindow = this;
             DataContext = vm;
             ExcelPackage.License.SetNonCommercialPersonal("Pavel Semenov");
@@ -224,5 +224,6 @@ namespace WmsDesktop
             tbBarcode.Text = "";
             
         }
+
     }
 }

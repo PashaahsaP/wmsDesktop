@@ -50,6 +50,7 @@ namespace WmsDesktop
     }
     class MainViewModel : INotifyPropertyChanged
     {
+        #region bisiness member
         private int _supplier;
         public Client Client { get; set; }
         public string ip {  get; set; }
@@ -69,10 +70,56 @@ namespace WmsDesktop
         public ICommand callBorkDialog { get; set; }
         public ICommand clearItems { get; set; }
         public ICommand createSession { get; set; }
+        #endregion
+        #region Display Window
+        private Window _window;
+        private int _outerMarginSize = 10;
+        private double _windowRadius = 10;
+        private int _barWidth = 160;
 
-
-        public MainViewModel()
+        public int ResizeBorder { get; set; } = 6;
+        public Thickness ResizeBorderThickness { get => new Thickness(ResizeBorder + OuterMarginSize); }
+        public int OuterMarginSize
         {
+            get
+            {
+                return _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
+            }
+            set
+            {
+                _outerMarginSize += value;
+            }
+        }
+        public Thickness OuterMarginThickness { get => new Thickness(OuterMarginSize); }
+
+        public double WindowRadius
+        {
+            get
+            {
+                return _window.WindowState == WindowState.Maximized ? 0 : _windowRadius;
+            }
+            set
+            {
+                _windowRadius += value;
+            }
+        }
+        public CornerRadius WindowRadiusCornerRadius { get => new CornerRadius(WindowRadius); }
+        public int CaptionHeight { get; set; } = 40;
+        public GridLength CaptionGridLength { get => new GridLength(CaptionHeight + ResizeBorder); }
+        public int BarWidht { get 
+            {
+                return _window.WindowState == WindowState.Maximized ? 220 : _barWidth;
+            }
+            set { _barWidth = value; }
+        }
+        public GridLength BarWidhtLength { get => new GridLength(BarWidht); }
+
+
+        #endregion
+
+        public MainViewModel(Window window)
+        {
+            #region businessLogic
             Client = new Client();
             selectAtomy = new RelayCommand(o =>
             {
@@ -131,6 +178,19 @@ namespace WmsDesktop
                 }
             });
             Items = new ObservableCollection<IUiItem>();
+            #endregion
+            #region Display Window
+            _window = window;
+            _window.StateChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(ResizeBorderThickness));
+                OnPropertyChanged(nameof(OuterMarginSize));
+                OnPropertyChanged(nameof(OuterMarginThickness));
+                OnPropertyChanged(nameof(WindowRadius));
+                OnPropertyChanged(nameof(WindowRadiusCornerRadius));
+                OnPropertyChanged(nameof(BarWidhtLength));
+            };
+            #endregion
         }
         public void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
