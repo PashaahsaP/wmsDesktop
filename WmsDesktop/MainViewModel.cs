@@ -73,46 +73,40 @@ namespace WmsDesktop
         #endregion
         #region Display Window
         private Window _window;
-        private int _outerMarginSize = 10;
-        private double _windowRadius = 10;
-        private int _barWidth = 160;
-
-        public int ResizeBorder { get; set; } = 6;
-        public Thickness ResizeBorderThickness { get => new Thickness(ResizeBorder + OuterMarginSize); }
-        public int OuterMarginSize
+        /// <summary>
+        /// margin need for correct displaing in maximazed state of window
+        /// </summary>
+        private Thickness _marginClosedButton = new Thickness(0, 0, 5, 0);
+        public Thickness MarginClosedButton
         {
             get
             {
-                return _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
+                return _window.WindowState == WindowState.Maximized ? _marginClosedButton : new Thickness(0);
             }
             set
             {
-                _outerMarginSize += value;
+                _marginClosedButton = value;
             }
         }
-        public Thickness OuterMarginThickness { get => new Thickness(OuterMarginSize); }
-
-        public double WindowRadius
+        /// <summary>
+        /// margin need for correct displaing in maximazed state of window
+        /// </summary>
+        private Thickness _titleMargin = new Thickness(0, 8, 0, 0);
+        public Thickness TitleMargin
         {
             get
             {
-                return _window.WindowState == WindowState.Maximized ? 0 : _windowRadius;
+                return _window.WindowState == WindowState.Maximized ? _titleMargin : new Thickness(0);
             }
             set
             {
-                _windowRadius += value;
+                _titleMargin = value;
             }
         }
-        public CornerRadius WindowRadiusCornerRadius { get => new CornerRadius(WindowRadius); }
-        public int CaptionHeight { get; set; } = 40;
-        public GridLength CaptionGridLength { get => new GridLength(CaptionHeight + ResizeBorder); }
-        public int BarWidht { get 
-            {
-                return _window.WindowState == WindowState.Maximized ? 220 : _barWidth;
-            }
-            set { _barWidth = value; }
-        }
-        public GridLength BarWidhtLength { get => new GridLength(BarWidht); }
+        public int TitleHeight { get; set; } = 30;
+        public ICommand collapseWindow { get; set; }
+        public ICommand expandWindow { get; set; }
+        public ICommand closeWindow { get; set; }
 
 
         #endregion
@@ -181,14 +175,13 @@ namespace WmsDesktop
             #endregion
             #region Display Window
             _window = window;
+            collapseWindow = new RelayCommand(o => _window.WindowState = WindowState.Minimized);
+            expandWindow = new RelayCommand(o => _window.WindowState = WindowState.Maximized);
+            closeWindow = new RelayCommand(o => _window.Close());
             _window.StateChanged += (s, e) =>
             {
-                OnPropertyChanged(nameof(ResizeBorderThickness));
-                OnPropertyChanged(nameof(OuterMarginSize));
-                OnPropertyChanged(nameof(OuterMarginThickness));
-                OnPropertyChanged(nameof(WindowRadius));
-                OnPropertyChanged(nameof(WindowRadiusCornerRadius));
-                OnPropertyChanged(nameof(BarWidhtLength));
+                OnPropertyChanged(nameof(MarginClosedButton));
+                OnPropertyChanged(nameof(TitleMargin));
             };
             #endregion
         }

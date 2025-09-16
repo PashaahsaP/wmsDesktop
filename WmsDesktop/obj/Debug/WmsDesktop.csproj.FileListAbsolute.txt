@@ -56,3 +56,4 @@ C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\bin\Debug\Microsoft.Xaml.Behavi
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\bin\Debug\Microsoft.Xaml.Behaviors.xml
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\Styles\Colors.baml
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\App.baml
+C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\Styles\Buttons.baml

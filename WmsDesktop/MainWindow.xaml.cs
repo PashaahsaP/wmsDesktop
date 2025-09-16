@@ -139,6 +139,7 @@ namespace WmsDesktop
             ip = setting["Ip"];
             vm.ip = ip;
         }
+        
         private void WrapPanel_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
