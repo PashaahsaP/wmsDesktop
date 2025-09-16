@@ -29,36 +29,44 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
+            <RowDefinition Height="{Binding TitleHeight, FallbackValue=30}"/>
+            <RowDefinition Height="{Binding MenuTitleHeight, FallbackValue=30}"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Margin="{Binding TitleMargin}" Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource RegularBlueBrush}" Height="{Binding TitleHeight, FallbackValue=30}" VerticalAlignment="Top">
+        <Border 
+            Padding="{Binding TitlePadding}"
+                Grid.Row="0" Grid.ColumnSpan="2" 
+                Background="{StaticResource TitleColorBrush}" Height="{Binding TitleHeight, FallbackValue=30}" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
                 <Button Command="{Binding collapseWindow}" Style="{StaticResource WindowControlButton}">_</Button>
                 <Button Command="{Binding expandWindow}" Style="{StaticResource WindowControlButton}">[]</Button>
                 <Button Margin="{Binding MarginClosedButton}" Command="{Binding closeWindow}" Style="{StaticResource WindowCloseButton}">X</Button>
             </StackPanel>
         </Border>
-        <Border Grid.Row="1" Height="6" BorderThickness="0 0.2 0 0">
-            <!-- Underline -->
-            <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1, 0">
-                    <GradientStop Color="{StaticResource ForegroundLight}" Offset="0.0" />
-                    <GradientStop Color="{StaticResource ForegroundMain}" Offset="0.5" />
-                    <GradientStop Color="{StaticResource ForegroundLight}" Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.BorderBrush>
-
-            <!-- Drop shadow -->
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1">
-                    <GradientStop Color="{StaticResource BackgroundVeryLight}" Offset="0.0" />
-                    <GradientStop Color="{StaticResource ForegroundLight}" Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.Background>
-
+        <Border Grid.Row="1" Grid.ColumnSpan="2"
+                Padding="{Binding TitleMenuPadding}"
+                Height="{Binding MenuTitleHeight}" >
+            <StackPanel  x:Name="containerMenuItem"
+                        Orientation="Horizontal" 
+                        Height="{Binding MenuTitleHeight}" 
+                        Background="{StaticResource TitleColorBrush}"
+                       >
+                <ItemsControl  ItemsSource="{Binding MenuItems}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource TitleMenuItem}" Content="{Binding Title}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+               
+            </StackPanel>
         </Border>
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+        <Grid Visibility="Collapsed" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                     
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>

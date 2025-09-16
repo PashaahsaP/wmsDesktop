@@ -2,9 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WmsDesktop"
                     >
+    <Color x:Key="TitleMenuOver">#124078</Color>
+    <SolidColorBrush x:Key="TitleMenuOverBrush" Color="{StaticResource TitleMenuOver}"/>
+
+    <Color x:Key="TitleColor">#2b579a</Color>
+    <SolidColorBrush x:Key="TitleColorBrush" Color="{StaticResource TitleColor}"/>
+
     <Color x:Key="RegularBlue">#0080fe</Color>
     <SolidColorBrush x:Key="RegularBlueBrush" Color="{StaticResource RegularBlue}"/>
-    
+
     <Color x:Key="BackgroundLight">#efefef</Color>
     <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}" />
 

@@ -6,7 +6,17 @@
         <!-- Order is important -->
         <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
+    <!--Image close button-->
+    <Style TargetType="{x:Type Button}" x:Key="ImageButton">
+        <Setter Property="Margin" Value="10 2 0 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Image Source="/Images/Logo/close-round-svgrepo-com.png"></Image>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!-- Hoverless button -->
     <Style TargetType="{x:Type Button}" x:Key="Hoverless">
         <Setter Property="Background" Value="Transparent" />
@@ -64,6 +74,53 @@
 
     </Style>
 
+    <!--Title Menu Item-->
+    <Style TargetType="{x:Type Button}" x:Key="TitleMenuItemBase">
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1.1" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" x:Key="TitleMenuItem" BasedOn="{StaticResource TitleMenuItemBase}">
+        <Setter Property="Background" Value="{StaticResource TitleColorBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource TitleMenuOverBrush}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--Title menu item selected-->
+    <Style TargetType="{x:Type Button}" x:Key="TitleMenuItemSelected" BasedOn="{StaticResource TitleMenuItemBase}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="{StaticResource TitleColorBrush}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <StackPanel Orientation="Horizontal"  >
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" />
+                            <Button Style="{StaticResource ImageButton}"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <!-- Window Close Button -->
     <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
 

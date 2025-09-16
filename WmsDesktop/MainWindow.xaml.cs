@@ -128,6 +128,29 @@ namespace WmsDesktop
             DataContext = vm;
             ExcelPackage.License.SetNonCommercialPersonal("Pavel Semenov");
             InitializeComponent();
+            var selectedStyle = (Style)FindResource("TitleMenuItemSelected");
+            var unselectedStyle = (Style)FindResource("TitleMenuItem");
+            vm.MenuItems = new ObservableCollection<MenuItem>(){new MenuItem
+            {
+                IsSelected = true,
+                Title = "NewItem",
+                SelectedStyle = selectedStyle,
+                UnselectedStyle = unselectedStyle
+            }, new MenuItem
+            {
+                IsSelected = false,
+                Title = "oldItem",
+                SelectedStyle = selectedStyle,
+                UnselectedStyle = unselectedStyle
+            }, new MenuItem
+            {
+                IsSelected = false,
+                Title = "some",
+                SelectedStyle = selectedStyle,
+                UnselectedStyle = unselectedStyle
+            }
+            };
+
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -226,5 +249,9 @@ namespace WmsDesktop
             
         }
 
+        public void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -48,6 +48,18 @@ namespace WmsDesktop
         public string Right { get => $"{_count}/{_amount}"; }
 
     }
+    internal class MenuItem
+    {
+        public string Title { get; set; }
+        public bool IsSelected { get; set; } = false;
+        public Style SelectedStyle { get; set; }
+        public Style UnselectedStyle { get; set; }
+        public Style Style { get 
+            {
+                return IsSelected ? SelectedStyle : UnselectedStyle;
+            }
+            set { Style = value; } }
+    }
     class MainViewModel : INotifyPropertyChanged
     {
         #region bisiness member
@@ -62,6 +74,15 @@ namespace WmsDesktop
                 OnPropertyChanged(nameof(Items));
             }
         }
+        private ObservableCollection<MenuItem> _menuItems;
+
+        public ObservableCollection<MenuItem> MenuItems{ get => _menuItems;
+            set
+            {
+                _menuItems = value;
+                OnPropertyChanged(nameof(MenuItems));
+            }
+        }
         public List<OrderItem> CatalogBorkItems { get; set; }
         public MainWindow MainWindow { get; set; }
         public int Supplier { get => _supplier; set { _supplier = value; } }
@@ -73,41 +94,59 @@ namespace WmsDesktop
         #endregion
         #region Display Window
         private Window _window;
+   
         /// <summary>
-        /// margin need for correct displaing in maximazed state of window
+        /// padding need for correct displaing in maximazed state of buttons
         /// </summary>
-        private Thickness _marginClosedButton = new Thickness(0, 0, 5, 0);
-        public Thickness MarginClosedButton
+        private Thickness _titlePadding = new Thickness(10);
+        public Thickness TitlePadding
         {
             get
             {
-                return _window.WindowState == WindowState.Maximized ? _marginClosedButton : new Thickness(0);
+                return _window.WindowState == WindowState.Maximized ? _titlePadding : new Thickness(0);
             }
             set
             {
-                _marginClosedButton = value;
+                _titlePadding = value;
             }
         }
         /// <summary>
-        /// margin need for correct displaing in maximazed state of window
+        /// need for correct displaing menu items(second line)
         /// </summary>
-        private Thickness _titleMargin = new Thickness(0, 8, 0, 0);
-        public Thickness TitleMargin
+        private Thickness _titleMenuPadding = new Thickness(8, 0, 8, 0);
+        public Thickness TitleMenuPadding
         {
             get
             {
-                return _window.WindowState == WindowState.Maximized ? _titleMargin : new Thickness(0);
+                return _window.WindowState == WindowState.Maximized ? _titleMenuPadding : new Thickness(0);
             }
             set
             {
-                _titleMargin = value;
+                _titleMenuPadding = value;
             }
         }
-        public int TitleHeight { get; set; } = 30;
+        /// <summary>
+        /// need for correct displaing button in top right
+        /// </summary>
+        private int _titleHeight = 30;
+        public int TitleHeight 
+        { get
+            {
+                return _window.WindowState == WindowState.Maximized ? 50 : _titleHeight;
+            }
+
+            set
+            {
+                _titleHeight = value;
+            }
+        } 
+        public int MenuTitleHeight { get; set; } = 30;
+        #region commands
         public ICommand collapseWindow { get; set; }
         public ICommand expandWindow { get; set; }
         public ICommand closeWindow { get; set; }
-
+        public ICommand selectMenuItem {  get; set; }
+        #endregion
 
         #endregion
 
@@ -178,10 +217,13 @@ namespace WmsDesktop
             collapseWindow = new RelayCommand(o => _window.WindowState = WindowState.Minimized);
             expandWindow = new RelayCommand(o => _window.WindowState = WindowState.Maximized);
             closeWindow = new RelayCommand(o => _window.Close());
+            selectMenuItem = new RelayCommand(o => _window.Close());
             _window.StateChanged += (s, e) =>
             {
-                OnPropertyChanged(nameof(MarginClosedButton));
-                OnPropertyChanged(nameof(TitleMargin));
+                OnPropertyChanged(nameof(TitlePadding)); 
+                OnPropertyChanged(nameof(TitleHeight)); 
+                OnPropertyChanged(nameof(TitleMenuPadding)); 
+                OnPropertyChanged(nameof(MenuTitleHeight));
             };
             #endregion
         }
