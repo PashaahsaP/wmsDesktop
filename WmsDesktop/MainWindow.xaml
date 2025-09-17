@@ -33,6 +33,7 @@
             <RowDefinition Height="{Binding MenuTitleHeight, FallbackValue=30}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+       
         <Border 
             Padding="{Binding TitlePadding}"
                 Grid.Row="0" Grid.ColumnSpan="2" 
@@ -43,7 +44,11 @@
                 <Button Margin="{Binding MarginClosedButton}" Command="{Binding closeWindow}" Style="{StaticResource WindowCloseButton}">X</Button>
             </StackPanel>
         </Border>
-        <Border Grid.Row="1" Grid.ColumnSpan="2"
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" 
+                Grid.Column="0" Grid.ColumnSpan="2"
+                Grid.Row="1" Grid.RowSpan="2"
+                Content="{Binding CurrentPage}"/>
+        <Border Panel.ZIndex="-1" Grid.Row="1" Grid.ColumnSpan="2"
                 Padding="{Binding TitleMenuPadding}"
                 Height="{Binding MenuTitleHeight}" >
             <StackPanel  x:Name="containerMenuItem"
@@ -52,7 +57,8 @@
                         Background="{StaticResource TitleColorBrush}"
                        >
                 <Button 
-                     Style="{StaticResource TitleMenuItem}" 
+                     Style="{StaticResource TitleMenuItem}"
+                    Command="{Binding callHomeWindow}"
                      Content="Home"
                      />
                 <ItemsControl  ItemsSource="{Binding MenuItems}">

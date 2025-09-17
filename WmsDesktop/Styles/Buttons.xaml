@@ -7,12 +7,27 @@
         <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <!--Image close button-->
-    <Style TargetType="{x:Type Button}" x:Key="ImageButton">
+    <Style TargetType="{x:Type Button}" x:Key="CloseImageButton">
         <Setter Property="Margin" Value="10 2 0 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Image Source="/Images/Logo/close-round-svgrepo-com.png"></Image>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--Image close button-->
+    <Style TargetType="{x:Type Button}" x:Key="CloseHomePage">
+        <Setter Property="Margin" Value="10 2 0 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Image>
+                        <Image.Source>
+                            <FormatConvertedBitmap Source="/Images/Logo/arrow-left.png" DestinationFormat="Bgra32"/>
+                        </Image.Source>
+                    </Image>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -116,7 +131,7 @@
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
                         <StackPanel Orientation="Horizontal"  >
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" />
-                            <Button Style="{StaticResource ImageButton}"/>
+                            <Button Style="{StaticResource CloseImageButton}"/>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>

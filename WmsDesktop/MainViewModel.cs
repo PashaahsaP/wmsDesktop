@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using WmsDesktop.vm;
 
@@ -149,11 +150,27 @@ namespace WmsDesktop
             }
         } 
         public int MenuTitleHeight { get; set; } = 30;
+        private Page _currentPage;
+        public Page CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    OnPropertyChanged(nameof(CurrentPage));
+                }
+            }
+        }
+
+
         #region commands
         public ICommand collapseWindow { get; set; }
         public ICommand expandWindow { get; set; }
         public ICommand closeWindow { get; set; }
         public ICommand selectMenuItem {  get; set; }
+        public ICommand callHomeWindow {  get; set; }
         #endregion
 
         #endregion
@@ -241,6 +258,10 @@ namespace WmsDesktop
                 OnPropertyChanged(nameof(TitleMenuPadding)); 
                 OnPropertyChanged(nameof(MenuTitleHeight));
             };
+            callHomeWindow = new RelayCommand(o =>
+            {
+                CurrentPage = new HomePage();
+            });
             #endregion
         }
         public void OnPropertyChanged(string propertyName) =>

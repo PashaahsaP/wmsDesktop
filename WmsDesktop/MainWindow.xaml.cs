@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace WmsDesktop
 {
@@ -145,6 +146,11 @@ namespace WmsDesktop
             }
             };
 
+            
+
+
+
+
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -156,7 +162,6 @@ namespace WmsDesktop
             ip = setting["Ip"];
             vm.ip = ip;
         }
-        
         private void WrapPanel_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -242,7 +247,6 @@ namespace WmsDesktop
             tbBarcode.Text = "";
             
         }
-
         public void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             this.Close();

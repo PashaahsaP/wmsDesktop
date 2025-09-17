@@ -58,3 +58,5 @@ C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\WmsDesktop.csproj.Cor
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\WmsDesktop.csproj.Up2Date
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\WmsDesktop.exe
 C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\WmsDesktop.pdb
+C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\HomePage.g.cs
+C:\Users\Work\source\repos\WmsDesktop\WmsDesktop\obj\Debug\HomePage.baml
