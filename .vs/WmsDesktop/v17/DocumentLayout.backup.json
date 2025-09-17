@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|C:\\Users\\Work\\source\\repos\\WmsDesktop\\wmsdesktop\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|c:\\users\\work\\source\\repos\\wmsdesktop\\wmsdesktop\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|c:\\users\\work\\source\\repos\\wmsdesktop\\wmsdesktop\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|C:\\Users\\Work\\source\\repos\\WmsDesktop\\wmsdesktop\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|c:\\users\\work\\source\\repos\\wmsdesktop\\wmsdesktop\\styles\\buttons.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|C:\\Users\\Work\\source\\repos\\WmsDesktop\\wmsdesktop\\styles\\buttons.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\styles\\buttons.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|c:\\users\\work\\source\\repos\\wmsdesktop\\wmsdesktop\\styles\\colors.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\styles\\colors.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|C:\\Users\\Work\\source\\repos\\WmsDesktop\\wmsdesktop\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{9DC68400-E6A7-4287-85A1-BE3DAAFB36BC}|WmsDesktop\\WmsDesktop.csproj|solutionrelative:wmsdesktop\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,41 +26,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Buttons.xaml",
               "DocumentMoniker": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\Styles\\Buttons.xaml",
               "RelativeDocumentMoniker": "WmsDesktop\\Styles\\Buttons.xaml",
               "ToolTip": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\Styles\\Buttons.xaml",
               "RelativeToolTip": "WmsDesktop\\Styles\\Buttons.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-09-15T23:38:11.074Z",
+              "WhenOpened": "2025-09-16T19:08:14.152Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Colors.xaml",
-              "DocumentMoniker": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\Styles\\Colors.xaml",
-              "RelativeDocumentMoniker": "WmsDesktop\\Styles\\Colors.xaml",
-              "ToolTip": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\Styles\\Colors.xaml",
-              "RelativeToolTip": "WmsDesktop\\Styles\\Colors.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-09-15T22:29:46.732Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "WmsDesktop\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\MainWindow.xaml.cs",
               "RelativeToolTip": "WmsDesktop\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAHoAAAAAAAAAAIA8wKIAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAMwI8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-15T14:06:07.856Z",
               "EditorCaption": ""
@@ -77,14 +61,14 @@
               "RelativeDocumentMoniker": "WmsDesktop\\MainViewModel.cs",
               "ToolTip": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\MainViewModel.cs",
               "RelativeToolTip": "WmsDesktop\\MainViewModel.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAqwE4AAABFAAAAAAAAAA==",
+              "ViewState": "AgIAAJsAAAAAAAAAAADwv+kAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-13T05:23:12.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Work\\source\\repos\\WmsDesktop\\WmsDesktop\\MainWindow.xaml",
               "RelativeDocumentMoniker": "WmsDesktop\\MainWindow.xaml",

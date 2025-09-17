@@ -134,20 +134,14 @@ namespace WmsDesktop
             {
                 IsSelected = true,
                 Title = "NewItem",
-                SelectedStyle = selectedStyle,
-                UnselectedStyle = unselectedStyle
             }, new MenuItem
             {
                 IsSelected = false,
                 Title = "oldItem",
-                SelectedStyle = selectedStyle,
-                UnselectedStyle = unselectedStyle
             }, new MenuItem
             {
                 IsSelected = false,
-                Title = "some",
-                SelectedStyle = selectedStyle,
-                UnselectedStyle = unselectedStyle
+                Title = "some" 
             }
             };
 

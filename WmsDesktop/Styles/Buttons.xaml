@@ -100,13 +100,16 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource TitleMenuOverBrush}"></Setter>
             </Trigger>
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Foreground" Value="{StaticResource RegularBlueBrush}"/>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
     <!--Title menu item selected-->
     <Style TargetType="{x:Type Button}" x:Key="TitleMenuItemSelected" BasedOn="{StaticResource TitleMenuItemBase}">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="{StaticResource TitleColorBrush}" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -119,6 +122,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+       
     </Style>
     
     <!-- Window Close Button -->

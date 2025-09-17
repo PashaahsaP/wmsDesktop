@@ -48,17 +48,25 @@ namespace WmsDesktop
         public string Right { get => $"{_count}/{_amount}"; }
 
     }
-    internal class MenuItem
+    internal class MenuItem : INotifyPropertyChanged
     {
+        private bool _isSelected;
         public string Title { get; set; }
-        public bool IsSelected { get; set; } = false;
-        public Style SelectedStyle { get; set; }
-        public Style UnselectedStyle { get; set; }
-        public Style Style { get 
+        public bool IsSelected {
+            get
             {
-                return IsSelected ? SelectedStyle : UnselectedStyle;
+                return _isSelected;
             }
-            set { Style = value; } }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName) =>
+           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     class MainViewModel : INotifyPropertyChanged
     {
@@ -217,7 +225,15 @@ namespace WmsDesktop
             collapseWindow = new RelayCommand(o => _window.WindowState = WindowState.Minimized);
             expandWindow = new RelayCommand(o => _window.WindowState = WindowState.Maximized);
             closeWindow = new RelayCommand(o => _window.Close());
-            selectMenuItem = new RelayCommand(o => _window.Close());
+            selectMenuItem = new RelayCommand((o) =>
+            {
+                foreach (var item in MenuItems)
+                {
+                    item.IsSelected = false;
+                }
+                MenuItem menuItem = o as MenuItem;
+                menuItem.IsSelected = true;
+            });
             _window.StateChanged += (s, e) =>
             {
                 OnPropertyChanged(nameof(TitlePadding)); 

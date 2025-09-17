@@ -51,6 +51,10 @@
                         Height="{Binding MenuTitleHeight}" 
                         Background="{StaticResource TitleColorBrush}"
                        >
+                <Button 
+                     Style="{StaticResource TitleMenuItem}" 
+                     Content="Home"
+                     />
                 <ItemsControl  ItemsSource="{Binding MenuItems}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -59,7 +63,14 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource TitleMenuItem}" Content="{Binding Title}"/>
+                            <Button Command="{Binding DataContext.selectMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource TitleMenuItem}" 
+                                    Content="{Binding Title}"
+                                    >
+                                 
+                                
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
