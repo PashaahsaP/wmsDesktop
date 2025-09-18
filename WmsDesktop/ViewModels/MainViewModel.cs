@@ -49,9 +49,10 @@ namespace WmsDesktop
         public string Right { get => $"{_count}/{_amount}"; }
 
     }
-    internal class MenuItem : INotifyPropertyChanged
+    public class MenuItem : INotifyPropertyChanged
     {
         private bool _isSelected;
+        private Page _pages;
         public string Title { get; set; }
         public bool IsSelected {
             get
@@ -64,12 +65,24 @@ namespace WmsDesktop
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
+        public Page Page
+        {
+            get
+            {
+                return _pages;
+            }
+            set
+            {
+                _pages = value;
+                OnPropertyChanged(nameof(Page));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) =>
            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         #region bisiness member
         private int _supplier;
@@ -150,6 +163,19 @@ namespace WmsDesktop
             }
         } 
         public int MenuTitleHeight { get; set; } = 30;
+        private Page _HomePage;
+        public Page HomePage
+        {
+            get => _HomePage;
+            set
+            {
+                if (_HomePage != value)
+                {
+                    _HomePage = value;
+                    OnPropertyChanged(nameof(HomePage));
+                }
+            }
+        }
         private Page _currentPage;
         public Page CurrentPage
         {
@@ -163,7 +189,6 @@ namespace WmsDesktop
                 }
             }
         }
-
 
         #region commands
         public ICommand collapseWindow { get; set; }
@@ -260,7 +285,7 @@ namespace WmsDesktop
             };
             callHomeWindow = new RelayCommand(o =>
             {
-                CurrentPage = new HomePage();
+                HomePage = new HomePage(this);
             });
             #endregion
         }

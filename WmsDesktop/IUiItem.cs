@@ -17,7 +17,7 @@ namespace WmsDesktop
     /// </summary>
     /// <param name="Count">Сколько нужно для заявки</param>
     /// <param name="Amount">Сколько есть Фактически</param>
-    internal interface IUiItem
+    public interface IUiItem
     {
         string Left { get;  }
         string Center { get;  }

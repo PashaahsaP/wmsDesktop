@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace WmsDesktop
 {
-    class Client
+    public class Client
     {
         private readonly HttpClient client = new HttpClient();
         internal async void CreateAssebmlySession(ObservableCollection<IUiItem> items, string ip, int countOfItems, int linesOfItem, int supplier)

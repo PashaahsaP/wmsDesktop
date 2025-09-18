@@ -19,18 +19,21 @@
     </Style>
     <!--Image close button-->
     <Style TargetType="{x:Type Button}" x:Key="CloseHomePage">
-        <Setter Property="Margin" Value="10 2 0 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Image>
-                        <Image.Source>
-                            <FormatConvertedBitmap Source="/Images/Logo/arrow-left.png" DestinationFormat="Bgra32"/>
-                        </Image.Source>
-                    </Image>
+                    <Border Padding="0 5 0 5" Height="40" x:Name="border" Background="{StaticResource TitleColorBrush}">
+                        <Image VerticalAlignment="Top" Height="30" Source="/Images/Logo/arrowLeft.png"></Image>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource TitleMenuOverBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
     </Style>
     <!-- Hoverless button -->
     <Style TargetType="{x:Type Button}" x:Key="Hoverless">
