@@ -39,23 +39,41 @@ namespace WmsDesktop.ViewModels
             });
             callAddingPage = new RelayCommand((o) =>
             {
-                vm.MenuItems.Add(new MenuItem
+                var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
                     Title = "Создание заявки",
                     Page = new AddingCatalogsPage()
-                });
+                };
+
+                AppendPage(newMenuItem, vm);
             });
             callCreateCatalogItemPage = new RelayCommand((o) =>
             {
-                vm.MenuItems.Add(new MenuItem
+                var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
-                    Title = "Создание заявки",
+                    Title = "Добавить наименование",
                     Page = new CreateSessionPage()
-                });
+                };
+                AppendPage(newMenuItem, vm);
             });
+           
+       
+            
         }
+        #region helper methods
+        private void AppendPage(MenuItem menuItem, MainViewModel vm)
+        {
+            foreach (var item in vm.MenuItems)
+            {
+                item.IsSelected = false;
+            }
+            vm.MenuItems.Add(menuItem);
+            vm.CurrentPage = menuItem.Page;
+            vm.HomePage = null;
+        }
+        #endregion
         #endregion
 
 

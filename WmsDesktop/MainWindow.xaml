@@ -87,6 +87,11 @@
                
             </StackPanel>
         </Border>
+        <Frame x:Name="PagesFrame" NavigationUIVisibility="Hidden" 
+         Grid.Column="0" Grid.ColumnSpan="2"
+         Grid.Row="2"
+         Panel.ZIndex="-2"
+         Content="{Binding CurrentPage}"/>
         <Grid Visibility="Collapsed" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                     
                     <Grid.RowDefinitions>

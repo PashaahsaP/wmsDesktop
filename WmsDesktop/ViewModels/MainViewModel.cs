@@ -276,6 +276,7 @@ namespace WmsDesktop
                 }
                 MenuItem menuItem = o as MenuItem;
                 menuItem.IsSelected = true;
+                CurrentPage = menuItem.Page;
             });
             _window.StateChanged += (s, e) =>
             {
@@ -289,8 +290,7 @@ namespace WmsDesktop
                 HomePage = new HomePage(this);
             });
             closeMenuItem = new RelayCommand(o => {
-                var menuItem = o as MenuItem;
-                MenuItems.Remove(menuItem);
+               
             });
             #endregion
         }

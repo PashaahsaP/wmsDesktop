@@ -129,28 +129,8 @@ namespace WmsDesktop
             DataContext = vm;
             ExcelPackage.License.SetNonCommercialPersonal("Pavel Semenov");
             InitializeComponent();
-            var selectedStyle = (Style)FindResource("TitleMenuItemSelected");
-            var unselectedStyle = (Style)FindResource("TitleMenuItem");
-            vm.MenuItems = new ObservableCollection<MenuItem>(){new MenuItem
-            {
-                IsSelected = true,
-                Title = "NewItem",
-            }, new MenuItem
-            {
-                IsSelected = false,
-                Title = "oldItem",
-            }, new MenuItem
-            {
-                IsSelected = false,
-                Title = "some" 
-            }
-            };
-
             
-
-
-
-
+            vm.MenuItems = new ObservableCollection<MenuItem>();
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -252,7 +232,23 @@ namespace WmsDesktop
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var item = (sender as Button)?.CommandParameter as MenuItem;
-            vm.MenuItems.Remove(item);
+            if (item != null)
+            {
+                if (item.IsSelected == true)
+                {
+                    vm.MenuItems.Remove(item);
+                    if (vm.MenuItems.Count != 0)
+                    {
+                        vm.MenuItems[vm.MenuItems.Count - 1].IsSelected = true;
+                        vm.CurrentPage = vm.MenuItems[vm.MenuItems.Count - 1].Page;
+                    }
+                    else
+                    {
+                        vm.CurrentPage = null;
+                    }
+                }
+                vm.MenuItems.Remove(item);
+            }
         }
     }
 }
