@@ -247,9 +247,12 @@ namespace WmsDesktop
             tbBarcode.Text = "";
             
         }
-        public void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    
+
+        private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.Close();
+            var item = (sender as Button)?.CommandParameter as MenuItem;
+            vm.MenuItems.Remove(item);
         }
     }
 }

@@ -72,13 +72,17 @@
                             <Button Command="{Binding DataContext.selectMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource TitleMenuItem}" 
-                                    Content="{Binding Title}"
+                                    Content="{Binding Title}" MouseDown="Button_MouseDown"
+                                    
                                     >
+
                                  
-                                
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+                    <ItemsControl.InputBindings>
+                        <MouseBinding CommandParameter="{Binding}" Command="{Binding closeMenuItem}" MouseAction="MiddleClick"/>
+                    </ItemsControl.InputBindings>
                 </ItemsControl>
                
             </StackPanel>

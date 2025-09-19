@@ -114,13 +114,28 @@
     <Style TargetType="{x:Type Button}" x:Key="TitleMenuItem" BasedOn="{StaticResource TitleMenuItemBase}">
         <Setter Property="Background" Value="{StaticResource TitleColorBrush}"/>
         <Setter Property="Foreground" Value="White"/>
+        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource TitleMenuOverBrush}"></Setter>
             </Trigger>
+             
             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                 <Setter Property="Background" Value="White"/>
                 <Setter Property="Foreground" Value="{StaticResource RegularBlueBrush}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                <StackPanel Orientation="Horizontal"  >
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" />
+                                    <Button CommandParameter="{Binding}" Style="{StaticResource CloseImageButton}" Command="{Binding DataContext.closeMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>

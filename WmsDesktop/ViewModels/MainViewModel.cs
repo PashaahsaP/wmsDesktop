@@ -196,6 +196,7 @@ namespace WmsDesktop
         public ICommand closeWindow { get; set; }
         public ICommand selectMenuItem {  get; set; }
         public ICommand callHomeWindow {  get; set; }
+        public ICommand closeMenuItem { get; set; }
         #endregion
 
         #endregion
@@ -286,6 +287,10 @@ namespace WmsDesktop
             callHomeWindow = new RelayCommand(o =>
             {
                 HomePage = new HomePage(this);
+            });
+            closeMenuItem = new RelayCommand(o => {
+                var menuItem = o as MenuItem;
+                MenuItems.Remove(menuItem);
             });
             #endregion
         }
