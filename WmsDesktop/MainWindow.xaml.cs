@@ -121,7 +121,7 @@ namespace WmsDesktop
 
         private readonly Client client = new Client();
         private string ip = "192.168.0.11";
-        public List<OrderItem> ItemsList { get; set; }
+        
         public MainWindow()
         {
             vm = new MainViewModel(this);
@@ -136,99 +136,21 @@ namespace WmsDesktop
         {
             var json = await client.GetAllCatalogBork(ip);
             vm.CatalogBorkItems = JsonConvert.DeserializeObject<List<OrderItem>>(json);
-            listItems.ItemsSource = vm.CatalogBorkItems;
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];
             vm.ip = ip;
         }
-        private void WrapPanel_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                if (files.Length == 1)
-                {
-                    GetDataFromFile(files[0], client);
-                }
-            }
-        }//DONE
-        private async Task GetDataFromFile(String pathToFile, Client client)
-        {
-            var func = AdapterHelper.getDataFromFile[vm.Supplier];
-            var result = func(pathToFile, client, ip);
-            vm.Items = new ObservableCollection<IUiItem>(await result);
-        }
-        private void textBoxSearhc_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (textBoxSearhc != null)
-            {
-                var content = textBoxSearhc.Text.ToString();
-                var filtered = ItemsList.Where(item => item.Name != null && item.Name.ToLower().Contains(content)).ToList();
-                listItems.ItemsSource = null;
-                listItems.ItemsSource = filtered;
-                
-            }
-        }
-        private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listItems.SelectedItem != null)
-            {
-                // Получаем выбранный элемент как ListBoxItem
-                var selectedItem = (OrderItem)listItems.SelectedItem;
-                string text = selectedItem.Name;
-                tbName.Text = text;
-            }
-        }
-        private async void btnCatalogBorkAdd_Click(object sender, RoutedEventArgs e)
-        {
-            tbError.Text = "";
-
-            bool isReturn =false;
-            if(tbName.Text == "")
-            {
-                tbError.Text += "Пустое поле названия товара \n";
-                isReturn = true;
-            }
-            if (tbBarcode.Text == "")
-            {
-                tbError.Text += "Пустое поле шк товара \n";
-                isReturn = true;
-            }
-            if (isReturn)
-            {
-                return;
-            }
-            var barcode = await client.GetBarcodeByName(tbBarcode.Text, ip);
-            var name = await client.GetCatalogBorkByName(tbName.Text, ip);
-            if(barcode != null)
-            {
-                tbError.Text += "У данного шк уже присвоен товар. \n";
-                return;
-            }
-            if(name!= null)
-            {
-                barcode = new BarcodeItem() { Id = null, catalogId = name.Id, name = tbBarcode.Text, type = "master" };
-                var barcodeId = await client.SendBarcodeBork(barcode, ip);
-
-            }
-            else
-            {
-                name = new BorkCatalogItem() { Id = null, name = tbName.Text.ToString() };
-                var catalogId = await client.SendCatalogBork(name, ip);
-                ItemsList.Add(new OrderItem()
-                { Id = catalogId.Id, Name = tbName.Text.ToString() });
-                barcode = new BarcodeItem() { Id = null, catalogId = catalogId.Id, name = tbBarcode.Text, type = "master" };
-                var barcodeId = await client.SendBarcodeBork(barcode, ip);
-            }
-
-            tbName.Text =  "";
-            tbBarcode.Text = "";
-            
-        }
+        
+        
+        
+       
     
-
+        /// <summary>
+        /// Work for closing menuItem by middle button of mouse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var item = (sender as Button)?.CommandParameter as MenuItem;

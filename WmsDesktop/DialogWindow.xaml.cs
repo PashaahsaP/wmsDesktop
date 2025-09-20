@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WmsDesktop.ViewModels;
 
 namespace WmsDesktop
 {
@@ -24,14 +25,14 @@ namespace WmsDesktop
     {
         private object Sender{ get; set; }
         private List<OrderItem> Items { get; set; }
-        MainViewModel MainViewModel { get; set; }
+        CreateSessionViewModel MainViewModel { get; set; }
         ObservableCollection<IUiItem> UiItems { get; set; }
-        internal DialogWindow(object sender, List<OrderItem> items, MainViewModel mainViewModel, System.Collections.ObjectModel.ObservableCollection<IUiItem> uiItems)
+        internal DialogWindow(object sender, List<OrderItem> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IUiItem> uiItems)
         {
             InitializeComponent();
             Sender = sender;
             Items = items;
-            MainViewModel = mainViewModel;
+            MainViewModel = createSessionViewModel;
             UiItems = uiItems;
         }
 

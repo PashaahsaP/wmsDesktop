@@ -8,7 +8,47 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddingCatalogsPage">
 
-    <Grid Background="Red">
-        
+    <Grid Background="White">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel
+            Width="200"
+            >
+                <StackPanel 
+                Margin="5"
+                Orientation="Horizontal">
+                    <TextBlock Margin="5">Имя</TextBlock>
+                    <TextBox x:Name="tbName" Width="150"></TextBox>
+                </StackPanel>
+                <StackPanel  Margin="5"
+                Orientation="Horizontal">
+                    <TextBlock Margin="5"> ШК</TextBlock>
+                    <TextBox x:Name="tbBarcode" Width="150"></TextBox>
+                </StackPanel>
+                <Button x:Name="btnCatalogBorkAdd" 
+                    Height="30" 
+                    Width="120"
+                    Click="btnCatalogBorkAdd_Click">Добавить</Button>
+                <TextBlock x:Name="tbError"></TextBlock>
+            </StackPanel>
+            <StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="textBoxSearhc" TextChanged="textBoxSearhc_TextChanged" 
+                    Padding="5"
+                    Margin="5"
+                    Width="200"></TextBox>
+
+                </StackPanel>
+                <ListBox
+                    ItemsSource="{Binding ItemsList}"
+                    Width="600" 
+                    Height="380"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                        x:Name="listItems"
+                                        SelectionChanged="listItems_SelectionChanged">
+
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

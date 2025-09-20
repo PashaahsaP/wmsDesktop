@@ -85,17 +85,9 @@ namespace WmsDesktop
     public class MainViewModel : INotifyPropertyChanged
     {
         #region bisiness member
-        private int _supplier;
-        public Client Client { get; set; }
+        
         public string ip {  get; set; }
-        private ObservableCollection<IUiItem> _items;
-        public ObservableCollection<IUiItem> Items { get => _items;
-            set
-            {
-                _items = value;
-                OnPropertyChanged(nameof(Items));
-            }
-        }
+
         private ObservableCollection<MenuItem> _menuItems;
 
         public ObservableCollection<MenuItem> MenuItems{ get => _menuItems;
@@ -105,14 +97,10 @@ namespace WmsDesktop
                 OnPropertyChanged(nameof(MenuItems));
             }
         }
-        public List<OrderItem> CatalogBorkItems { get; set; }
         public MainWindow MainWindow { get; set; }
-        public int Supplier { get => _supplier; set { _supplier = value; } }
-        public ICommand selectBork { get; set; }
-        public ICommand selectAtomy { get; set; }
-        public ICommand callBorkDialog { get; set; }
-        public ICommand clearItems { get; set; }
-        public ICommand createSession { get; set; }
+        
+       
+        
         #endregion
         #region Display Window
         private Window _window;
@@ -196,6 +184,9 @@ namespace WmsDesktop
         public ICommand closeWindow { get; set; }
         public ICommand selectMenuItem {  get; set; }
         public ICommand callHomeWindow {  get; set; }
+        /// <summary>
+        /// Event for closing button on press X on menu item(еще есть закрытие на среднию кнопку и это события cs коде)
+        /// </summary>
         public ICommand closeMenuItem { get; set; }
         #endregion
 
@@ -203,66 +194,6 @@ namespace WmsDesktop
 
         public MainViewModel(Window window)
         {
-            #region businessLogic
-            Client = new Client();
-            selectAtomy = new RelayCommand(o =>
-            {
-                _supplier = 0;
-            });
-            selectBork = new RelayCommand(o =>
-            {
-                _supplier = 1;
-            });
-            callBorkDialog = new RelayCommand(o =>
-            {
-                var dialog = new DialogWindow(o, CatalogBorkItems, this, Items);
-                dialog.Owner = MainWindow;
-                dialog.listItems.ItemsSource = CatalogBorkItems;
-                dialog.Show();
-            }, c =>
-            {
-                var isBork = c.GetType().GetProperty("TE") == null;
-                
-                if(isBork)
-                {
-                    var catalogExist = (BorkItem)c;
-                    if(catalogExist.Catalog == null)
-                        return true;
-                }
-                return false;
-            });
-            clearItems = new RelayCommand(o =>
-            {
-                Items = new ObservableCollection<IUiItem>();
-            });
-            createSession = new RelayCommand(async o =>
-            {
-                bool isGood = true;
-                foreach (var item in Items)
-                {
-                    var func = AdapterHelper.getGoodsBalance[_supplier];
-                    var str = _supplier == 0 ? (item as AtomyItem).TE : item.Catalog.Id;
-                    Int32 count = item.Catalog != null ? await func(str, Client, ip) : 0;
-                    if (item.Catalog == null)
-                    {
-                        isGood = false;
-                    }
-                    if (item.Count > count)
-                    {
-                        isGood = false;
-                        MessageBox.Show($"{item.Name} не хватает {item.Count - count}");
-                    }
-                }
-                if (isGood)
-                {
-                    var func = AdapterHelper.createAssebmlySession[_supplier];
-                    await func(Client, Items, ip, Items.Sum(el => el.Count), Items.Count, _supplier);
-                    Client.CreateAssebmlySession(Items, ip, Items.Sum(el => el.Count), Items.Count, 1);//REMAKE
-                    Items = new ObservableCollection<IUiItem>();
-                }
-            });
-            Items = new ObservableCollection<IUiItem>();
-            #endregion
             #region Display Window
             _window = window;
             collapseWindow = new RelayCommand(o => _window.WindowState = WindowState.Minimized);
@@ -287,10 +218,27 @@ namespace WmsDesktop
             };
             callHomeWindow = new RelayCommand(o =>
             {
-                HomePage = new HomePage(this);
+                HomePage = new HomePage(this, window);
             });
             closeMenuItem = new RelayCommand(o => {
-               
+                var item = o as MenuItem;
+                if (item != null)
+                {
+                    if (item.IsSelected == true)
+                    {
+                        MenuItems.Remove(item);
+                        if (MenuItems.Count != 0)
+                        {
+                            MenuItems[MenuItems.Count - 1].IsSelected = true;
+                            CurrentPage = MenuItems[MenuItems.Count - 1].Page;
+                        }
+                        else
+                        {
+                            CurrentPage = null;
+                        }
+                    }
+                    MenuItems.Remove(item);
+                }
             });
             #endregion
         }

@@ -3,12 +3,85 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WmsDesktop.Pages"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:local="clr-namespace:WmsDesktop"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CreateSessionPage">
+    <Page.Resources>
 
-    <Grid Background="Green">
-        
-    </Grid>
+        <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
+        <local:CatalogToBackgroundColorConverter x:Key="CatalogToBackgroundColorConverter"/>
+    </Page.Resources>
+    <Grid Visibility="Visible" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Visibility="Visible" 
+                          Grid.Row="1" 
+                          Background="AliceBlue"
+                          Margin="10">
+
+            <ScrollViewer x:Name="SWCreatingAssembly" Visibility="Visible">
+                <StackPanel>
+                    <StackPanel 
+                                    Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibilityConverter}}"
+                                    x:Name="GridContainer"
+                                    >
+                        <RadioButton Command="{Binding selectAtomy}" IsChecked="True">Atomy</RadioButton>
+                        <RadioButton Command="{Binding selectBork}" x:Name="radioBork" >Bork</RadioButton>
+
+                        <WrapPanel
+                                        Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
+                                        Name="PanelDnD"
+                                        DragDrop.Drop="WrapPanel_Drop"
+                                        AllowDrop="True"
+                                        Background="LightBlue">
+                        </WrapPanel>
+                    </StackPanel>
+                    <Grid  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15" >
+                                        <Grid Margin="10" Background="{Binding Catalog, Converter={StaticResource CatalogToBackgroundColorConverter}}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                    <i:InvokeCommandAction 
+                                                                        Command="{Binding DataContext.callBorkDialog, 
+                                                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                        CommandParameter="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Padding="10" Text="{Binding Left}" Grid.Column="0"></TextBlock>
+                                            <TextBlock Padding="10" Text="{Binding Center}" Grid.Column="1"></TextBlock>
+                                            <TextBlock Padding="10" Text="{Binding Right}" Grid.Column="2" HorizontalAlignment="Right"></TextBlock>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
+                            <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+
+        </Grid>
+
 </Page>

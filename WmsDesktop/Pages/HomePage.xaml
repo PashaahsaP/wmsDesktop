@@ -14,7 +14,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding WidthSideBar}"/>
+            <ColumnDefinition Width="{Binding WidthSideBar, FallbackValue=150}"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Background="{StaticResource TitleColorBrush}">
@@ -23,8 +23,8 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Column="1" Background="White">
-            <Button Command="{Binding callCreateCatalogItemPage}" Margin="5" Width="105">Добавить каталог</Button>
-            <Button Command="{Binding callAddingPage}" Margin="5" Width="105">Создать заявку</Button>
+            <Button Command="{Binding callCreateCatalogItemPage}" Margin="5" Width="105">Создать заявку</Button>
+            <Button Command="{Binding callAddingPage}" Margin="5" Width="105">Добавить каталог</Button>
         </StackPanel>
     </Grid>
 </Page>

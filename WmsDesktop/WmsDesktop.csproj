@@ -93,7 +93,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CatalogToBackgroundColorConverter.cs" />
+    <Compile Include="Converter\CatalogToBackgroundColorConverter.cs" />
     <Compile Include="Pages\AddingCatalogsPage.xaml.cs">
       <DependentUpon>AddingCatalogsPage.xaml</DependentUpon>
     </Compile>
@@ -104,10 +104,11 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="IUiItem.cs" />
+    <Compile Include="ViewModels\CreateSessionViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ZeroToVisibilityConverter.cs" />
+    <Compile Include="Converter\ZeroToVisibilityConverter.cs" />
     <Page Include="DialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

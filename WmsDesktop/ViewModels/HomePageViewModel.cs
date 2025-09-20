@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WmsDesktop.Pages;
@@ -32,7 +33,7 @@ namespace WmsDesktop.ViewModels
         public ICommand callCreateCatalogItemPage { get; set; }
         #endregion
         #region ctor
-        public HomePageViewModel(MainViewModel vm)
+        public HomePageViewModel(MainViewModel vm, Window window)
         {
             closePage = new RelayCommand((o) => {
                 vm.HomePage = null;
@@ -42,8 +43,8 @@ namespace WmsDesktop.ViewModels
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
-                    Title = "Создание заявки",
-                    Page = new AddingCatalogsPage()
+                    Title = "Добавить наименование",
+                    Page = new AddingCatalogsPage(vm)
                 };
 
                 AppendPage(newMenuItem, vm);
@@ -53,8 +54,8 @@ namespace WmsDesktop.ViewModels
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
-                    Title = "Добавить наименование",
-                    Page = new CreateSessionPage()
+                    Title = "Создать заявку",
+                    Page = new CreateSessionPage(vm, window)
                 };
                 AppendPage(newMenuItem, vm);
             });
