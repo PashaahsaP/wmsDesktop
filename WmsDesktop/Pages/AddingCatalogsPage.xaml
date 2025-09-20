@@ -6,7 +6,9 @@
       xmlns:local="clr-namespace:WmsDesktop.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AddingCatalogsPage">
+      Loaded="Page_Loaded"
+      Title="AddingCatalogsPage"
+      >
 
     <Grid Background="White">
         <StackPanel Orientation="Horizontal">
@@ -17,23 +19,23 @@
                 Margin="5"
                 Orientation="Horizontal">
                     <TextBlock Margin="5">Имя</TextBlock>
-                    <TextBox x:Name="tbName" Width="150"></TextBox>
+                    <TextBox x:Name="tbName" Width="150" Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </StackPanel>
                 <StackPanel  Margin="5"
                 Orientation="Horizontal">
                     <TextBlock Margin="5"> ШК</TextBlock>
-                    <TextBox x:Name="tbBarcode" Width="150"></TextBox>
+                    <TextBox x:Name="tbBarcode" Width="150" Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </StackPanel>
                 <Button x:Name="btnCatalogBorkAdd" 
                     Height="30" 
                     Width="120"
                     Click="btnCatalogBorkAdd_Click">Добавить</Button>
-                <TextBlock x:Name="tbError"></TextBlock>
+                <TextBlock x:Name="tbError" Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             </StackPanel>
             <StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="textBoxSearhc" TextChanged="textBoxSearhc_TextChanged" 
+                    <TextBox x:Name="textBoxSearhc" Text="{Binding TbText, UpdateSourceTrigger=PropertyChanged}" TextChanged="textBoxSearhc_TextChanged" 
                     Padding="5"
                     Margin="5"
                     Width="200"></TextBox>

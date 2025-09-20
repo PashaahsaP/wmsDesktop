@@ -134,8 +134,7 @@ namespace WmsDesktop
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var json = await client.GetAllCatalogBork(ip);
-            vm.CatalogBorkItems = JsonConvert.DeserializeObject<List<OrderItem>>(json);
+          
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];

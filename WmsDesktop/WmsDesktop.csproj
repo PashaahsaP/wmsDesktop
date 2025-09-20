@@ -104,6 +104,7 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="IUiItem.cs" />
+    <Compile Include="ViewModels\AddingCatalogViewModel.cs" />
     <Compile Include="ViewModels\CreateSessionViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
