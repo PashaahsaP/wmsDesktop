@@ -115,7 +115,6 @@ namespace WmsDesktop.ViewModels
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];
             var data = await client.GetAllCatalogBork(ip);
-            await SetCommand();
             return new AddingCatalogViewModel(data);
         }
         public async void SetCommand()
