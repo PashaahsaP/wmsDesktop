@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WmsDesktop"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Loaded="Window_Loaded" Margin="10">
+        Loaded="Window_Loaded" Margin="10" KeyDown="Window_KeyDown">
 
    
     <WindowChrome.WindowChrome>

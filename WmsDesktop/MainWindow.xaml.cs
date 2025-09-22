@@ -171,5 +171,25 @@ namespace WmsDesktop
                 vm.MenuItems.Remove(item);
             }
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Escape)
+            {
+                var menuItem = vm.MenuItems.First(item => item.IsSelected == true);
+                vm.MenuItems.Remove(menuItem);
+                if (vm.MenuItems.Count != 0)
+                {
+                    vm.MenuItems[vm.MenuItems.Count - 1].IsSelected = true;
+                    vm.CurrentPage = vm.MenuItems[vm.MenuItems.Count - 1].Page;
+                }
+                else
+                {
+                    vm.CurrentPage = null;
+
+                }
+                
+            }
+        }
     }
 }
