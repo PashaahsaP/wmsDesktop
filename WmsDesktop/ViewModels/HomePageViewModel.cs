@@ -12,7 +12,7 @@ using WmsDesktop.vm;
 
 namespace WmsDesktop.ViewModels
 {
-    internal class HomePageViewModel : INotifyPropertyChanged
+    internal class HomePageViewModel : INotifyPropertyChanged, IState
     {
         #region ui
         private int _widthSideBar = 150;
@@ -31,31 +31,35 @@ namespace WmsDesktop.ViewModels
         public ICommand closePage { get; set; }
         public ICommand callAddingPage { get; set; }
         public ICommand callCreateCatalogItemPage { get; set; }
+        public PageStates PageState { get => PageStates.HomePage;}
         #endregion
         #region ctor
-        public HomePageViewModel(MainViewModel vm, Window window)
+        public  HomePageViewModel(MainViewModel vm, Window window)
         {
             closePage = new RelayCommand((o) => {
                 vm.HomePage = null;
             });
-            callAddingPage = new RelayCommand((o) =>
+            callAddingPage = new RelayCommand(async (o) =>
             {
+                var catalogVm = await AddingCatalogViewModel.CreateAsync();
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
                     Title = "Добавить наименование",
-                    Page = new AddingCatalogsPage(vm)
+                    Page = new AddingCatalogsPage(vm, catalogVm),
+                    State = catalogVm
                 };
 
                 AppendPage(newMenuItem, vm);
             });
-            callCreateCatalogItemPage = new RelayCommand((o) =>
+            callCreateCatalogItemPage = new RelayCommand(async (o) =>
             {
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
                     Title = "Создать заявку",
-                    Page = new CreateSessionPage(vm, window)
+                    Page = new CreateSessionPage(vm, window),
+                    
                 };
                 AppendPage(newMenuItem, vm);
             });
@@ -66,13 +70,13 @@ namespace WmsDesktop.ViewModels
         #region helper methods
         private void AppendPage(MenuItem menuItem, MainViewModel vm)
         {
-            foreach (var item in vm.MenuItems)
+            foreach (var item in vm.MenuItems)// сброс выделения
             {
                 item.IsSelected = false;
             }
-            vm.MenuItems.Add(menuItem);
-            vm.CurrentPage = menuItem.Page;
-            vm.HomePage = null;
+            vm.MenuItems.Add(menuItem); // добавить в панель
+            vm.CurrentPage = menuItem.Page; // Выделенный элемент на панели
+            vm.HomePage = null; //закрыть боковую панель
         }
         #endregion
         #endregion

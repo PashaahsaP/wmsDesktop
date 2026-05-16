@@ -6,10 +6,21 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
-    public class OrderItem
+    public class Supplier
     {
         public string Id { get; set; }
         public string Name { get; set; }
+
+        public override string ToString() => Name;
+    }
+    public class OrderItem
+    {
+        public string Id { get; set; }
+        public string SupplierId { get; set; }
+        public string Name { get; set; }
+        public string SupplierName { get; set; }
+        public string Sku{ get; set; }
+
         public override string ToString() => Name;
     }
     /// <summary>

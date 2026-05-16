@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WmsDesktop.Pages;
+using WmsDesktop.ViewModels;
 using WmsDesktop.vm;
 
 namespace WmsDesktop
@@ -52,7 +54,7 @@ namespace WmsDesktop
     public class MenuItem : INotifyPropertyChanged
     {
         private bool _isSelected;
-        private Page _pages;
+        private Page _page;
         public string Title { get; set; }
         public bool IsSelected {
             get
@@ -69,14 +71,16 @@ namespace WmsDesktop
         {
             get
             {
-                return _pages;
+                return _page;
             }
             set
             {
-                _pages = value;
+                _page = value;
                 OnPropertyChanged(nameof(Page));
             }
         }
+        
+        public IState State { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) =>
@@ -208,6 +212,7 @@ namespace WmsDesktop
                 MenuItem menuItem = o as MenuItem;
                 menuItem.IsSelected = true;
                 CurrentPage = menuItem.Page;
+               
             });
             _window.StateChanged += (s, e) =>
             {

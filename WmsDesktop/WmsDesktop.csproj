@@ -93,7 +93,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Barcode.cs" />
     <Compile Include="Converter\CatalogToBackgroundColorConverter.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="IState.cs" />
+    <Compile Include="PageStates.cs" />
     <Compile Include="Pages\AddingCatalogsPage.xaml.cs">
       <DependentUpon>AddingCatalogsPage.xaml</DependentUpon>
     </Compile>

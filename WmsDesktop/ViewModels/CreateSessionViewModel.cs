@@ -14,7 +14,7 @@ using WmsDesktop.vm;
 
 namespace WmsDesktop.ViewModels
 {
-    internal class CreateSessionViewModel : INotifyPropertyChanged
+    internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
         private int _supplier;
         private MainViewModel vm;
@@ -39,6 +39,9 @@ namespace WmsDesktop.ViewModels
         public ICommand createSession { get; set; }
         public ICommand selectBork { get; set; }
         public ICommand selectAtomy { get; set; }
+
+        public PageStates PageState => PageStates.CreateSessionPage;
+
         public CreateSessionViewModel(MainViewModel vm, Window window)
         {
             Client = new Client();

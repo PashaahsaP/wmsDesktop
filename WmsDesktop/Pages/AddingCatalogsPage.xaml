@@ -9,50 +9,159 @@
       Loaded="Page_Loaded"
       Title="AddingCatalogsPage"
       >
-
     <Grid Background="White">
-        <StackPanel Orientation="Horizontal">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid  Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.2*"/>
+                </Grid.ColumnDefinitions>
+            
             <StackPanel
-            Width="200"
+                Grid.Column="0"
             >
-                <StackPanel 
-                Margin="5"
-                Orientation="Horizontal">
-                    <TextBlock Margin="5">Имя</TextBlock>
-                    <TextBox x:Name="tbName" Width="150" Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </StackPanel>
-                <StackPanel  Margin="5"
-                Orientation="Horizontal">
-                    <TextBlock Margin="5"> ШК</TextBlock>
-                    <TextBox x:Name="tbBarcode" Width="150" Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </StackPanel>
-                <Button x:Name="btnCatalogBorkAdd" 
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.4*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Margin="5">Клиент</TextBlock>
+                        <ComboBox
+                            Grid.Column="1"
+                             x:Name="CBSuppliersCatalog"
+                             Width="125"
+                             ItemsSource="{Binding Suppliers}"
+                             SelectedItem="{Binding SelectedSupplierCatalog, Mode=TwoWay}"
+                             DisplayMemberPath="Name"
+                             Margin="5">
+                        </ComboBox>
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="5">Имя</TextBlock>
+                    <TextBox Grid.Column="1" 
+                             x:Name="tbName"  
+                             Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsEnabled}"></TextBox>
+                </Grid>
+                <Grid  Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Margin="5"> ШК</TextBlock>
+                    <TextBox Grid.Column="1" x:Name="tbBarcode"  Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </Grid>
+                <Button 
+                    x:Name="btnCatalogBorkAdd" 
                     Height="30" 
                     Width="120"
-                        Command="{Binding updateCatalog}">Добавить</Button>
-                <TextBlock x:Name="tbError" 
+                    Margin="5"
+                    Command="{Binding addBarcode}">Добавить шк</Button>
+                <Button 
+                    x:Name="btnCatalogBoAdd" 
+                    Height="30" 
+                    Width="120"
+                    Margin="5"
+                    Command="{Binding clearFields}">Очистить</Button>
+                <Button x:Name="btnCatalogBorkAd" 
+                    Height="30" 
+                    Width="120"
+                    Margin="5"
+                    IsEnabled="{Binding IsEnabledSave}"
+                    Command="{Binding save}">Сохранить</Button>
+                    <Button 
+                    Height="30" 
+                    Width="120"
+                    Margin="5"
+                    IsEnabled="{Binding IsEnabledAppend}"
+                    Command="{Binding addEntity}">Добавить</Button>   
+                    <TextBlock x:Name="tbError" 
                            Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
                            ></TextBlock>
             </StackPanel>
-            <StackPanel>
+
+                <ItemsControl 
+                    Grid.Column="1"
+                    ItemsSource="{Binding SelectedBarcodes}"
+                    HorizontalContentAlignment="Stretch">
+                    
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border 
+                                    Background="#2596be"
+                                    CornerRadius="5"
+                                    Padding="3"
+                                    Margin="5">
+                                <Grid 
+                                    VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.8*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock 
+                                        Grid.Column="0"
+                                        Foreground="White"
+                                        FontFamily="Cascadia Mono"
+                                        Padding="2"
+                                        Margin="0"
+                                        Text="{Binding Name}"
+                                        ></TextBlock>
+                                    <Button 
+                                        Background="Transparent" 
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Padding="0"
+                                        Margin="0"
+                                        Command="{Binding DataContext.removeBarcode,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        >X</Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+            <StackPanel Grid.Column="1">
 
                 <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                        x:Name="CBSuppliers"
+                        Width="125"
+                        ItemsSource="{Binding Suppliers}"
+                        SelectedItem="{Binding SelectedSupplier}"
+                        DisplayMemberPath="Name"
+                        Margin="5">
+                        
+                    </ComboBox>
                     <TextBox x:Name="textBoxSearhc" Text="{Binding TbText, UpdateSourceTrigger=PropertyChanged}"  
                     Padding="5"
                     Margin="5"
-                    Width="200"></TextBox>
+                    MinWidth="125"></TextBox>
 
                 </StackPanel>
+                
                 <ListBox
                     ItemsSource="{Binding ItemsList}"
-                    Width="600" 
-                    Height="380"
+                    Margin="0 0 10 0"
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                         x:Name="listItems"
                                         SelectionChanged="listItems_SelectionChanged">
 
                 </ListBox>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>

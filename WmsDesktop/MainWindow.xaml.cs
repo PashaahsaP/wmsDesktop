@@ -33,6 +33,11 @@ namespace WmsDesktop
         public int id { get; set; }
 
     }
+    public class StringID
+    {
+        public string id { get; set; }
+
+    }
     public class Name
     {
         public string name { get; set; }
@@ -80,11 +85,9 @@ namespace WmsDesktop
     }
     public class BarcodeItem
     {
-        public string Id { get; set; }
-        public string catalogId { get; set; }
         public string name { get; set; }
-        public string type { get; set; }
-        public override string ToString() => name;
+        public string catalogId { get; set; }
+        public int supplierId { get; set; }
     }
     public class AtomyGoodsItem
     {
@@ -107,10 +110,10 @@ namespace WmsDesktop
 
         public override string ToString() => id;
     }
-    public class BorkCatalogItem
+    public class Catalog
     {
-        public string Id { get; set; }
         public string name { get; set; }
+        public int supplierId { get; set; }
 
     }
    

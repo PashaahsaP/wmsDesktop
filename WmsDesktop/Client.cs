@@ -198,15 +198,15 @@ namespace WmsDesktop
 
             return barcodeResult;
         }
-        internal async Task<BorkCatalogItem> GetCatalogBorkByName(string catalogName, string ip)
+        /*internal async Task<BorkCatalog> GetCatalogBorkByName(string catalogName, string ip)
         {
-            BorkCatalogItem barcodeResult = null;
+            BorkCatalog barcodeResult = null;
             try
             {
                 var response = await client.GetAsync($"http://{ip}:3000/catalogsBorks/name/{catalogName.Replace("/", "%2F")}");
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<BorkCatalogItem>(data);
+                var result = JsonConvert.DeserializeObject<BorkCatalog>(data);
                 barcodeResult = result;
             }
             catch (Exception ex)
@@ -215,24 +215,24 @@ namespace WmsDesktop
             }
 
             return barcodeResult;
-        }
-        internal async Task<BorkCatalogItem> SendCatalogBork(BorkCatalogItem catalog, string ip)
+        }*/
+        internal async Task<string> SendCatalog(Catalog catalog, string ip)
         {
-            BorkCatalogItem result = null;
+            var resultId = "";
             try
             {
                 var json = JsonConvert.SerializeObject(catalog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync($"http://{ip}:3000/catalogBork", content);
+                var response = await client.PostAsync($"http://{ip}:3000/catalog/nameAndSupplier", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<BorkCatalogItem>(data);
+                resultId = JsonConvert.DeserializeObject<StringID>(data).id;
             }
             catch (Exception ex)
             {
             }
 
-            return result;
+            return resultId;
         }
         internal async Task<ID> SendGoodsBork(GoodsBorkItem goods, string ip)
         {
@@ -324,17 +324,17 @@ namespace WmsDesktop
 
             return result;
         }
-        internal async Task<string> SendBarcodeBork(BarcodeItem barcode, string ip)
+        internal async Task<string> SendBarcode(BarcodeItem barcode, string ip)
         {
             string barcodeId = null;
             try
             {
                 var json = JsonConvert.SerializeObject(barcode);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync($"http://{ip}:3000/barcodeBork", content);
+                var response = await client.PostAsync($"http://{ip}:3000/barcode/nameAndCatalogAndSup", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                barcodeId = JsonConvert.DeserializeObject<string>(data);
+                barcodeId = JsonConvert.DeserializeObject<StringID>(data).id;
             }
             catch (Exception ex)
             {
@@ -343,12 +343,46 @@ namespace WmsDesktop
 
             return barcodeId;
         }
-        internal async Task<string> GetAllCatalogBork(string ip)
+        internal async Task<string> GetAllCatalogsWithSuppliers(string ip)
         {
             var result = "";
             try
             {
-                var response = await client.GetAsync($"http://{ip}:3000/allCatalogBork");
+                var response = await client.GetAsync($"http://{ip}:3000/catalogsAndSuppliers/0");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
+        internal async Task<string> GetSuppliers(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/suppliers/catalog/0");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
+        internal async Task<string> GetBarcodes(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/barcodes/catalog/0");
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
                 result = data;
@@ -361,4 +395,5 @@ namespace WmsDesktop
             return result;
         }
     }
+
 }
