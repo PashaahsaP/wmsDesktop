@@ -41,7 +41,7 @@ namespace WmsDesktop
             if (listItems != null)
             {
                 var content = textBox.Text.ToString();
-                var filtered = Items.Where(item => item.Name != null && item.Name.ToLower().Contains(content)).ToList();
+                var filtered = Items.Where(item => item.name != null && item.name.ToLower().Contains(content)).ToList();
                 listItems.ItemsSource = null;
                 listItems.ItemsSource = filtered;
             }
@@ -58,8 +58,8 @@ namespace WmsDesktop
                     return true;
                 return false;
             }) as BorkItem;
-            newObj.Name = selected.Name;
-            newObj.Catalog = new OrderItem { Id = selected.Id, Name = "" };
+            newObj.Name = selected.name;
+            newObj.Catalog = new OrderItem { id = selected.id, name = "" };
             var newCollection = new ObservableCollection<IUiItem>();
             foreach (var item in UiItems)
             {

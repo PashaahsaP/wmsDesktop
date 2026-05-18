@@ -92,13 +92,24 @@ namespace WmsDesktop
         
         public string ip {  get; set; }
 
-        private ObservableCollection<MenuItem> _menuItems;
+        private ObservableCollection<MenuItem> _leftMenuItems = new ObservableCollection<MenuItem>();
+        private ObservableCollection<MenuItem> _rightMenuItems = new ObservableCollection<MenuItem>();
 
-        public ObservableCollection<MenuItem> MenuItems{ get => _menuItems;
+        public ObservableCollection<MenuItem> LeftMenuItems{ 
+            get => _leftMenuItems;
             set
             {
-                _menuItems = value;
-                OnPropertyChanged(nameof(MenuItems));
+                _leftMenuItems = value;
+                OnPropertyChanged(nameof(LeftMenuItems));
+            }
+        }
+        public ObservableCollection<MenuItem> RightMenuItems
+        {
+            get => _rightMenuItems;
+            set
+            {
+                _rightMenuItems = value;
+                OnPropertyChanged(nameof(RightMenuItems));
             }
         }
         public MainWindow MainWindow { get; set; }
@@ -168,16 +179,29 @@ namespace WmsDesktop
                 }
             }
         }
-        private Page _currentPage;
-        public Page CurrentPage
+        private Page _leftCurrentPage;
+        private Page _rightCurrentPage;
+        public Page LeftCurrentPage
         {
-            get => _currentPage;
+            get => _leftCurrentPage;
             set
             {
-                if (_currentPage != value)
+                if (_leftCurrentPage != value)
                 {
-                    _currentPage = value;
-                    OnPropertyChanged(nameof(CurrentPage));
+                    _leftCurrentPage = value;
+                    OnPropertyChanged(nameof(LeftCurrentPage));
+                }
+            }
+        }
+        public Page RightCurrentPage
+        {
+            get => _rightCurrentPage;
+            set
+            {
+                if (_rightCurrentPage != value)
+                {
+                    _rightCurrentPage = value;
+                    OnPropertyChanged(nameof(RightCurrentPage));
                 }
             }
         }
@@ -186,8 +210,11 @@ namespace WmsDesktop
         public ICommand collapseWindow { get; set; }
         public ICommand expandWindow { get; set; }
         public ICommand closeWindow { get; set; }
-        public ICommand selectMenuItem {  get; set; }
+        public ICommand selectLeftMenuItem {  get; set; }
+        public ICommand selectRightMenuItem {  get; set; }
         public ICommand callHomeWindow {  get; set; }
+        public ICommand moveToLeft { get; set; }
+        public ICommand moveToRight { get; set; }
         /// <summary>
         /// Event for closing button on press X on menu item(еще есть закрытие на среднию кнопку и это события cs коде)
         /// </summary>
@@ -203,16 +230,27 @@ namespace WmsDesktop
             collapseWindow = new RelayCommand(o => _window.WindowState = WindowState.Minimized);
             expandWindow = new RelayCommand(o => _window.WindowState = WindowState.Maximized);
             closeWindow = new RelayCommand(o => _window.Close());
-            selectMenuItem = new RelayCommand((o) =>
+            selectLeftMenuItem = new RelayCommand((o) =>
             {
-                foreach (var item in MenuItems)
+                foreach (var item in LeftMenuItems)
                 {
                     item.IsSelected = false;
                 }
                 MenuItem menuItem = o as MenuItem;
                 menuItem.IsSelected = true;
-                CurrentPage = menuItem.Page;
+                LeftCurrentPage = menuItem.Page;
                
+            });
+            selectRightMenuItem = new RelayCommand((o) =>
+            {
+                foreach (var item in RightMenuItems)
+                {
+                    item.IsSelected = false;
+                }
+                MenuItem menuItem = o as MenuItem;
+                menuItem.IsSelected = true;
+                RightCurrentPage = menuItem.Page;
+
             });
             _window.StateChanged += (s, e) =>
             {
@@ -227,22 +265,117 @@ namespace WmsDesktop
             });
             closeMenuItem = new RelayCommand(o => {
                 var item = o as MenuItem;
-                if (item != null)
+                if (item == null)
+                    return;
+                if (LeftMenuItems.Contains(item))
                 {
                     if (item.IsSelected == true)
                     {
-                        MenuItems.Remove(item);
-                        if (MenuItems.Count != 0)
+                        LeftMenuItems.Remove(item);
+                        if (LeftMenuItems.Count != 0)
                         {
-                            MenuItems[MenuItems.Count - 1].IsSelected = true;
-                            CurrentPage = MenuItems[MenuItems.Count - 1].Page;
+                            LeftMenuItems[LeftMenuItems.Count - 1].IsSelected = true;
+                            LeftCurrentPage = LeftMenuItems[LeftMenuItems.Count - 1].Page;
                         }
                         else
                         {
-                            CurrentPage = null;
+                            LeftCurrentPage = null;
                         }
                     }
-                    MenuItems.Remove(item);
+                    //LeftMenuItems.Remove(item);
+                }
+                else
+                {
+                    if (item.IsSelected == true)
+                    {
+                        RightMenuItems.Remove(item);
+                        if (RightMenuItems.Count != 0)
+                        {
+                            RightMenuItems[RightMenuItems.Count - 1].IsSelected = true;
+                            RightCurrentPage = RightMenuItems[RightMenuItems.Count - 1].Page;
+                        }
+                        else
+                        {
+                            RightCurrentPage = null;
+                        }
+                    }
+                    //RightMenuItems.Remove(item);
+                }
+            });
+            
+            moveToLeft = new RelayCommand(o => {
+                if (RightMenuItems.Count != 0)
+                {
+                    LeftCurrentPage = null;
+                    RightCurrentPage= null;
+                    var leftResult = new ObservableCollection<MenuItem>();
+                    var rightResult = new ObservableCollection<MenuItem>();
+
+                    foreach (var item in LeftMenuItems)
+                    {
+                        item.IsSelected = false;
+                        leftResult.Add(item);
+                    }
+
+                    foreach (var item in RightMenuItems)
+                    {
+                        if (item.IsSelected)
+                        {
+                            leftResult.Add(item);
+                            LeftCurrentPage = item.Page;
+                        }
+                        else
+                        {
+                            rightResult.Add(item);
+                            
+                        }
+                    }
+                    if (rightResult.Count != 0)
+                    {
+                        var last = rightResult.Last();
+                        last.IsSelected = true;
+                        RightCurrentPage = last.Page;
+                    }
+                    RightMenuItems = rightResult;
+                    LeftMenuItems = leftResult;
+
+                }
+            });
+            moveToRight = new RelayCommand(o => {
+                if (LeftMenuItems.Count != 0)
+                {
+                    LeftCurrentPage = null;
+                    RightCurrentPage = null;
+                    var leftResult = new ObservableCollection<MenuItem>();
+                    var rightResult = new ObservableCollection<MenuItem>();
+
+                    foreach (var item in RightMenuItems)
+                    {
+                        item.IsSelected = false;
+                        rightResult.Add(item);
+                    }
+
+                    foreach (var item in LeftMenuItems)
+                    {
+                        if (item.IsSelected)
+                        {
+                            rightResult.Add(item);
+                            RightCurrentPage = item.Page;
+                        }
+                        else
+                        {
+                            leftResult.Add(item);
+                           
+                        }
+                    }
+                    if (leftResult.Count != 0)
+                    {
+                        var last = leftResult.Last();
+                        last.IsSelected = true;
+                        LeftCurrentPage = last.Page;
+                    }
+                    LeftMenuItems = leftResult;
+                    RightMenuItems = rightResult;
                 }
             });
             #endregion

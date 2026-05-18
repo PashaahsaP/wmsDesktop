@@ -114,6 +114,7 @@ namespace WmsDesktop
     {
         public string name { get; set; }
         public int supplierId { get; set; }
+        public string sku { get; set; }
 
     }
    
@@ -133,7 +134,7 @@ namespace WmsDesktop
             ExcelPackage.License.SetNonCommercialPersonal("Pavel Semenov");
             InitializeComponent();
             
-            vm.MenuItems = new ObservableCollection<MenuItem>();
+            vm.LeftMenuItems = new ObservableCollection<MenuItem>();
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -156,22 +157,41 @@ namespace WmsDesktop
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var item = (sender as Button)?.CommandParameter as MenuItem;
+            if (item == null)
+                return;
             if (item != null)
             {
                 if (item.IsSelected == true)
                 {
-                    vm.MenuItems.Remove(item);
-                    if (vm.MenuItems.Count != 0)
+                    vm.LeftMenuItems.Remove(item);
+                    if (vm.LeftMenuItems.Count != 0)
                     {
-                        vm.MenuItems[vm.MenuItems.Count - 1].IsSelected = true;
-                        vm.CurrentPage = vm.MenuItems[vm.MenuItems.Count - 1].Page;
+                        vm.LeftMenuItems[vm.LeftMenuItems.Count - 1].IsSelected = true;
+                        vm.LeftCurrentPage = vm.LeftMenuItems[vm.LeftMenuItems.Count - 1].Page;
                     }
                     else
                     {
-                        vm.CurrentPage = null;
+                        vm.LeftCurrentPage = null;
                     }
                 }
-                vm.MenuItems.Remove(item);
+                //vm.LeftMenuItems.Remove(item);
+            }
+            if (item != null)
+            {
+                if (item.IsSelected == true)
+                {
+                    vm.RightMenuItems.Remove(item);
+                    if (vm.RightMenuItems.Count != 0)
+                    {
+                        vm.RightMenuItems[vm.RightMenuItems.Count - 1].IsSelected = true;
+                        vm.RightCurrentPage = vm.RightMenuItems[vm.RightMenuItems.Count - 1].Page;
+                    }
+                    else
+                    {
+                        vm.RightCurrentPage = null;
+                    }
+                }
+                //vm.LeftMenuItems.Remove(item);
             }
         }
 
@@ -179,16 +199,16 @@ namespace WmsDesktop
         {
             if(e.Key == Key.Escape)
             {
-                var menuItem = vm.MenuItems.First(item => item.IsSelected == true);
-                vm.MenuItems.Remove(menuItem);
-                if (vm.MenuItems.Count != 0)
+                var menuItem = vm.LeftMenuItems.First(item => item.IsSelected == true);
+                vm.LeftMenuItems.Remove(menuItem);
+                if (vm.LeftMenuItems.Count != 0)
                 {
-                    vm.MenuItems[vm.MenuItems.Count - 1].IsSelected = true;
-                    vm.CurrentPage = vm.MenuItems[vm.MenuItems.Count - 1].Page;
+                    vm.LeftMenuItems[vm.LeftMenuItems.Count - 1].IsSelected = true;
+                    vm.LeftCurrentPage = vm.LeftMenuItems[vm.LeftMenuItems.Count - 1].Page;
                 }
                 else
                 {
-                    vm.CurrentPage = null;
+                    vm.LeftCurrentPage = null;
 
                 }
                 

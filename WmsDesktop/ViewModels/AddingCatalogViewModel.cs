@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -21,6 +22,7 @@ namespace WmsDesktop.ViewModels
         private static string ip = "192.168.0.11";
         private string _tbText = "";
         private string _tbName = "";
+        private string _tbSku = "";
         private string _tbBarcode = "";
         private string _tblockError = "";
         private bool _isEnabled = true;
@@ -39,6 +41,18 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(TbText));
                 OnPropertyChanged(nameof(ItemsList));
 
+            }
+        }
+        public string TbSku
+        {
+            get
+            {
+                return _tbSku;
+            }
+            set
+            {
+                _tbSku = value;
+                OnPropertyChanged(nameof(TbSku));
             }
         }
         public string TbName
@@ -123,7 +137,8 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(IsEnabledSave));
             }
         }
-        public Filter Filter { get; set; } = new Filter(new List<OrderItem>());
+        public Visibility PartyVisibility { get; set; } = Visibility.Collapsed;
+        public Filter Filter { get; set; } = new Filter(new List<OrderItem>(), new List<Barcode>());
         public Supplier SelectedSupplier
         {
             get => _selectedSupplier;
@@ -142,6 +157,12 @@ namespace WmsDesktop.ViewModels
             set
             {
                 _selectedSupplierCatalog = value;
+                if(value.Name == "Atomy") 
+                    PartyVisibility = Visibility.Visible;
+                else
+                    PartyVisibility=Visibility.Collapsed;
+
+                OnPropertyChanged(nameof(PartyVisibility));// Добавить применение фильтром и прочее
                 OnPropertyChanged(nameof(SelectedSupplierCatalog));// Добавить применение фильтром и прочее
             }
         }
@@ -183,6 +204,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
+        public OrderItem SelectedItem { get; set; }
 
         public PageStates PageState => PageStates.AddingCatalogPage;
 
@@ -194,7 +216,7 @@ namespace WmsDesktop.ViewModels
                 CatalogItems.Add(item);
 
             }
-            var temp = new ObservableCollection<OrderItem>(_borkItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower())));
+            var temp = new ObservableCollection<OrderItem>(_borkItems.Where(x => x.name.ToLower().Contains(TbText.ToLower())));
             ItemsList = temp;
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
@@ -205,7 +227,7 @@ namespace WmsDesktop.ViewModels
                 Suppliers.Add(item);
 
             }
-            Filter.Items = temp.ToList();
+            
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
             foreach (var item in parsedBarcodes)
@@ -213,7 +235,8 @@ namespace WmsDesktop.ViewModels
                 Barcodes.Add(item);
 
             }
-
+            Filter.Items = temp.ToList();
+            Filter.Barcodes = parsedBarcodes.ToList();
             removeBarcode = new RelayCommand(o =>
             {
                 var barcode = (Barcode)o;
@@ -234,16 +257,17 @@ namespace WmsDesktop.ViewModels
                 IsEnabledNameField = true;
                 TbBarcode = "";
                 TbName = "";
+                TbSku = "";
                 SelectedBarcodes.Clear();
                 SelectedSupplierCatalog = Suppliers.First();
 
             });
             addBarcode = new RelayCommand(async o =>
             {
-                var curCatalog = CatalogItems.FirstOrDefault(it => it.Name == TbName) ;
+                var curCatalog = CatalogItems.FirstOrDefault(it => it.name == TbName) ;
                 if (TbBarcode != "")
                 {
-                    SelectedBarcodes.Add(new Barcode("99999999", TbBarcode, curCatalog != null? curCatalog.Id : "none"));
+                    SelectedBarcodes.Add(new Barcode("?", TbBarcode, curCatalog != null? curCatalog.id : "none"));
                     TbBarcode = "";
                 }
             });
@@ -263,7 +287,7 @@ namespace WmsDesktop.ViewModels
                 TblockError = text;
                 if (isOk) {
                     var suppId = Int32.Parse(SelectedSupplierCatalog.Id);
-                    var catalogId = await client.SendCatalog(new Catalog() { name = TbName, supplierId = suppId }, ip);
+                    var catalogId = await client.SendCatalog(new Catalog() { name = TbName, supplierId = suppId, sku = TbSku}, ip);
                     var barcodeId = "";
                     foreach (var barcode in SelectedBarcodes)
                     {
@@ -273,23 +297,71 @@ namespace WmsDesktop.ViewModels
                     }
                     ItemsList.Add(new OrderItem()
                     {
-                        Id = catalogId, 
-                        Name = TbName,
-                        Sku = "",
-                        SupplierId = SelectedSupplierCatalog.Id,
-                        SupplierName = SelectedSupplierCatalog.Name
+                        id = catalogId, 
+                        name = TbName,
+                        sku = TbSku,
+                        supplierId = SelectedSupplierCatalog.Id,
+                        supplierName = SelectedSupplierCatalog.Name
                     });
                     Filter.Items = new List<OrderItem>(ItemsList);
                     clearFields.Execute(null);
                 }
             });
+            updateEntity = new RelayCommand(async o =>{
+                if(SelectedItem != null)
+                {
+                    var updateItem = new OrderItem()
+                    {
+                        id = SelectedItem.id,
+                        supplierId = SelectedSupplierCatalog.Id,
+                        name= TbName,
+                        sku= TbSku,
+                        supplierName = SelectedSupplierCatalog.Name
+                    };
+                    var updatedId = await client.UpdateCatalog(updateItem, ip);
+                    if(updatedId == SelectedItem.id)
+                    {
+                        var t = ItemsList.First(it => it.id == SelectedItem.id);
+                        t.name = TbName;
+                        t.sku = TbSku;
+                        t.supplierId = SelectedSupplierCatalog.Id;
+                        ItemsList = new ObservableCollection<OrderItem>(ItemsList);
+                    }
+
+
+                    Barcodes.Where(bar => bar.CatalogId == updateItem.id).ToList()
+                        .ForEach(async item => {
+                            if (!SelectedBarcodes.Any(it => it.Name == item.Name))
+                            {
+                                //удалить запись из бд
+                                var t = await client.RemoveBarcode(item, ip);
+                                //удалить запись из локальной
+                            }
+                            
+                        });
+                    foreach (var item in SelectedBarcodes)
+                    {
+                        if (item.Id == "?")
+                        {
+                            //добавить в бд
+                            var addedId = await client.SendBarcode(new BarcodeItem()
+                            {
+                                name = item.Name,
+                                catalogId = item.CatalogId,
+                                supplierId = int.Parse(SelectedSupplierCatalog.Id)
+                            }, ip);
+                            Console.WriteLine();
+                            //добавить в локальное хранилище
+                        }
+                    }
+                }
+            }); 
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public static async Task<AddingCatalogViewModel> CreateAsync()
         {
-
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];

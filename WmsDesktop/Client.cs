@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -288,23 +289,24 @@ namespace WmsDesktop
 
             return result;
         }
-        internal async Task<string> UpdateBorkGoodsAsync(GoodsBorkItem item, string ip)
+        internal async Task<string> UpdateCatalog(OrderItem item, string ip)
         {
             string result = null;
+            StringID[] str = null;
             try
             {
                 var json = JsonConvert.SerializeObject(item);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PutAsync($"http://{ip}:3000/goodsBork/update/", content);
+                var response = await client.PutAsync($"http://{ip}:3000/catalog/update/", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<string>(data);
+                str  = JsonConvert.DeserializeObject<StringID[]>(data);
             }
             catch (Exception ex)
             {
             }
 
-            return result;
+            return str[0].id;
         }
         internal async Task<string> UpdateAtomyGoodsAsync(AtomyGoodsItem item, string ip)
         {
@@ -393,6 +395,25 @@ namespace WmsDesktop
             }
 
             return result;
+        }
+
+        internal async Task<string> RemoveBarcode(Barcode item, string ip)
+        {
+            string result = null;
+            StringID[] str = null;
+            try
+            {
+                var json = JsonConvert.SerializeObject(item);
+                var response = await client.DeleteAsync($"http://{ip}:3000/catalog/delete/{item.Id}");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                str = JsonConvert.DeserializeObject<StringID[]>(data);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return str[0].id;
         }
     }
 

@@ -85,7 +85,7 @@ namespace WmsDesktop.ViewModels
                 bool isGood = true;
                 foreach (var item in Items)
                 {
-                    var func = AdapterHelper.getGoodsBalance[_supplier];
+                   /* var func = AdapterHelper.getGoodsBalance[_supplier];
                     var str = _supplier == 0 ? (item as AtomyItem).TE : item.Catalog.Id;
                     Int32 count = item.Catalog != null ? await func(str, Client, ip) : 0;
                     if (item.Catalog == null)
@@ -96,14 +96,14 @@ namespace WmsDesktop.ViewModels
                     {
                         isGood = false;
                         MessageBox.Show($"{item.Name} не хватает {item.Count - count}");
-                    }
+                    }*/
                 }
                 if (isGood)
                 {
-                    var func = AdapterHelper.createAssebmlySession[_supplier];
+                   /* var func = AdapterHelper.createAssebmlySession[_supplier];
                     await func(Client, Items, ip, Items.Sum(el => el.Count), Items.Count, _supplier);
                     Client.CreateAssebmlySession(Items, ip, Items.Sum(el => el.Count), Items.Count, 1);//REMAKE
-                    Items = new ObservableCollection<IUiItem>();
+                    Items = new ObservableCollection<IUiItem>();*/
                 }
             });
         }

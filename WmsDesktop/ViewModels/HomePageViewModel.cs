@@ -70,12 +70,12 @@ namespace WmsDesktop.ViewModels
         #region helper methods
         private void AppendPage(MenuItem menuItem, MainViewModel vm)
         {
-            foreach (var item in vm.MenuItems)// сброс выделения
+            foreach (var item in vm.LeftMenuItems)// сброс выделения
             {
                 item.IsSelected = false;
             }
-            vm.MenuItems.Add(menuItem); // добавить в панель
-            vm.CurrentPage = menuItem.Page; // Выделенный элемент на панели
+            vm.LeftMenuItems.Add(menuItem); // добавить в панель
+            vm.LeftCurrentPage = menuItem.Page; // Выделенный элемент на панели
             vm.HomePage = null; //закрыть боковую панель
         }
         #endregion

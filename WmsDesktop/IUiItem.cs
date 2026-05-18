@@ -15,13 +15,13 @@ namespace WmsDesktop
     }
     public class OrderItem
     {
-        public string Id { get; set; }
-        public string SupplierId { get; set; }
-        public string Name { get; set; }
-        public string SupplierName { get; set; }
-        public string Sku{ get; set; }
+        public string id { get; set; }
+        public string supplierId { get; set; }
+        public string name { get; set; }
+        public string supplierName { get; set; }
+        public string sku{ get; set; }
 
-        public override string ToString() => Name;
+        public override string ToString() => name;
     }
     /// <summary>
     /// Интерфейс для ui элементов

@@ -31,41 +31,60 @@
         </Grid.RowDefinitions>
 
         <Border 
+            
             Padding="{Binding TitlePadding}"
-                Grid.Row="0" Grid.ColumnSpan="2" 
-                Background="{StaticResource TitleColorBrush}" Height="{Binding TitleHeight, FallbackValue=30}" VerticalAlignment="Top">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                <Button Command="{Binding collapseWindow}" Style="{StaticResource WindowControlButton}">_</Button>
-                <Button Command="{Binding expandWindow}" Style="{StaticResource WindowControlButton}">[]</Button>
-                <Button Margin="{Binding MarginClosedButton}" Command="{Binding closeWindow}" Style="{StaticResource WindowCloseButton}">X</Button>
-            </StackPanel>
+            Grid.Row="0" Grid.ColumnSpan="2" 
+            Background="{StaticResource TitleColorBrush}" 
+            Height="{Binding TitleHeight, FallbackValue=30}" 
+            VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.9*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Command="{Binding collapseWindow}" Style="{StaticResource WindowControlButton}">_</Button>
+                    <Button Command="{Binding expandWindow}" Style="{StaticResource WindowControlButton}">[]</Button>
+                    <Button Margin="{Binding MarginClosedButton}" Command="{Binding closeWindow}" Style="{StaticResource WindowCloseButton}">X</Button>
+                </StackPanel>
+                
+            </Grid>
+           
         </Border>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" 
-                Grid.Column="0" Grid.ColumnSpan="2"
-                Grid.Row="1" Grid.RowSpan="2"
+                Grid.Column="0" 
+               Grid.ColumnSpan="2"
+                Grid.Row="1" 
+               Panel.ZIndex="999"
+               Grid.RowSpan="2"
                 Content="{Binding HomePage}"/>
         <Border Panel.ZIndex="-1" Grid.Row="1" Grid.ColumnSpan="2"
                 Padding="{Binding TitleMenuPadding}"
                 Height="{Binding MenuTitleHeight}" >
-            <StackPanel  x:Name="containerMenuItem"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0"  x:Name="containerMenuItem"
                         Orientation="Horizontal" 
                         Height="{Binding MenuTitleHeight}" 
                         Background="{StaticResource TitleColorBrush}"
                        >
-                <Button 
+                    <Button 
                      Style="{StaticResource TitleMenuItem}"
                     Command="{Binding callHomeWindow}"
                      Content="Home"
                      />
-                <ItemsControl  ItemsSource="{Binding MenuItems}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Command="{Binding DataContext.selectMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <ItemsControl  ItemsSource="{Binding LeftMenuItems}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.selectLeftMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource TitleMenuItem}" 
                                     Content="{Binding Title}" MouseDown="Button_MouseDown"
@@ -73,21 +92,82 @@
                                     >
 
 
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.InputBindings>
-                        <MouseBinding CommandParameter="{Binding}" Command="{Binding closeMenuItem}" MouseAction="MiddleClick"/>
-                    </ItemsControl.InputBindings>
-                </ItemsControl>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.InputBindings>
+                            <MouseBinding CommandParameter="{Binding}" Command="{Binding closeMenuItem}" MouseAction="MiddleClick"/>
+                        </ItemsControl.InputBindings>
+                    </ItemsControl>
 
-            </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1"  x:Name="rightContainerMenuItem"
+                            Orientation="Horizontal" 
+                            Height="{Binding MenuTitleHeight}" 
+                            Background="{StaticResource TitleColorBrush}"
+                           >
+                    <ItemsControl  ItemsSource="{Binding RightMenuItems}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.selectRightMenuItem, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource TitleMenuItem}" 
+                                    Content="{Binding Title}" MouseDown="Button_MouseDown"
+                    >
+
+
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.InputBindings>
+                            <MouseBinding CommandParameter="{Binding}" Command="{Binding closeMenuItem}" MouseAction="MiddleClick"/>
+                        </ItemsControl.InputBindings>
+                    </ItemsControl>
+
+                </StackPanel>
+            </Grid>
         </Border>
-        <Frame x:Name="PagesFrame" NavigationUIVisibility="Hidden" 
-         Grid.Column="0" Grid.ColumnSpan="2"
-         Grid.Row="2"
-         Panel.ZIndex="-2"
-         Content="{Binding CurrentPage}"/>
+        <Grid
+            Grid.Column="0" 
+            Grid.ColumnSpan="2"
+            Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*"/>
+                <RowDefinition Height="0.1*"/>
+            </Grid.RowDefinitions>
+            <Frame 
+                Grid.Column="0"
+                x:Name="PagesFrame" 
+                NavigationUIVisibility="Hidden" 
+                Panel.ZIndex="-2"
+                Content="{Binding LeftCurrentPage}"/>
+            <Frame 
+                Grid.Column="1"
+                x:Name="PagesFrameRight" 
+                NavigationUIVisibility="Hidden" 
+                Panel.ZIndex="-2"
+                Content="{Binding RightCurrentPage}"/>
+            <StackPanel 
+                Orientation="Horizontal"
+                Grid.Column="0"
+                Grid.Row="1">
+                <Button Command="{Binding moveToLeft}" 
+            Margin="5 1 5 1"
+            Padding="5">left
+                </Button>
+                <Button Command="{Binding moveToRight}" 
+            Margin="5 1 5 1">right</Button>
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Window>

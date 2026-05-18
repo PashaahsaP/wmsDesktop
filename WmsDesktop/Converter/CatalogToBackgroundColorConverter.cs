@@ -18,9 +18,9 @@ namespace WmsDesktop
             var redColor = Color.FromArgb(255, 245, 6, 57);
             if (value is OrderItem catalog)
             {
-                if(catalog.Id != null && catalog.Name != "")
+                if(catalog.id != null && catalog.name != "")
                     return new SolidColorBrush(greenColor);
-                if(catalog.Id != null && catalog.Name == "")
+                if(catalog.id != null && catalog.name == "")
                     return new SolidColorBrush(yellowColor);
             }
             return new SolidColorBrush(redColor);
