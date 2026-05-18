@@ -17,7 +17,19 @@
             GlassFrameThickness="0" 
             ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>
+    
+    <Window.InputBindings>
 
+        <KeyBinding
+        Modifiers="Control"
+        Key="Right"
+        Command="{Binding moveToRight}"/>
+        <KeyBinding
+         Modifiers="Control"
+         Key="Left"
+         Command="{Binding moveToLeft}"/>  
+
+    </Window.InputBindings>
 
     <Grid   x:Name="Main">
         <Grid.ColumnDefinitions>
@@ -101,7 +113,8 @@
                     </ItemsControl>
 
                 </StackPanel>
-                <StackPanel Grid.Column="1"  x:Name="rightContainerMenuItem"
+                
+                <StackPanel Grid.Column="2"  x:Name="rightContainerMenuItem"
                             Orientation="Horizontal" 
                             Height="{Binding MenuTitleHeight}" 
                             Background="{StaticResource TitleColorBrush}"
@@ -137,36 +150,33 @@
             Grid.ColumnSpan="2"
             Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="{Binding LeftWidth, FallbackValue=0.5*}"/>
+                <ColumnDefinition Width="{Binding CenterWidth, FallbackValue=0.01*}"/>
+                <ColumnDefinition Width="{Binding RightWidth, FallbackValue=0.5*}" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.9*"/>
-                <RowDefinition Height="0.1*"/>
-            </Grid.RowDefinitions>
             <Frame 
                 Grid.Column="0"
                 x:Name="PagesFrame" 
                 NavigationUIVisibility="Hidden" 
                 Panel.ZIndex="-2"
                 Content="{Binding LeftCurrentPage}"/>
-            <Frame 
+            
+            <GridSplitter 
                 Grid.Column="1"
+                Grid.RowSpan="2"
+                Width="3"
+                Margin="3 0 3 0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Background="{StaticResource TitleColorBrush}"
+                  ResizeBehavior="PreviousAndNext"/>
+            <Frame 
+                Grid.Column="2"
                 x:Name="PagesFrameRight" 
                 NavigationUIVisibility="Hidden" 
                 Panel.ZIndex="-2"
                 Content="{Binding RightCurrentPage}"/>
-            <StackPanel 
-                Orientation="Horizontal"
-                Grid.Column="0"
-                Grid.Row="1">
-                <Button Command="{Binding moveToLeft}" 
-            Margin="5 1 5 1"
-            Padding="5">left
-                </Button>
-                <Button Command="{Binding moveToRight}" 
-            Margin="5 1 5 1">right</Button>
-            </StackPanel>
+            
         </Grid>
 
     </Grid>

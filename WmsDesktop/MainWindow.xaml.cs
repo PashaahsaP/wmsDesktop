@@ -191,6 +191,12 @@ namespace WmsDesktop
                         vm.RightCurrentPage = null;
                     }
                 }
+                var temp = new ObservableCollection<MenuItem>();
+                foreach (var item1 in vm.RightMenuItems)
+                {
+                    temp.Add(item1);
+                }
+                vm.RightMenuItems = temp;
                 //vm.LeftMenuItems.Remove(item);
             }
         }

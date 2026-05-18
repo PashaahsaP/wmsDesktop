@@ -94,6 +94,9 @@ namespace WmsDesktop
 
         private ObservableCollection<MenuItem> _leftMenuItems = new ObservableCollection<MenuItem>();
         private ObservableCollection<MenuItem> _rightMenuItems = new ObservableCollection<MenuItem>();
+        private GridLength _leftWidth = new GridLength(1, GridUnitType.Star);
+        private GridLength _centerWidth = new GridLength(0, GridUnitType.Star);
+        private GridLength _rightWidth = new GridLength(0, GridUnitType.Star);
 
         public ObservableCollection<MenuItem> LeftMenuItems{ 
             get => _leftMenuItems;
@@ -109,7 +112,25 @@ namespace WmsDesktop
             set
             {
                 _rightMenuItems = value;
+
                 OnPropertyChanged(nameof(RightMenuItems));
+
+                if (RightMenuItems.Count != 0)
+                {
+                    LeftWidth = new GridLength(0.5, GridUnitType.Star);
+                    CenterWidth = new GridLength(0.01, GridUnitType.Star);
+                    RightWidth = new GridLength(0.5, GridUnitType.Star);
+                }
+                else
+                {
+                    LeftWidth = new GridLength(1, GridUnitType.Star);
+                    CenterWidth = new GridLength(0, GridUnitType.Star);
+                    RightWidth = new GridLength(0, GridUnitType.Star);
+                }
+                OnPropertyChanged(nameof(LeftWidth));
+                OnPropertyChanged(nameof(CenterWidth));
+                OnPropertyChanged(nameof(RightWidth));
+                
             }
         }
         public MainWindow MainWindow { get; set; }
@@ -186,6 +207,8 @@ namespace WmsDesktop
             get => _leftCurrentPage;
             set
             {
+                
+
                 if (_leftCurrentPage != value)
                 {
                     _leftCurrentPage = value;
@@ -198,6 +221,7 @@ namespace WmsDesktop
             get => _rightCurrentPage;
             set
             {
+               
                 if (_rightCurrentPage != value)
                 {
                     _rightCurrentPage = value;
@@ -206,6 +230,33 @@ namespace WmsDesktop
             }
         }
 
+        public GridLength LeftWidth
+        {
+            get => _leftWidth;
+            set
+            {
+                _leftWidth = value;
+                OnPropertyChanged(nameof(LeftWidth));
+            }
+        }
+        public GridLength CenterWidth
+        {
+            get => _centerWidth;
+            set
+            {
+                _centerWidth = value;
+                OnPropertyChanged(nameof(CenterWidth));
+            }
+        }
+        public GridLength RightWidth
+        {
+            get => _rightWidth;
+            set
+            {
+                _rightWidth = value;
+                OnPropertyChanged(nameof(RightWidth));
+            }
+        }
         #region commands
         public ICommand collapseWindow { get; set; }
         public ICommand expandWindow { get; set; }
@@ -299,10 +350,15 @@ namespace WmsDesktop
                             RightCurrentPage = null;
                         }
                     }
+                    var temp = new ObservableCollection<MenuItem>();
+                    foreach (var item1 in RightMenuItems)
+                    {
+                        temp.Add(item1);
+                    }
+                    RightMenuItems = temp;
                     //RightMenuItems.Remove(item);
                 }
-            });
-            
+            });   
             moveToLeft = new RelayCommand(o => {
                 if (RightMenuItems.Count != 0)
                 {
