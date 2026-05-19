@@ -15,38 +15,151 @@
     </Page.Resources>
     <Grid Visibility="Visible" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <Grid Visibility="Visible" 
+        <Grid Visibility="Visible" 
                           Grid.Row="1" 
                           Background="AliceBlue"
                           Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*"/>
+                <ColumnDefinition Width="0.65*"/>
+            </Grid.ColumnDefinitions>
+            <!--Left Top-->
+            <Grid 
+                Grid.Row="0"
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                </Grid.RowDefinitions>
+                <Grid 
+                        Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
 
-            <ScrollViewer x:Name="SWCreatingAssembly" Visibility="Visible">
+
+
+                </Grid>
+                
+
+                <Grid 
+                    Grid.Row="0"
+                    Grid.Column="0">        
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="Клиент"> </TextBlock>
+                    <ComboBox 
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="15 10 15 10"/>
+                </Grid>
+                
+                <!--Client-->
+                <Grid 
+                    Grid.Row="0"
+                    Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="Клиент"></TextBlock>
+                    <ComboBox 
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="15 10 15 10"/>
+                </Grid>
+                <!--Cell-->
+                <Grid 
+                    Grid.Row="1"
+                    Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="Ячейка"></TextBlock>
+                    <ComboBox 
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="15 10 15 10"/>
+                </Grid>
+                <!--Cell-->
+                <Grid 
+                    Grid.Row="2"
+                    Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="Дата"></TextBlock>
+                    <DatePicker 
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="15 10 15 10"/>
+                </Grid>
+                
+
+            </Grid>
+            <!--Right Top-->
+            <StackPanel Grid.Column="1">
+
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                        x:Name="CBSuppliers"
+                        Width="125"
+                        ItemsSource="{Binding Suppliers}"
+                        SelectedItem="{Binding SelectedSupplier}"
+                        DisplayMemberPath="Name"
+                        Margin="5">
+
+                    </ComboBox>
+                    <TextBox x:Name="textBoxSearhc" Text="{Binding TbText, UpdateSourceTrigger=PropertyChanged}"  
+                    Padding="5"
+                    Margin="5"
+                    MinWidth="125"></TextBox>
+
+                </StackPanel>
+
+                <ListBox
+                    ItemsSource="{Binding ItemsList}"
+                    SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
+                    Margin="0 0 10 0"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                        x:Name="listItems"
+                                        >
+
+                </ListBox>
+            </StackPanel>
+            <!--Down-->
+            <ScrollViewer 
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                x:Name="SWCreatingAssembly" 
+                Visibility="Visible">
                 <StackPanel>
-                    <StackPanel 
-                                    Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibilityConverter}}"
-                                    x:Name="GridContainer"
-                                    >
-                        <RadioButton Command="{Binding selectAtomy}" IsChecked="True">Atomy</RadioButton>
-                        <RadioButton Command="{Binding selectBork}" x:Name="radioBork" >Bork</RadioButton>
 
-                        <WrapPanel
-                                        Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
-                                        Name="PanelDnD"
-                                        DragDrop.Drop="WrapPanel_Drop"
-                                        AllowDrop="True"
-                                        Background="LightBlue">
-                        </WrapPanel>
-                    </StackPanel>
                     <Grid  >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="99*"/>
+                            <ColumnDefinition Width="664*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}">
+                        <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}" Grid.ColumnSpan="2" Margin="0,0,0,58" Grid.RowSpan="2">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="15" >
@@ -72,7 +185,7 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="1" Margin="192,0,0,0">
                             <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
                             <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
                         </StackPanel>
@@ -82,6 +195,6 @@
 
         </Grid>
 
-        </Grid>
+    </Grid>
 
 </Page>
