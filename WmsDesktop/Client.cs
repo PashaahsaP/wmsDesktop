@@ -415,6 +415,24 @@ namespace WmsDesktop
 
             return str[0].id;
         }
+
+        internal async Task<string> GetIncomeCells(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/incomeCell/");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
     }
 
 }

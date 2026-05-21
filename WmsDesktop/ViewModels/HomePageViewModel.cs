@@ -30,7 +30,7 @@ namespace WmsDesktop.ViewModels
         #region ui command
         public ICommand closePage { get; set; }
         public ICommand callAddingPage { get; set; }
-        public ICommand callCreateCatalogItemPage { get; set; }
+        public ICommand callCreateIncomeSessionPage { get; set; }
         public PageStates PageState { get => PageStates.HomePage;}
         #endregion
         #region ctor
@@ -52,13 +52,15 @@ namespace WmsDesktop.ViewModels
 
                 AppendPage(newMenuItem, vm);
             });
-            callCreateCatalogItemPage = new RelayCommand(async (o) =>
+            callCreateIncomeSessionPage = new RelayCommand(async (o) =>
             {
+                var sessionVm = await CreateSessionViewModel.CreateAsync();
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
                     Title = "Создать заявку",
-                    Page = new CreateSessionPage(vm, window),
+                    Page = new CreateSessionPage(vm, window, sessionVm),
+                    State = sessionVm
                     
                 };
                 AppendPage(newMenuItem, vm);

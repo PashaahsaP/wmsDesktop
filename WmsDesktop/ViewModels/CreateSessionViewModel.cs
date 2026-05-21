@@ -17,10 +17,14 @@ namespace WmsDesktop.ViewModels
     internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
         private int _supplier;
-        private MainViewModel vm;
-        private string ip = "192.168.0.11";
+        private static readonly Client client = new Client();
+        private ObservableCollection<OrderItem> _borkItems = new ObservableCollection<OrderItem>();
+        private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>();
+        private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
+        private DateTime? _date = new DateTime?();
 
-        public Client Client { get; set; }
+        private MainViewModel vm;
+
         public int Supplier { get => _supplier; set { _supplier = value; } }
         private ObservableCollection<IUiItem> _items;
         public ObservableCollection<IUiItem> Items
@@ -33,22 +37,71 @@ namespace WmsDesktop.ViewModels
             }
         }
         public List<OrderItem> CatalogBorkItems { get; set; }
+        public ObservableCollection<OrderItem> CatalogItems
+        {
+            get
+            {
+                return _borkItems;
+            }
+            set
+            {
+                _borkItems = value;
+                OnPropertyChanged(nameof(CatalogItems));
+            }
+        }
+        public ObservableCollection<Supplier> Suppliers
+        {
+            get
+            {
+                return _suppliers;
+            }
+            set
+            {
+                _suppliers = value;
+                OnPropertyChanged(nameof(Suppliers));
+            }
+        }
+        public Supplier SelectedSupplier {  get; set; }
+        public Cell SelectedCell {  get; set; }
+        public DateTime? Date
+        {
+            get
+            {
+                return _date;
+            }
+            set
+            {
+                _date = value;
+                OnPropertyChanged(nameof(Date));
+            }
+        }
+        public ObservableCollection<Cell> Cells
+        {
+            get
+            {
+                return _cells;
+            }
+            set
+            {
+                _cells = value;
+                OnPropertyChanged(nameof(Cells));
+            }
+        }
+        public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
+        public PageStates PageState => PageStates.CreateSessionPage;
+
+
 
         public ICommand callBorkDialog { get; set; }
         public ICommand clearItems { get; set; }
         public ICommand createSession { get; set; }
         public ICommand selectBork { get; set; }
         public ICommand selectAtomy { get; set; }
+        
 
-        public PageStates PageState => PageStates.CreateSessionPage;
-
-        public CreateSessionViewModel(MainViewModel vm, Window window)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells)
         {
-            Client = new Client();
-            this.vm = vm;
-            var jsonIp = File.ReadAllText("config.json");
-            var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
-            ip = setting["Ip"];
+            
             Items = new ObservableCollection<IUiItem>();
             selectAtomy = new RelayCommand(o =>
             {
@@ -61,7 +114,7 @@ namespace WmsDesktop.ViewModels
             callBorkDialog = new RelayCommand(o =>
             {
                 var dialog = new DialogWindow(o, CatalogBorkItems, this, Items);
-                dialog.Owner = window;
+                //dialog.Owner = window;
                 dialog.listItems.ItemsSource = CatalogBorkItems;
                 dialog.Show();
             }, c =>
@@ -82,6 +135,9 @@ namespace WmsDesktop.ViewModels
             });
             createSession = new RelayCommand(async o =>
             {
+                var t = new DateTimeOffset(Date.Value).ToUnixTimeSeconds();
+                var q = SelectedCell;
+                var v = SelectedSupplier;
                 bool isGood = true;
                 foreach (var item in Items)
                 {
@@ -106,9 +162,48 @@ namespace WmsDesktop.ViewModels
                     Items = new ObservableCollection<IUiItem>();*/
                 }
             });
+
+            //parse catalogs
+            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<OrderItem>>(catalogAndSuppliers);
+            foreach (var item in parsedData)
+            {
+                CatalogItems.Add(item);
+
+            }
+            //parse suppliers
+            var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
+            foreach (var item in supplierData)
+            {
+                Suppliers.Add(item);
+
+            }
+            //parse barcodes
+            var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
+            foreach (var item in parsedBarcodes)
+            {
+                Barcodes.Add(item);
+
+            }
+            //parse cells
+            var parsedCells = JsonConvert.DeserializeObject<ObservableCollection<Cell>>(cells);
+            foreach (var item in parsedCells)
+            {
+                Cells.Add(item);
+
+            }
         }
 
-     
+        public static async Task<CreateSessionViewModel> CreateAsync()
+        {
+            var jsonIp = File.ReadAllText("config.json");
+            var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
+            var ip = setting["Ip"];
+            var catalogAndSuppliers = await client.GetAllCatalogsWithSuppliers(ip);
+            var suppliers = await client.GetSuppliers(ip);
+            var barcodes = await client.GetBarcodes(ip);
+            var incomeCells = await client.GetIncomeCells(ip);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) =>

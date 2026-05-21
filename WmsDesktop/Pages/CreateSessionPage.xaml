@@ -53,19 +53,7 @@
                 </Grid>
                 
 
-                <Grid 
-                    Grid.Row="0"
-                    Grid.Column="0">        
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition  Width="0.3*"/>
-                        <ColumnDefinition Width="0.7*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="Клиент"> </TextBlock>
-                    <ComboBox 
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="15 10 15 10"/>
-                </Grid>
+               
                 
                 <!--Client-->
                 <Grid 
@@ -76,10 +64,13 @@
                         <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="Клиент"></TextBlock>
-                    <ComboBox 
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="15 10 15 10"/>
+                    <ComboBox
+                        MaxHeight="40"
+                        ItemsSource="{Binding Suppliers}"
+                        SelectedItem="{Binding SelectedSupplier, Mode=TwoWay}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="15 10 15 10"/>
                 </Grid>
                 <!--Cell-->
                 <Grid 
@@ -90,10 +81,13 @@
                         <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="Ячейка"></TextBlock>
-                    <ComboBox 
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="15 10 15 10"/>
+                    <ComboBox
+                        MaxHeight="40"
+                        ItemsSource="{Binding Cells}"
+                        SelectedItem="{Binding SelectedCell, Mode=TwoWay}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="15 10 15 10" SelectionChanged="ComboBox_SelectionChanged"/>
                 </Grid>
                 <!--Cell-->
                 <Grid 
@@ -105,9 +99,11 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="Дата"></TextBlock>
                     <DatePicker 
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="15 10 15 10"/>
+                        MaxHeight="35"
+                        Grid.Row="0"
+                        SelectedDate="{Binding Date, Mode=TwoWay}"
+                        Grid.Column="1"
+                        Margin="15 10 15 10"/>
                 </Grid>
                 
 
