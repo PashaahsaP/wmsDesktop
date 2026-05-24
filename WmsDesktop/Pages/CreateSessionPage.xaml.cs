@@ -16,8 +16,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using WmsDesktop.ViewModels;
 using WmsDesktop.vm;
+using WmsDesktop.Windows;
 
 namespace WmsDesktop.Pages
 {
@@ -30,11 +32,14 @@ namespace WmsDesktop.Pages
         private MainViewModel _vm = null;
         private CreateSessionViewModel localVm = null;
         private string ip = "192.168.0.11";
+        private Window _window = null;
       
         public CreateSessionPage(MainViewModel vm, Window window, IState state)
         {
             InitializeComponent();
+            _window = window;
             DataContext = state as CreateSessionViewModel;
+            localVm = state as CreateSessionViewModel;
             _vm = vm;
         }
         private void WrapPanel_Drop(object sender, DragEventArgs e)
@@ -60,6 +65,94 @@ namespace WmsDesktop.Pages
         {
 
         }
-     
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var ui = (sender as FrameworkElement);
+            var context = ui.DataContext;
+            var element = context as IncomeSessionItem;
+            var result = new List<IncomeSessionItemBase>();
+            
+            foreach (var item in localVm.Items)
+            {
+                if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
+                {
+                    var temp = new IncomeSessionSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid };
+                    result.Add(temp);
+                }
+                else
+                {
+                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid };
+                    result.Add(temp);
+                }
+            }
+
+            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            var frameElem = (sender as TextBox);
+            var context = (sender as FrameworkElement).DataContext;
+            var element = context as IncomeSessionSelectedItem;
+            var result = new List<IncomeSessionItemBase>();
+            foreach (var item in localVm.Items)
+            {
+                if (item.Name == element.Name && item.Sku == element.Sku)
+                {
+                    var temp = new IncomeSessionItem() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid };
+                    result.Add(temp);
+                }
+                else
+                {
+                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid };
+                    result.Add(temp);
+                }
+            }
+
+            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
+        }
+
+        private void TextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var ui = (sender as TextBox);
+            ui.Focus();
+            ui.SelectAll();
+
+
+
+            
+
+        }
+
+        private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            var dialog = new AddItemWindow(localVm.CatalogItems);
+            var uiItem = (sender as FrameworkElement).DataContext as IncomeSessionWrongItem;
+            dialog.Owner = _window;
+
+            bool? result = dialog.ShowDialog();
+            OrderItem data = null;
+            if (result == true)
+            {
+                data = dialog.orderItem;
+
+
+                var resultCollection = new ObservableCollection<IncomeSessionItemBase>();
+                foreach (var item in localVm.Items)
+                {
+                    if (item == uiItem)
+                        resultCollection.Add(new IncomeSessionItem() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku });
+                    else
+                        resultCollection.Add(item);
+
+                }
+
+                localVm.Items = resultCollection;
+            }
+        }
     }
 }

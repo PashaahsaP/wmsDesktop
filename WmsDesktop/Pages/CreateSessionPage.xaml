@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:local="clr-namespace:WmsDesktop"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -12,7 +12,119 @@
 
         <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
         <local:CatalogToBackgroundColorConverter x:Key="CatalogToBackgroundColorConverter"/>
+
+        <DataTemplate DataType="{x:Type local:IncomeSessionItem}">
+            <Border
+                Margin="0 0 5 0"
+                BorderBrush="#efefef"
+                BorderThickness="2">
+                <Grid 
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    MouseDown="Grid_MouseDown"
+                    
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.4*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock 
+                        Padding="5"
+                        Grid.Column="0"
+                        Text="{Binding Sku}"
+                        ></TextBlock>
+                    <TextBlock 
+                        Padding="5"
+                        Grid.Column="1"
+                        Text="{Binding Name}"
+                        ></TextBlock>
+                    <TextBlock 
+                        Padding="5"
+                        Grid.Column="3"
+                        HorizontalAlignment="Center"
+                        Text="{Binding Count}"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:IncomeSessionSelectedItem}">
+            <Grid 
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="0"
+                    Text="{Binding Sku}"
+                    ></TextBlock>
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="1"
+                    Text="{Binding Name}"></TextBlock>
+                <TextBox
+                    Loaded="TextBox_Loaded"
+                    KeyDown="TextBox_KeyDown"
+                    Padding="5"
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Count}">
+
+                </TextBox>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:IncomeSessionWrongItem}">
+            <Grid 
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Background="#FF3131"
+                MouseDown="Grid_MouseDown_1"
+                >
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="0"
+                    Text="{Binding Sku}"
+                    ></TextBlock>
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="1"
+                    Text="{Binding Name}"></TextBlock>
+                <TextBlock
+                    Padding="5"
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Count}">
+                    
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+
     </Page.Resources>
+
+
+
+
+
     <Grid Visibility="Visible" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
 
         <Grid.RowDefinitions>
@@ -21,7 +133,7 @@
 
         <Grid Visibility="Visible" 
                           Grid.Row="1" 
-                          Background="AliceBlue"
+                          Background="White"
                           Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -32,15 +144,10 @@
                 <ColumnDefinition Width="0.65*"/>
             </Grid.ColumnDefinitions>
             <!--Left Top-->
-            <Grid 
+            <StackPanel 
                 Grid.Row="0"
                 Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.25*"/>
-                </Grid.RowDefinitions>
+
                 <Grid 
                         Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -51,10 +158,10 @@
 
 
                 </Grid>
-                
 
-               
-                
+
+
+
                 <!--Client-->
                 <Grid 
                     Grid.Row="0"
@@ -97,7 +204,7 @@
                         <ColumnDefinition  Width="0.3*"/>
                         <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="Дата"></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="Дата прихода"></TextBlock>
                     <DatePicker 
                         MaxHeight="35"
                         Grid.Row="0"
@@ -105,18 +212,24 @@
                         Grid.Column="1"
                         Margin="15 10 15 10"/>
                 </Grid>
-                
 
-            </Grid>
+
+            </StackPanel>
             <!--Right Top-->
-            <StackPanel Grid.Column="1">
-
-                <StackPanel Orientation="Horizontal">
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.8*"/>
+                </Grid.RowDefinitions>
+                <StackPanel 
+                    Grid.Row="0" 
+                    Orientation="Horizontal"
+                    Height="40">
                     <ComboBox
                         x:Name="CBSuppliers"
                         Width="125"
-                        ItemsSource="{Binding Suppliers}"
-                        SelectedItem="{Binding SelectedSupplier}"
+                        ItemsSource="{Binding SuppliersFilter}"
+                        SelectedItem="{Binding SelectedFilterSupplier}"
                         DisplayMemberPath="Name"
                         Margin="5">
 
@@ -125,70 +238,59 @@
                     Padding="5"
                     Margin="5"
                     MinWidth="125"></TextBox>
-
+                    <Button 
+                        Command="{Binding loadFile}"
+                        Width="150"
+                        Height="30">Загрузить из файла</Button>
                 </StackPanel>
 
                 <ListBox
-                    ItemsSource="{Binding ItemsList}"
-                    SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                    Margin="0 0 10 0"
+                    Grid.Row="1"
+                    ItemsSource="{Binding CatalogItems}"
+                    SelectedItem="{Binding SelectedCatalogItem, Mode=OneWayToSource}"
+                    Margin="0 0 10 20"
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                         x:Name="listItems"
                                         >
 
                 </ListBox>
-            </StackPanel>
+            </Grid>
             <!--Down-->
-            <ScrollViewer 
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                x:Name="SWCreatingAssembly" 
-                Visibility="Visible">
-                <StackPanel>
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="0.2*"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer 
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    VerticalScrollBarVisibility="Auto"
+                    x:Name="SWCreatingAssembly" 
+                    Visibility="Visible">
 
-                    <Grid  >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="99*"/>
-                            <ColumnDefinition Width="664*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <ItemsControl Grid.Row="0" ItemsSource="{Binding Items}" Grid.ColumnSpan="2" Margin="0,0,0,58" Grid.RowSpan="2">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="15" >
-                                        <Grid Margin="10" Background="{Binding Catalog, Converter={StaticResource CatalogToBackgroundColorConverter}}">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                    <i:InvokeCommandAction 
-                                                                        Command="{Binding DataContext.callBorkDialog, 
-                                                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                                        CommandParameter="{Binding}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="3*"/>
-                                                <ColumnDefinition Width="2*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Padding="10" Text="{Binding Left}" Grid.Column="0"></TextBlock>
-                                            <TextBlock Padding="10" Text="{Binding Center}" Grid.Column="1"></TextBlock>
-                                            <TextBlock Padding="10" Text="{Binding Right}" Grid.Column="2" HorizontalAlignment="Right"></TextBlock>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="1" Margin="192,0,0,0">
-                            <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
-                            <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
-                        </StackPanel>
-                    </Grid>
+                    <ItemsControl 
+                                Grid.Row="0" 
+                                ItemsSource="{Binding Items}" 
+                                Margin="0,0,0,58" 
+                                >
+
+                    </ItemsControl>
+                    
+
+                </ScrollViewer>
+                <StackPanel 
+                    Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Left" 
+                    Margin="192,0,0,0">
+                    <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
+                    <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
                 </StackPanel>
-            </ScrollViewer>
-
+            </Grid>
         </Grid>
 
     </Grid>

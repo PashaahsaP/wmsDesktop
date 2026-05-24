@@ -26,8 +26,8 @@ namespace WmsDesktop
         private object Sender{ get; set; }
         private List<OrderItem> Items { get; set; }
         CreateSessionViewModel MainViewModel { get; set; }
-        ObservableCollection<IUiItem> UiItems { get; set; }
-        internal DialogWindow(object sender, List<OrderItem> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IUiItem> uiItems)
+        ObservableCollection<IncomeSessionItemBase> UiItems { get; set; }
+        internal DialogWindow(object sender, List<OrderItem> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IncomeSessionItemBase> uiItems)
         {
             InitializeComponent();
             Sender = sender;
@@ -49,7 +49,7 @@ namespace WmsDesktop
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
-            var selected = (OrderItem)listItems.SelectedItem;
+            /*var selected = (OrderItem)listItems.SelectedItem;
             var sen = (BorkItem)Sender;
             BorkItem newObj = UiItems.First(item =>
             {
@@ -60,7 +60,7 @@ namespace WmsDesktop
             }) as BorkItem;
             newObj.Name = selected.name;
             newObj.Catalog = new OrderItem { id = selected.id, name = "" };
-            var newCollection = new ObservableCollection<IUiItem>();
+            var newCollection = new ObservableCollection<IncomeSessionItemBase>();
             foreach (var item in UiItems)
             {
                 if(item.Name == sen.Name)
@@ -73,7 +73,7 @@ namespace WmsDesktop
                 }
             }
             MainViewModel.Items = newCollection;
-            this.Close();
+            this.Close();*/
             
         }
     }
