@@ -77,13 +77,17 @@ namespace WmsDesktop.Pages
             {
                 if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
                 {
-                    var temp = new IncomeSessionSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid };
+                    var temp = new IncomeSessionSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
+                    result.Add(temp);
+                }
+                else if (item is IncomeSessionSelectedItem)
+                {
+                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, Id = element.Id };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid };
-                    result.Add(temp);
+                    result.Add(item);
                 }
             }
 
@@ -101,14 +105,14 @@ namespace WmsDesktop.Pages
             var result = new List<IncomeSessionItemBase>();
             foreach (var item in localVm.Items)
             {
-                if (item.Name == element.Name && item.Sku == element.Sku)
+                if (item.Id == element.Id && item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new IncomeSessionItem() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid };
+                    var temp = new IncomeSessionItem() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid };
+                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
                     result.Add(temp);
                 }
             }
@@ -121,10 +125,6 @@ namespace WmsDesktop.Pages
             var ui = (sender as TextBox);
             ui.Focus();
             ui.SelectAll();
-
-
-
-            
 
         }
 
@@ -145,7 +145,7 @@ namespace WmsDesktop.Pages
                 foreach (var item in localVm.Items)
                 {
                     if (item == uiItem)
-                        resultCollection.Add(new IncomeSessionItem() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku });
+                        resultCollection.Add(new IncomeSessionItem() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", Id = data.id });
                     else
                         resultCollection.Add(item);
 
@@ -153,6 +153,40 @@ namespace WmsDesktop.Pages
 
                 localVm.Items = resultCollection;
             }
+        }
+
+        private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var t = localVm.SelectedCatalogItem;
+            localVm.Items.Add(new IncomeSessionItem() { Count = 1, isValid = true, Name = t.name, Sku = t.sku });
+        }
+
+      
+
+        private void TextBox_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            var frameElem = (sender as TextBox);
+            var context = (sender as FrameworkElement).DataContext;
+            var element = context as IncomeSessionSelectedItem;
+            var result = new List<IncomeSessionItemBase>();
+            foreach (var item in localVm.Items)
+            {
+                if (item.Id == element.Id &&  item.Name == element.Name && item.Sku == element.Sku)
+                {
+                    var temp = new IncomeSessionItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, Id = element.Id };
+                    result.Add(temp);
+                }
+                else
+                {
+                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
+                    result.Add(temp);
+                }
+            }
+
+            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
         }
     }
 }

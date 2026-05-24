@@ -8,11 +8,13 @@ namespace WmsDesktop
 {
     public abstract class IncomeSessionItemBase
     {
-        public string Sku { get; set; }
-        public string Name { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Sku { get; set; } = string.Empty;
+        public string TE { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public int Count { get; set; }
-        public bool isValid { get; set; }
+        public int Count { get; set; } = 0;
+        public bool isValid { get; set; } = true;
 
     }
 

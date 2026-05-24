@@ -145,7 +145,7 @@ namespace WmsDesktop.ViewModels
         public ICommand selectBork { get; set; }
         public ICommand selectAtomy { get; set; }
         public ICommand loadFile { get; set; }
-        public ICommand selectIncomeItem {  get; set; }
+        public ICommand removeLine {  get; set; }
 
 
 
@@ -223,8 +223,12 @@ namespace WmsDesktop.ViewModels
                     MessageBox.Show(path);
                 }
             });
+            removeLine = new RelayCommand(async o =>
+            {
+                Items.Remove(o as IncomeSessionItemBase);
+            });
 
-            
+
 
 
 
@@ -235,7 +239,7 @@ namespace WmsDesktop.ViewModels
             foreach (var item in parsedData)
             {
                 CatalogItems.Add(item);
-                var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = false};
+                var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = false, Id = item.id};
                 Items.Add(temp);
 
             }

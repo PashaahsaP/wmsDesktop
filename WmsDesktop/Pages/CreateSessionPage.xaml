@@ -27,7 +27,8 @@
                     >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.4*"/>
                         <ColumnDefinition Width="0.1*"/>
                     </Grid.ColumnDefinitions>
@@ -38,13 +39,18 @@
                         Text="{Binding Sku}"
                         ></TextBlock>
                     <TextBlock 
+                         Padding="5"
+                         Grid.Column="1"
+                         Text="{Binding TE}"
+                         ></TextBlock>
+                    <TextBlock 
                         Padding="5"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Text="{Binding Name}"
                         ></TextBlock>
                     <TextBlock 
                         Padding="5"
-                        Grid.Column="3"
+                        Grid.Column="4"
                         HorizontalAlignment="Center"
                         Text="{Binding Count}"></TextBlock>
                 </Grid>
@@ -59,7 +65,8 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="0.1*"/>
                 </Grid.ColumnDefinitions>
@@ -69,15 +76,30 @@
                     Grid.Column="0"
                     Text="{Binding Sku}"
                     ></TextBlock>
+                <TextBox 
+                    KeyDown="TextBox_KeyDown_1"
+                      Padding="5"
+                      Grid.Column="1"
+                      Text="{Binding TE}"
+                    ></TextBox>
                 <TextBlock 
                     Padding="5"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Text="{Binding Name}"></TextBlock>
+                <Button
+                    Grid.Column="3"
+                    Content="delete"
+                    Width="100"
+                    Command="{Binding DataContext.removeLine,
+                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding}">
+                    
+                </Button>
                 <TextBox
                     Loaded="TextBox_Loaded"
                     KeyDown="TextBox_KeyDown"
                     Padding="5"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     HorizontalAlignment="Center"
                     Text="{Binding Count}">
 
@@ -250,7 +272,8 @@
                     SelectedItem="{Binding SelectedCatalogItem, Mode=OneWayToSource}"
                     Margin="0 0 10 20"
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                                        x:Name="listItems"
+                    x:Name="listItems"
+                    SelectionChanged="listItems_SelectionChanged"
                                         >
 
                 </ListBox>
