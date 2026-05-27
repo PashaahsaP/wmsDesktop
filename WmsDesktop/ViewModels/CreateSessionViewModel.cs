@@ -23,12 +23,12 @@ namespace WmsDesktop.ViewModels
         private int _supplier;
         private static readonly Client client = new Client();
         private string _tbText = "";
+        private bool _isSupplierSelected = false;
         private ObservableCollection<OrderItem> _borkItems = new ObservableCollection<OrderItem>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>(); 
-        private ObservableCollection<Supplier> _suppliersFilter = new ObservableCollection<Supplier>(); 
         private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
-        private Supplier _selectedFilterSupplier = new Supplier() { Id = "-1", Name = "" };
         private ObservableCollection<IncomeSessionItemBase> _items;
+        private Supplier _selectedSupplier;
         private DateTime? _date = new DateTime?();
 
         private MainViewModel vm;
@@ -72,18 +72,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
-        public ObservableCollection<Supplier> SuppliersFilter
-        {
-            get
-            {
-                return _suppliersFilter;
-            }
-            set
-            {
-                _suppliersFilter = value;
-                OnPropertyChanged(nameof(SuppliersFilter));
-            }
-        } 
+        public List<OrderItem> CatalogData {  get; set; } = new List<OrderItem>();
         public ObservableCollection<Supplier> Suppliers
         {
             get
@@ -95,25 +84,28 @@ namespace WmsDesktop.ViewModels
                 _suppliers = value;
                 OnPropertyChanged(nameof(Suppliers));
             }
-        } 
-        public OrderItem SelectedCatalogItem { get; set; }
-
-        public Supplier SelectedSupplier {  get; set; }
-        public Supplier SelectedFilterSupplier
-        {
-            get => _selectedFilterSupplier;
-            set
-            {
-                _selectedFilterSupplier = value;
-                Filter.Supplier = _selectedFilterSupplier;
-                _borkItems = Filter.Apply();
-                OnPropertyChanged(nameof(SelectedFilterSupplier));// Добавить применение фильтром и прочее
-                OnPropertyChanged(nameof(CatalogItems));// Добавить применение фильтром и прочее
-            }
         }
+        public Supplier SelectedSupplier { 
+            get 
+            {
+                return _selectedSupplier;
+            } 
+            set 
+            { 
+                _selectedSupplier = value;
+                var isEnabled = Suppliers.Any(item =>
+                    item.Name == value.Name
+                );
+                if (isEnabled) { 
+                    var selectedItems = CatalogData.Where(item => item.supplierId == value.Id).ToList();
+                    CatalogItems = new ObservableCollection<OrderItem>(selectedItems);
+                }
+                IsSupplierSelected = isEnabled;
+                OnPropertyChanged(nameof(SelectedSupplier));
+            } 
+        }
+        public OrderItem SelectedCatalogItem { get; set; }
         public Cell SelectedCell {  get; set; }
-        
-
         public DateTime? Date
         {
             get
@@ -140,6 +132,22 @@ namespace WmsDesktop.ViewModels
         }
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
         public PageStates PageState => PageStates.CreateSessionPage;
+        public bool IsSupplierSelected
+        {
+            get
+            {
+                return _isSupplierSelected;
+            }
+            set
+            {
+                _isSupplierSelected = value;
+                OnPropertyChanged(nameof(IsSupplierSelected));
+            }
+        }
+
+
+
+
         public ICommand callBorkDialog { get; set; }
         public ICommand clearItems { get; set; }
         public ICommand createSession { get; set; }
@@ -245,24 +253,18 @@ namespace WmsDesktop.ViewModels
 
             //parse catalogs
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<OrderItem>>(catalogAndSuppliers);
-            Items.Add(new IncomeSessionWrongItem() { Count = 0, isValid = false, Name = "wrong", Sku = "234" });
             foreach (var item in parsedData)
             {
-                CatalogItems.Add(item);
+                CatalogData.Add(item);
                 var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = false, Id = item.id};
                 Items.Add(temp);
 
             }
-            Items.Add(new IncomeSessionWrongItem() { Count = 0, isValid = false, Name = "wrong", Sku = "234" });
             Filter.Items = parsedData.ToList();
             //parse suppliers
-            SuppliersFilter.Add(SelectedFilterSupplier);
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             foreach (var item in supplierData)
-            {
                 Suppliers.Add(item);
-                SuppliersFilter.Add(item);
-            }
 
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);

@@ -247,20 +247,13 @@
                     Grid.Row="0" 
                     Orientation="Horizontal"
                     Height="40">
-                    <ComboBox
-                        x:Name="CBSuppliers"
-                        Width="125"
-                        ItemsSource="{Binding SuppliersFilter}"
-                        SelectedItem="{Binding SelectedFilterSupplier}"
-                        DisplayMemberPath="Name"
-                        Margin="5">
-
-                    </ComboBox>
+                    
                     <TextBox x:Name="textBoxSearhc" Text="{Binding TbText, UpdateSourceTrigger=PropertyChanged}"  
                     Padding="5"
                     Margin="5"
                     MinWidth="125"></TextBox>
                     <Button 
+                        IsEnabled="{Binding IsSupplierSelected}"
                         Command="{Binding loadFile}"
                         Width="150"
                         Height="30">Загрузить из файла</Button>
@@ -310,8 +303,16 @@
                     Orientation="Horizontal" 
                     HorizontalAlignment="Left" 
                     Margin="192,0,0,0">
-                    <Button Command="{Binding createSession}" Padding="10" Margin="10">Создать</Button>
-                    <Button Command="{Binding clearItems}" Padding="10" Margin="10">Отменить</Button>
+                    <Button 
+                        Command="{Binding createSession}" 
+                        Padding="10" 
+                        Margin="10"
+                        IsEnabled="{Binding IsSupplierSelected}">Создать</Button>
+                    <Button 
+                        Command="{Binding clearItems}" 
+                        Padding="10" 
+                        Margin="10"
+                        IsEnabled="{Binding IsSupplierSelected}">Отменить</Button>
                 </StackPanel>
             </Grid>
         </Grid>
