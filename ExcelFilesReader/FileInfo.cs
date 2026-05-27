@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace ExcelFileParser
 {
+    
     public class FileInfo
     {
         #region varible
@@ -11,7 +12,7 @@ namespace ExcelFileParser
         #endregion
         #region prop
         public string Path {  get; set; }
-        public List<string> SessionField { get; set; } = new List<string>();
+        public List<string> SessionField { get; set; } = new List<string>() { "sku", "name", "barcode", "count"};
         public List<Tuple<string, int>> FileField { get; set; } = new List<Tuple<string, int>>();
         public List<List<string>> Data
         {
@@ -30,7 +31,6 @@ namespace ExcelFileParser
                         FileField.Add(Tuple.Create (firstLine[i], i));
                     }
                 }
-                Console.WriteLine();
             }
         }
         #endregion

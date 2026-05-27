@@ -129,6 +129,7 @@
     <Compile Include="IUiItem.cs" />
     <Compile Include="ViewModels\AddingCatalogViewModel.cs" />
     <Compile Include="ViewModels\AddItemViewModel.cs" />
+    <Compile Include="ViewModels\CreateSessionByExcelFileViewModel.cs" />
     <Compile Include="ViewModels\CreateSessionViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -136,6 +137,9 @@
     <Compile Include="Converter\ZeroToVisibilityConverter.cs" />
     <Compile Include="Windows\AddItemWindow.xaml.cs">
       <DependentUpon>AddItemWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateSessionByExcelFile.xaml.cs">
+      <DependentUpon>CreateSessionByExcelFile.xaml</DependentUpon>
     </Compile>
     <Page Include="DialogWindow.xaml">
       <SubType>Designer</SubType>
@@ -183,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddItemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateSessionByExcelFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

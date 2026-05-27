@@ -54,7 +54,7 @@ namespace WmsDesktop.ViewModels
             });
             callCreateIncomeSessionPage = new RelayCommand(async (o) =>
             {
-                var sessionVm = await CreateSessionViewModel.CreateAsync();
+                var sessionVm = await CreateSessionViewModel.CreateAsync(window);
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,

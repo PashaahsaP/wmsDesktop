@@ -42,8 +42,6 @@ namespace ExcelFileParser
                     lines.Add(new List<string>(temp));
                 }
                 fileInfo.Data = lines;
-                Console.WriteLine();
-
             
         }
     }

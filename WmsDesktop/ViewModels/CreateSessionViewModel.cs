@@ -1,5 +1,5 @@
-﻿using Microsoft.Win32;
-using ExcelFileParser;
+﻿using ExcelFileParser;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,14 +11,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WmsDesktop.vm;
- 
+using WmsDesktop.Windows;
+
 
 namespace WmsDesktop.ViewModels
 {
     internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
         public Filter Filter { get; set; } = new Filter(new List<OrderItem>(), new List<Barcode>());
-
+        private Window _window;
         private int _supplier;
         private static readonly Client client = new Client();
         private string _tbText = "";
@@ -150,9 +151,9 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, Window window)
         {
-            
+            _window = window;
             Items = new ObservableCollection<IncomeSessionItemBase>();
             selectAtomy = new RelayCommand(o =>
             {
@@ -220,8 +221,16 @@ namespace WmsDesktop.ViewModels
                 {
                     string path = dialog.FileName;
                     FileReader reader = new FileReader(path);
-                    
-                    string text = File.ReadAllText(path);
+
+                    var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(), reader.fileInfo);
+                    innerDialog.Owner = _window;
+
+                    bool? innerResult = innerDialog.ShowDialog();
+                    if (innerResult == true)
+                    {
+                         
+                    }
+
                 }
             });
             removeLine = new RelayCommand(async o =>
@@ -271,7 +280,7 @@ namespace WmsDesktop.ViewModels
             }
         }
 
-        public static async Task<CreateSessionViewModel> CreateAsync()
+        public static async Task<CreateSessionViewModel> CreateAsync(Window window)
         {
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
@@ -280,7 +289,7 @@ namespace WmsDesktop.ViewModels
             var suppliers = await client.GetSuppliers(ip);
             var barcodes = await client.GetBarcodes(ip);
             var incomeCells = await client.GetIncomeCells(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
