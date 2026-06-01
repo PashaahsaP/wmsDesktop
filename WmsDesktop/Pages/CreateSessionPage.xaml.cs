@@ -70,19 +70,19 @@ namespace WmsDesktop.Pages
         {
             var ui = (sender as FrameworkElement);
             var context = ui.DataContext;
-            var element = context as IncomeSessionItem;
-            var result = new List<IncomeSessionItemBase>();
+            var element = context as IncomeBaseItem;
+            var result = new List<IncomeItem>();
             
             foreach (var item in localVm.Items)
             {
                 if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
                 {
-                    var temp = new IncomeSessionSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeBaseSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
                     result.Add(temp);
                 }
-                else if (item is IncomeSessionSelectedItem)
+                else if (item is IncomeBaseSelectedItem)
                 {
-                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeBaseItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, Id = element.Id };
                     result.Add(temp);
                 }
                 else
@@ -91,7 +91,7 @@ namespace WmsDesktop.Pages
                 }
             }
 
-            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
+            localVm.Items = new ObservableCollection<IncomeItem>(result);
         }
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -101,23 +101,23 @@ namespace WmsDesktop.Pages
 
             var frameElem = (sender as TextBox);
             var context = (sender as FrameworkElement).DataContext;
-            var element = context as IncomeSessionSelectedItem;
-            var result = new List<IncomeSessionItemBase>();
+            var element = context as IncomeBaseSelectedItem;
+            var result = new List<IncomeItem>();
             foreach (var item in localVm.Items)
             {
                 if (item.Id == element.Id && item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new IncomeSessionItem() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeBaseItem() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
+                    var temp = new IncomeBaseItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
                     result.Add(temp);
                 }
             }
 
-            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
+            localVm.Items = new ObservableCollection<IncomeItem>(result);
         }
 
         private void TextBox_Loaded(object sender, RoutedEventArgs e)
@@ -141,11 +141,11 @@ namespace WmsDesktop.Pages
                 data = dialog.orderItem;
 
 
-                var resultCollection = new ObservableCollection<IncomeSessionItemBase>();
+                var resultCollection = new ObservableCollection<IncomeItem>();
                 foreach (var item in localVm.Items)
                 {
                     if (item == uiItem)
-                        resultCollection.Add(new IncomeSessionItem() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", Id = data.id });
+                        resultCollection.Add(new IncomeBaseItem() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", Id = data.id });
                     else
                         resultCollection.Add(item);
 
@@ -158,7 +158,7 @@ namespace WmsDesktop.Pages
         private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var t = localVm.SelectedCatalogItem;
-            localVm.Items.Add(new IncomeSessionItem() { Count = 1, isValid = true, Name = t.name, Sku = t.sku });
+            localVm.Items.Add(new IncomeBaseItem() { Count = 1, isValid = true, Name = t.name, Sku = t.sku });
         }
 
       
@@ -170,23 +170,23 @@ namespace WmsDesktop.Pages
 
             var frameElem = (sender as TextBox);
             var context = (sender as FrameworkElement).DataContext;
-            var element = context as IncomeSessionSelectedItem;
-            var result = new List<IncomeSessionItemBase>();
+            var element = context as IncomeBaseSelectedItem;
+            var result = new List<IncomeItem>();
             foreach (var item in localVm.Items)
             {
                 if (item.Id == element.Id &&  item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new IncomeSessionItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, Id = element.Id };
+                    var temp = new IncomeBaseItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, Id = element.Id };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new IncomeSessionItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
+                    var temp = new IncomeBaseItem() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
                     result.Add(temp);
                 }
             }
 
-            localVm.Items = new ObservableCollection<IncomeSessionItemBase>(result);
+            localVm.Items = new ObservableCollection<IncomeItem>(result);
         }
     }
 }

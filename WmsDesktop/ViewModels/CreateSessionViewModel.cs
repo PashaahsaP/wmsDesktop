@@ -7,10 +7,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WmsDesktop.Classes;
+using WmsDesktop;
+using WmsDesktop.Enums;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
 
@@ -19,16 +21,16 @@ namespace WmsDesktop.ViewModels
 {
     internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
-        public Filter Filter { get; set; } = new Filter(new List<OrderItem>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
         private Window _window;
         private int _supplier;
         private static readonly Client client = new Client();
         private string _tbText = "";
         private bool _isSupplierSelected = false;
-        private ObservableCollection<OrderItem> _borkItems = new ObservableCollection<OrderItem>();
+        private ObservableCollection<CatalogItemBase> _borkItems = new ObservableCollection<CatalogItemBase>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>(); 
         private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
-        private ObservableCollection<IncomeSessionItemBase> _items;
+        private ObservableCollection<IncomeItem> _items;
         private Supplier _selectedSupplier;
         private DateTime? _date = new DateTime?();
 
@@ -51,7 +53,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public int Supplier { get => _supplier; set { _supplier = value; } }
-        public ObservableCollection<IncomeSessionItemBase> Items
+        public ObservableCollection<IncomeItem> Items
         {
             get => _items;
             set
@@ -60,9 +62,9 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Items));
             }
         }
-        public List<OrderItem> CatalogBorkItems { get; set; }
+        public List<CatalogItemBase> CatalogBorkItems { get; set; }
         public List<Batch> Batches { get; set; } = new List<Batch>();
-        public ObservableCollection<OrderItem> CatalogItems
+        public ObservableCollection<CatalogItemBase> CatalogItems
         {
             get
             {
@@ -74,7 +76,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
-        public List<OrderItem> CatalogData {  get; set; } = new List<OrderItem>();
+        public List<CatalogItemBase> CatalogData {  get; set; } = new List<CatalogItemBase>();
         public ObservableCollection<Supplier> Suppliers
         {
             get
@@ -99,8 +101,8 @@ namespace WmsDesktop.ViewModels
                     item.Name == value.Name
                 );
                 if (isEnabled) { 
-                    var selectedItems = CatalogData.Where(item => item.supplierId == value.Id).ToList();
-                    CatalogItems = new ObservableCollection<OrderItem>(selectedItems);
+                    var selectedItems = CatalogData.Where(item => item.SupplierId == value.Id).ToList();
+                    CatalogItems = new ObservableCollection<CatalogItemBase>(selectedItems);
                 }
                 IsSupplierSelected = isEnabled;
                 OnPropertyChanged(nameof(SelectedSupplier));
@@ -164,7 +166,7 @@ namespace WmsDesktop.ViewModels
         public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, string batches, Window window)
         {
             _window = window;
-            Items = new ObservableCollection<IncomeSessionItemBase>();
+            Items = new ObservableCollection<IncomeItem>();
             selectAtomy = new RelayCommand(o =>
             {
                 _supplier = 0;
@@ -193,7 +195,7 @@ namespace WmsDesktop.ViewModels
             });
             clearItems = new RelayCommand(o =>
             {
-                Items = new ObservableCollection<IncomeSessionItemBase>();
+                Items = new ObservableCollection<IncomeItem>();
             });
             createSession = new RelayCommand(async o =>
             {
@@ -245,24 +247,72 @@ namespace WmsDesktop.ViewModels
             });
             removeLine = new RelayCommand(async o =>
             {
-                Items.Remove(o as IncomeSessionItemBase);
+                Items.Remove(o as IncomeItem);
             });
 
 
-            //parse catalogs
-            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<OrderItem>>(catalogAndSuppliers);
-            foreach (var item in parsedData)
-            {
-                CatalogData.Add(item);
-                var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = true, Id = item.id, Other = item.other};
-                Items.Add(temp);
-
-            }
-            Filter.Items = parsedData.ToList();
+            
+            
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             foreach (var item in supplierData)
             { Suppliers.Add(item); }
+
+            //parse catalogs
+            // make switch case for client types
+            // creating income session items for each type
+            // var temp = new IncomeBaseItem();
+            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<CatalogItemBase>>(catalogAndSuppliers);
+            IncomeItem temp = new IncomeBaseItem();
+
+            foreach (var item in parsedData)
+            {
+                
+                var sup = Suppliers.FirstOrDefault(inner => inner.Id == item.SupplierId);
+                if (Enum.IsDefined(typeof(ClientType), sup.Type))
+                {
+                    ClientType currentStatus = (ClientType)sup.Type;
+
+                    switch (currentStatus)
+                    {
+                        case ClientType.Base:
+                            temp = new IncomeBaseItem() { 
+                                Name = item.Name, 
+                                Sku = item.Sku, 
+                                Count = 1, 
+                                isValid = true, 
+                                Id = item.Id, 
+                                Other = item.Other };
+                            break;
+                        case ClientType.WithDate:
+                            temp = new IncomeWithDateItem() { 
+                                Name = item.Name, 
+                                Sku = item.Sku, 
+                                Count = 1, 
+                                isValid = true, 
+                                Id = item.Id, 
+                                Other = item.Other,
+                                Date = item.Other };
+                            break;
+                        case ClientType.WithBatch:
+                            temp = new IncomeWithBatchItem() { 
+                                Name = item.Name, 
+                                Sku = item.Sku, 
+                                Count = 1, 
+                                isValid = true, 
+                                Id = item.Id, 
+                                Other = item.Other, 
+                                Batches = this.Batches.Where(inner => inner.CatalogId == item.Id).ToList() };
+                            break;
+                    }
+                }
+
+                CatalogData.Add(item);
+                Items.Add(temp);
+
+            }
+            Filter.Items = parsedData.ToList();
+
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
             foreach (var item in parsedBarcodes)
@@ -283,6 +333,7 @@ namespace WmsDesktop.ViewModels
             {
                 Batches.Add(item);
             }
+
         }
 
         public static async Task<CreateSessionViewModel> CreateAsync(Window window)

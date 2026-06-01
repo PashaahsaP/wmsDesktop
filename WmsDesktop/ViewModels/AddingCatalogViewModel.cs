@@ -91,11 +91,11 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(TblockError));
             }
         }
-        private ObservableCollection<OrderItem> _items = new ObservableCollection<OrderItem>();
-        private ObservableCollection<OrderItem> _borkItems = new ObservableCollection<OrderItem>();
+        private ObservableCollection<CatalogItemBase> _items = new ObservableCollection<CatalogItemBase>();
+        private ObservableCollection<CatalogItemBase> _catalogItems = new ObservableCollection<CatalogItemBase>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>();
-        private Supplier _selectedSupplier = new Supplier() { Id = "-1", Name = "" };
-        private Supplier _selectedSupplierCatalog = new Supplier() { Id = "-1", Name = "" };
+        private Supplier _selectedSupplier = new Supplier() { Id = -1, Name = "" };
+        private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "" };
         public ICommand addBarcode { get; set; }
         public ICommand removeBarcode { get; set; }
         public ICommand clearFields { get; set; }
@@ -138,7 +138,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public Visibility PartyVisibility { get; set; } = Visibility.Collapsed;
-        public Filter Filter { get; set; } = new Filter(new List<OrderItem>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
         public Supplier SelectedSupplier
         {
             get => _selectedSupplier;
@@ -180,7 +180,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Suppliers));
             }
         }
-        public ObservableCollection<OrderItem> ItemsList { 
+        public ObservableCollection<CatalogItemBase> ItemsList { 
             get
             {
                 return _items;
@@ -193,14 +193,14 @@ namespace WmsDesktop.ViewModels
             }
 
         }
-        public ObservableCollection<OrderItem> CatalogItems { 
+        public ObservableCollection<CatalogItemBase> CatalogItems { 
             get
             {
-                return _borkItems;
+                return _catalogItems;
             }
             set
             {
-                _borkItems = value;
+                _catalogItems = value;
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
@@ -208,15 +208,23 @@ namespace WmsDesktop.ViewModels
 
         public PageStates PageState => PageStates.AddingCatalogPage;
 
-        public  AddingCatalogViewModel(string data, string suppliers, string barcodes)
-        {   //parse catalog items
-            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<OrderItem>>(data);
+        public  AddingCatalogViewModel(string data, string suppliers, string barcodes, string batches)
+        {
+            //parse barcodes
+            var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
+            foreach (var item in parsedBarcodes)
+            {
+                Barcodes.Add(item);
+
+            }
+            //parse catalog items
+            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<CatalogItemBase>>(data);
             foreach (var item in parsedData)
             {
                 CatalogItems.Add(item);
 
             }
-            var temp = new ObservableCollection<OrderItem>(_borkItems.Where(x => x.name.ToLower().Contains(TbText.ToLower())));
+            var temp = new ObservableCollection<CatalogItemBase>(_catalogItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower())));
             ItemsList = temp;
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
@@ -228,13 +236,7 @@ namespace WmsDesktop.ViewModels
 
             }
             
-            //parse barcodes
-            var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
-            foreach (var item in parsedBarcodes)
-            {
-                Barcodes.Add(item);
-
-            }
+            
             Filter.Items = temp.ToList();
             Filter.Barcodes = parsedBarcodes.ToList();
             removeBarcode = new RelayCommand(o =>
@@ -365,10 +367,11 @@ namespace WmsDesktop.ViewModels
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];
+            var batches = await client.GetBatches(ip);
             var data = await client.GetAllCatalogsWithSuppliers(ip);
             var suppliers = await client.GetSuppliers(ip);
             var barcodes = await client.GetBarcodes(ip);
-            return new AddingCatalogViewModel(data, suppliers, barcodes);
+            return new AddingCatalogViewModel(data, suppliers, barcodes, batches);
         }
          
     }

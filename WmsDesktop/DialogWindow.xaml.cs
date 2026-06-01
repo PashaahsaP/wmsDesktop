@@ -24,10 +24,10 @@ namespace WmsDesktop
     public partial class DialogWindow : Window
     {
         private object Sender{ get; set; }
-        private List<OrderItem> Items { get; set; }
+        private List<CatalogItemBase> Items { get; set; }
         CreateSessionViewModel MainViewModel { get; set; }
-        ObservableCollection<IncomeSessionItemBase> UiItems { get; set; }
-        internal DialogWindow(object sender, List<OrderItem> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IncomeSessionItemBase> uiItems)
+        ObservableCollection<IncomeItem> UiItems { get; set; }
+        internal DialogWindow(object sender, List<CatalogItemBase> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IncomeItem> uiItems)
         {
             InitializeComponent();
             Sender = sender;
@@ -41,7 +41,7 @@ namespace WmsDesktop
             if (listItems != null)
             {
                 var content = textBox.Text.ToString();
-                var filtered = Items.Where(item => item.name != null && item.name.ToLower().Contains(content)).ToList();
+                var filtered = Items.Where(item => item.Name != null && item.Name.ToLower().Contains(content)).ToList();
                 listItems.ItemsSource = null;
                 listItems.ItemsSource = filtered;
             }
