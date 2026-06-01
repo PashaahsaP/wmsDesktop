@@ -20,6 +20,7 @@ namespace WmsDesktop
         public string name { get; set; }
         public string supplierName { get; set; }
         public string sku{ get; set; }
+        public string other {  get; set; }
 
         public override string ToString() => name;
     }

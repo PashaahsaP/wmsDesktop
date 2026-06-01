@@ -12,7 +12,7 @@ namespace WmsDesktop
         public string Sku { get; set; } = string.Empty;
         public string TE { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-
+        public string Other {  get; set; } = string.Empty;
         public int Count { get; set; } = 0;
         public bool isValid { get; set; } = true;
 

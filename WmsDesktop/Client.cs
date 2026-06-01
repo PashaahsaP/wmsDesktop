@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using WmsDesktop.Classes;
 
 namespace WmsDesktop
 {
@@ -72,7 +73,6 @@ namespace WmsDesktop
 
             return result;
         }
-        
         internal async Task<ID> SendAssemlbySession(AssemblySession session, string ip)
         {
 
@@ -345,6 +345,25 @@ namespace WmsDesktop
 
             return barcodeId;
         }
+        internal async Task<string> SendBatch(Batch batch, string ip)
+        {
+            string barcodeId = null;
+            try
+            {
+                var json = JsonConvert.SerializeObject(batch);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"http://{ip}:3000/batch/", content);
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                barcodeId = JsonConvert.DeserializeObject<StringID>(data).id;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return barcodeId;
+        }
         internal async Task<string> GetAllCatalogsWithSuppliers(string ip)
         {
             var result = "";
@@ -396,7 +415,6 @@ namespace WmsDesktop
 
             return result;
         }
-
         internal async Task<string> RemoveBarcode(Barcode item, string ip)
         {
             string result = null;
@@ -415,13 +433,29 @@ namespace WmsDesktop
 
             return str[0].id;
         }
-
         internal async Task<string> GetIncomeCells(string ip)
         {
             var result = "";
             try
             {
                 var response = await client.GetAsync($"http://{ip}:3000/incomeCell/");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
+        internal async Task<string> GetBatches(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/batches/");
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
                 result = data;

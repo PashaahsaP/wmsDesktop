@@ -9,6 +9,11 @@
       Loaded="Page_Loaded"
       Title="AddingCatalogsPage"
       >
+    <Page.Resources>
+        <DataTemplate DataType="{x:Type local:IncomeSessionItem}">
+            
+        </DataTemplate>
+    </Page.Resources>
     <Grid Background="White">
         <Grid >
             <Grid.ColumnDefinitions>

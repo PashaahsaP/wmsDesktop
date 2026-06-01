@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using WmsDesktop.Classes;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
 
@@ -60,6 +61,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public List<OrderItem> CatalogBorkItems { get; set; }
+        public List<Batch> Batches { get; set; } = new List<Batch>();
         public ObservableCollection<OrderItem> CatalogItems
         {
             get
@@ -159,7 +161,7 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, Window window)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, string batches, Window window)
         {
             _window = window;
             Items = new ObservableCollection<IncomeSessionItemBase>();
@@ -247,16 +249,12 @@ namespace WmsDesktop.ViewModels
             });
 
 
-
-
-
-
             //parse catalogs
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<OrderItem>>(catalogAndSuppliers);
             foreach (var item in parsedData)
             {
                 CatalogData.Add(item);
-                var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = false, Id = item.id};
+                var temp = new IncomeSessionItem() { Name = item.name, Sku = item.sku , Count = 1, isValid = true, Id = item.id, Other = item.other};
                 Items.Add(temp);
 
             }
@@ -264,8 +262,7 @@ namespace WmsDesktop.ViewModels
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             foreach (var item in supplierData)
-                Suppliers.Add(item);
-
+            { Suppliers.Add(item); }
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
             foreach (var item in parsedBarcodes)
@@ -280,6 +277,12 @@ namespace WmsDesktop.ViewModels
                 Cells.Add(item);
 
             }
+            //parse batches
+            var parsedBatches = JsonConvert.DeserializeObject<ObservableCollection<Batch>>(batches);
+            foreach (var item in parsedBatches)
+            {
+                Batches.Add(item);
+            }
         }
 
         public static async Task<CreateSessionViewModel> CreateAsync(Window window)
@@ -289,9 +292,10 @@ namespace WmsDesktop.ViewModels
             var ip = setting["Ip"];
             var catalogAndSuppliers = await client.GetAllCatalogsWithSuppliers(ip);
             var suppliers = await client.GetSuppliers(ip);
+            var batches = await client.GetBatches(ip);
             var barcodes = await client.GetBarcodes(ip);
             var incomeCells = await client.GetIncomeCells(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, window);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
