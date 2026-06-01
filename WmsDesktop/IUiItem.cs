@@ -8,7 +8,8 @@ namespace WmsDesktop
 {
     public class Supplier
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
+        public int Type { get; set; }
         public string Name { get; set; }
 
         public override string ToString() => Name;

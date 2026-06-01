@@ -112,8 +112,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Barcode.cs" />
-    <Compile Include="Classes\IncomeSessionItemBase.cs" />
+    <Compile Include="Classes\Batch.cs" />
+    <Compile Include="Classes\CatalogItemBase.cs" />
+    <Compile Include="Classes\IncomeItem.cs" />
     <Compile Include="Converter\CatalogToBackgroundColorConverter.cs" />
+    <Compile Include="Enums\ClientType.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="PageStates.cs" />

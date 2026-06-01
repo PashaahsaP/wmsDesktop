@@ -13,7 +13,7 @@
         <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
         <local:CatalogToBackgroundColorConverter x:Key="CatalogToBackgroundColorConverter"/>
 
-        <DataTemplate DataType="{x:Type local:IncomeSessionItem}">
+        <DataTemplate DataType="{x:Type local:IncomeBaseItem}">
             <Border
                 Margin="0 0 5 0"
                 BorderBrush="#efefef"
@@ -57,7 +57,7 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type local:IncomeSessionSelectedItem}">
+        <DataTemplate DataType="{x:Type local:IncomeBaseSelectedItem}">
             <Grid 
                 Grid.Row="0"
                 Grid.Column="0"
