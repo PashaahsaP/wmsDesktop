@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using WmsDesktop;
 using WmsDesktop.Classes;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
@@ -303,3 +304,4 @@ namespace WmsDesktop.ViewModels
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
+
