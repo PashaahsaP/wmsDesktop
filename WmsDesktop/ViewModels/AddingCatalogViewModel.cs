@@ -266,10 +266,10 @@ namespace WmsDesktop.ViewModels
             });
             addBarcode = new RelayCommand(async o =>
             {
-                var curCatalog = CatalogItems.FirstOrDefault(it => it.name == TbName) ;
+                var curCatalog = CatalogItems.FirstOrDefault(it => it.Name == TbName) ;
                 if (TbBarcode != "")
                 {
-                    SelectedBarcodes.Add(new Barcode("?", TbBarcode, curCatalog != null? curCatalog.id : "none"));
+                    SelectedBarcodes.Add(new Barcode("?", TbBarcode, curCatalog != null? curCatalog.Id : "none"));
                     TbBarcode = "";
                 }
             });
@@ -288,7 +288,7 @@ namespace WmsDesktop.ViewModels
 
                 TblockError = text;
                 if (isOk) {
-                    var suppId = Int32.Parse(SelectedSupplierCatalog.Id);
+                    var suppId = SelectedSupplierCatalog.Id;
                     var catalogId = await client.SendCatalog(new Catalog() { name = TbName, supplierId = suppId, sku = TbSku}, ip);
                     var barcodeId = "";
                     foreach (var barcode in SelectedBarcodes)
@@ -297,41 +297,39 @@ namespace WmsDesktop.ViewModels
                         new BarcodeItem() { name = barcode.Name, supplierId = suppId, catalogId = catalogId }, ip);
                         Barcodes.Add(new Barcode(barcodeId, barcode.Name, catalogId));
                     }
-                    ItemsList.Add(new OrderItem()
+                    ItemsList.Add(new CatalogItemBase()
                     {
-                        id = catalogId, 
-                        name = TbName,
-                        sku = TbSku,
-                        supplierId = SelectedSupplierCatalog.Id,
-                        supplierName = SelectedSupplierCatalog.Name
+                        Id = catalogId, 
+                        Name = TbName,
+                        Sku = TbSku,
+                        SupplierId = SelectedSupplierCatalog.Id 
                     });
-                    Filter.Items = new List<OrderItem>(ItemsList);
+                    Filter.Items = new List<CatalogItemBase>(ItemsList);
                     clearFields.Execute(null);
                 }
             });
             updateEntity = new RelayCommand(async o =>{
                 if(SelectedItem != null)
                 {
-                    var updateItem = new OrderItem()
+                    var updateItem = new CatalogItemBase()
                     {
-                        id = SelectedItem.id,
-                        supplierId = SelectedSupplierCatalog.Id,
-                        name= TbName,
-                        sku= TbSku,
-                        supplierName = SelectedSupplierCatalog.Name
+                        Id = SelectedItem.id,
+                        SupplierId = SelectedSupplierCatalog.Id,
+                        Name= TbName,
+                        Sku= TbSku
                     };
                     var updatedId = await client.UpdateCatalog(updateItem, ip);
                     if(updatedId == SelectedItem.id)
                     {
-                        var t = ItemsList.First(it => it.id == SelectedItem.id);
-                        t.name = TbName;
-                        t.sku = TbSku;
-                        t.supplierId = SelectedSupplierCatalog.Id;
-                        ItemsList = new ObservableCollection<OrderItem>(ItemsList);
+                        var t = ItemsList.First(it => it.Id == SelectedItem.id);
+                        t.Name = TbName;
+                        t.Sku = TbSku;
+                        t.SupplierId = SelectedSupplierCatalog.Id;
+                        ItemsList = new ObservableCollection<CatalogItemBase>(ItemsList);
                     }
 
 
-                    Barcodes.Where(bar => bar.CatalogId == updateItem.id).ToList()
+                    Barcodes.Where(bar => bar.CatalogId == updateItem.Id).ToList()
                         .ForEach(async item => {
                             if (!SelectedBarcodes.Any(it => it.Name == item.Name))
                             {
@@ -350,7 +348,7 @@ namespace WmsDesktop.ViewModels
                             {
                                 name = item.Name,
                                 catalogId = item.CatalogId,
-                                supplierId = int.Parse(SelectedSupplierCatalog.Id)
+                                supplierId = SelectedSupplierCatalog.Id
                             }, ip);
                             Console.WriteLine();
                             //добавить в локальное хранилище

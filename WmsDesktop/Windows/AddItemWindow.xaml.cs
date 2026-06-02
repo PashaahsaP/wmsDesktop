@@ -22,7 +22,7 @@ namespace WmsDesktop.Windows
     {
         public AddItemViewModel localVm = null;
         public OrderItem orderItem = null;
-        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<OrderItem> catalogItems)
+        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<CatalogItemBase> catalogItems)
         {
             InitializeComponent();
             localVm = new AddItemViewModel(catalogItems);

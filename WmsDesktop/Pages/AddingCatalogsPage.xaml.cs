@@ -41,9 +41,9 @@ namespace WmsDesktop.Pages
                 viewModel.IsEnabledAppend = false;
                 viewModel.IsEnabledSave = true;
                 var selectedItem = (OrderItem)listItems.SelectedItem;
-                tbName.Text = selectedItem.name;
-                tbSku.Text = selectedItem.sku;
-                CBSuppliersCatalog.SelectedIndex = 0;
+                //tbName.Text = selectedItem.name;
+                //tbSku.Text = selectedItem.sku;
+                //CBSuppliersCatalog.SelectedIndex = 0;
                 viewModel.SelectedBarcodes.Clear();
                 foreach (var item in viewModel.Barcodes.Where(item => item.CatalogId == selectedItem.id))
                 {
@@ -51,8 +51,8 @@ namespace WmsDesktop.Pages
                 };
                 for (int i = 0; i < viewModel.Suppliers.Count; i++)
                 {
-                    if(selectedItem.supplierName == viewModel.Suppliers[i].Name)
-                        CBSuppliersCatalog.SelectedIndex = i;
+                    if (selectedItem.supplierName == viewModel.Suppliers[i].Name) { }
+                        //CBSuppliersCatalog.SelectedIndex = i;
                 }
             }
             

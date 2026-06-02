@@ -289,7 +289,7 @@ namespace WmsDesktop
 
             return result;
         }
-        internal async Task<string> UpdateCatalog(OrderItem item, string ip)
+        internal async Task<string> UpdateCatalog(CatalogItemBase item, string ip)
         {
             string result = null;
             StringID[] str = null;

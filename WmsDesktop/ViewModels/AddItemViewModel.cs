@@ -11,10 +11,10 @@ namespace WmsDesktop.ViewModels
     public class AddItemViewModel : INotifyPropertyChanged
     {
         public string _tbText = string.Empty;
-        public ObservableCollection<OrderItem> _items = new ObservableCollection<OrderItem>();
+        public ObservableCollection<CatalogItemBase> _items = new ObservableCollection<CatalogItemBase>();
 
         public OrderItem SelectedItem { get; set; }
-        public ObservableCollection<OrderItem>  Items
+        public ObservableCollection<CatalogItemBase>  Items
         {
             get
             {
@@ -27,7 +27,7 @@ namespace WmsDesktop.ViewModels
 
             }
         }
-        public Filter Filter { get; set; } = new Filter(new List<OrderItem>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
         public string TbText {  
             get
             {
@@ -44,7 +44,7 @@ namespace WmsDesktop.ViewModels
             }
         }
 
-        public AddItemViewModel(ObservableCollection<OrderItem> items)
+        public AddItemViewModel(ObservableCollection<CatalogItemBase> items)
         {
             Items = items;
             Filter.Items = items.ToList();
