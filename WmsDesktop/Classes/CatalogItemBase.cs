@@ -13,6 +13,7 @@ namespace WmsDesktop
         public string Sku { get; set; } = string.Empty;
         public int SupplierId { get; set; } = 0;
         public List<Barcode> BarcodeList { get; set; } = new List<Barcode>();
+        public string Barcode { get; set; } = string.Empty;
         public string Other {  get; set; } = string.Empty;
 
     }

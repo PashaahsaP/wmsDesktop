@@ -19,22 +19,7 @@
 
                 <StackPanel
                     Grid.Column="0" >   
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Клиент</TextBlock>
-                        <ComboBox
-                            Grid.Column="1"
-                             x:Name="CBSuppliersCatalog"
-                             Width="125"
-                             ItemsSource="{Binding Suppliers}"
-                             SelectedItem="{Binding SelectedSupplierCatalog, Mode=TwoWay}"
-                             DisplayMemberPath="Name"
-                             Margin="5">
-                        </ComboBox>
-                    </Grid>
+                    
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*"/>
@@ -43,8 +28,7 @@
                         <TextBlock Grid.Column="0" Margin="5">Имя</TextBlock>
                         <TextBox Grid.Column="1" 
                                  x:Name="tbName"  
-                                 Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"
-                                 IsEnabled="{Binding IsEnabled}"></TextBox>
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -54,8 +38,7 @@
                         <TextBlock Grid.Column="0" Margin="5">Артикул</TextBlock>
                         <TextBox Grid.Column="1" 
                                  x:Name="tbSku"  
-                                 Text="{Binding TbSku, UpdateSourceTrigger=PropertyChanged}"
-                 ></TextBox>
+                                 Text="{Binding Sku, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Grid>
 
                     <Grid  Margin="5" >
@@ -64,41 +47,41 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Margin="5"> ШК</TextBlock>
-                        <TextBox Grid.Column="1" x:Name="tbBarcode"  Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBox Grid.Column="1" x:Name="tbBarcode"  Text="{Binding DataContext.TbBarcode, RelativeSource={RelativeSource AncestorType=ContentControl} }"></TextBox>
                     </Grid>
                     <Button 
                         x:Name="btnCatalogBorkAdd" 
                         Height="30" 
                         Width="120"
-                        Margin="5"
-                        Command="{Binding addBarcode}">Добавить шк</Button>
+                        Margin="5"                
+                        Command="{Binding DataContext.addBarcode, RelativeSource={RelativeSource AncestorType=ContentControl} }">Добавить шк</Button>
                     <Button 
                         x:Name="btnCatalogBoAdd" 
                         Height="30" 
                         Width="120"
                         Margin="5"
-                        Command="{Binding clearFields}">Очистить</Button>
+                        Command="{Binding DataContext.clearFields, RelativeSource={RelativeSource AncestorType=ContentControl} }">Очистить</Button>
                     <Button x:Name="btnCatalogBorkAd" 
                         Height="30" 
                         Width="120"
                         Margin="5"
-                        IsEnabled="{Binding IsEnabledSave}"
-                        Command="{Binding updateEntity}">Сохранить</Button>
+                         IsEnabled="{Binding DataContext.IsEnabledSave, RelativeSource={RelativeSource AncestorType=ContentControl} }"
+                        Command="{Binding DataContext.updateEntity, RelativeSource={RelativeSource AncestorType=ContentControl} }">Сохранить</Button>
                     <Button 
                         Height="30" 
                         Width="120"
                         Margin="5"
-                        IsEnabled="{Binding IsEnabledAppend}"
-                        Command="{Binding addEntity}">Добавить</Button>
+                        IsEnabled="{Binding DataContext.IsEnabledAppend, RelativeSource={RelativeSource AncestorType=ContentControl} }"
+                        Command="{Binding DataContext.addEntity, RelativeSource={RelativeSource AncestorType=ContentControl} }">Добавить</Button>
                     <TextBlock x:Name="tbError" 
                Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
                ></TextBlock>
                 </StackPanel>
 
                 <ItemsControl 
-        Grid.Column="1"
-        ItemsSource="{Binding SelectedBarcodes}"
-        HorizontalContentAlignment="Stretch">
+                    Grid.Column="1"
+                    ItemsSource="{Binding DataContext.SelectedBarcodes, RelativeSource={RelativeSource AncestorType=ContentControl} }"
+                    HorizontalContentAlignment="Stretch">
 
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -142,270 +125,7 @@
                 </ItemsControl>
             </Grid>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:WithDate}">
-            <Grid  Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel
-            Grid.Column="0" >
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Клиент</TextBlock>
-                        <ComboBox
-                    Grid.Column="1"
-                     x:Name="CBSuppliersCatalog"
-                     Width="125"
-                     ItemsSource="{Binding Suppliers}"
-                     SelectedItem="{Binding SelectedSupplierCatalog, Mode=TwoWay}"
-                     DisplayMemberPath="Name"
-                     Margin="5">
-                        </ComboBox>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Имя</TextBlock>
-                        <TextBox Grid.Column="1" 
-                         x:Name="tbName"  
-                         Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding IsEnabled}"></TextBox>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Артикул</TextBlock>
-                        <TextBox Grid.Column="1" 
-                         x:Name="tbSku"  
-                         Text="{Binding TbSku, UpdateSourceTrigger=PropertyChanged}"
-         ></TextBox>
-                    </Grid>
-
-                    <Grid  Margin="5" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5"> ШК</TextBlock>
-                        <TextBox Grid.Column="1" x:Name="tbBarcode"  Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    </Grid>
-                    <Button 
-                x:Name="btnCatalogBorkAdd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                Command="{Binding addBarcode}">Добавить шк</Button>
-                    <Button 
-                x:Name="btnCatalogBoAdd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                Command="{Binding clearFields}">Очистить</Button>
-                    <Button x:Name="btnCatalogBorkAd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                IsEnabled="{Binding IsEnabledSave}"
-                Command="{Binding updateEntity}">Сохранить</Button>
-                    <Button 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                IsEnabled="{Binding IsEnabledAppend}"
-                Command="{Binding addEntity}">Добавить</Button>
-                    <TextBlock x:Name="tbError" 
-       Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
-       ></TextBlock>
-                </StackPanel>
-
-                <ItemsControl 
-Grid.Column="1"
-ItemsSource="{Binding SelectedBarcodes}"
-HorizontalContentAlignment="Stretch">
-
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border 
-                Background="#2596be"
-                CornerRadius="5"
-                Padding="3"
-                Margin="5">
-                                <Grid 
-                VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.8*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock 
-                    Grid.Column="0"
-                    Foreground="White"
-                    FontFamily="Cascadia Mono"
-                    Padding="2"
-                    Margin="0"
-                    Text="{Binding Name}"
-                    ></TextBlock>
-                                    <Button 
-                    Background="Transparent" 
-                    Grid.Column="1"
-                    Foreground="White"
-                    Padding="0"
-                    Margin="0"
-                    Command="{Binding DataContext.removeBarcode,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}"
-                    >X</Button>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:WithBatch}">
-            <Grid  Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel
-            Grid.Column="0" >
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Клиент</TextBlock>
-                        <ComboBox
-                    Grid.Column="1"
-                     x:Name="CBSuppliersCatalog"
-                     Width="125"
-                     ItemsSource="{Binding Suppliers}"
-                     SelectedItem="{Binding SelectedSupplierCatalog, Mode=TwoWay}"
-                     DisplayMemberPath="Name"
-                     Margin="5">
-                        </ComboBox>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Имя</TextBlock>
-                        <TextBox Grid.Column="1" 
-                         x:Name="tbName"  
-                         Text="{Binding TbName, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding IsEnabled}"></TextBox>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5">Артикул</TextBlock>
-                        <TextBox Grid.Column="1" 
-                         x:Name="tbSku"  
-                         Text="{Binding TbSku, UpdateSourceTrigger=PropertyChanged}"
-         ></TextBox>
-                    </Grid>
-
-                    <Grid  Margin="5" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5"> ШК</TextBlock>
-                        <TextBox Grid.Column="1" x:Name="tbBarcode"  Text="{Binding TbBarcode, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    </Grid>
-                    <Button 
-                x:Name="btnCatalogBorkAdd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                Command="{Binding addBarcode}">Добавить шк</Button>
-                    <Button 
-                x:Name="btnCatalogBoAdd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                Command="{Binding clearFields}">Очистить</Button>
-                    <Button x:Name="btnCatalogBorkAd" 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                IsEnabled="{Binding IsEnabledSave}"
-                Command="{Binding updateEntity}">Сохранить</Button>
-                    <Button 
-                Height="30" 
-                Width="120"
-                Margin="5"
-                IsEnabled="{Binding IsEnabledAppend}"
-                Command="{Binding addEntity}">Добавить</Button>
-                    <TextBlock x:Name="tbError" 
-       Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
-       ></TextBlock>
-                </StackPanel>
-
-                <ItemsControl 
-Grid.Column="1"
-ItemsSource="{Binding SelectedBarcodes}"
-HorizontalContentAlignment="Stretch">
-
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border 
-                Background="#2596be"
-                CornerRadius="5"
-                Padding="3"
-                Margin="5">
-                                <Grid 
-                VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.8*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock 
-                    Grid.Column="0"
-                    Foreground="White"
-                    FontFamily="Cascadia Mono"
-                    Padding="2"
-                    Margin="0"
-                    Text="{Binding Name}"
-                    ></TextBlock>
-                                    <Button 
-                    Background="Transparent" 
-                    Grid.Column="1"
-                    Foreground="White"
-                    Padding="0"
-                    Margin="0"
-                    Command="{Binding DataContext.removeBarcode,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}"
-                    >X</Button>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </DataTemplate>
+      
     </Page.Resources>
     <Grid Background="White">
         <Grid >
@@ -413,11 +133,32 @@ HorizontalContentAlignment="Stretch">
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ItemsControl 
-                ItemsSource="{Binding CatalogItems}"
-                Grid.Column="0">
-
-            </ItemsControl>
+            <Grid  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.7*"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Height="30"
+                    Width="100"
+                    ItemsSource="{Binding MainSuppliers}"
+                    SelectedItem="{Binding MainSelectedSupplier}"
+                    >
+                    
+                </ComboBox>
+                <ContentControl
+                    Content="{Binding SelectedCatalogItem, UpdateSourceTrigger=PropertyChanged}"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1">
+                </ContentControl>
+            </Grid>
             <StackPanel Grid.Column="1">
 
                 <StackPanel Orientation="Horizontal">

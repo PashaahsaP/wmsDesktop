@@ -1,19 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WmsDesktop.ViewModels;
 
 namespace WmsDesktop.Pages
@@ -23,21 +11,20 @@ namespace WmsDesktop.Pages
     /// </summary>
     public partial class AddingCatalogsPage : Page
     {
-       
+
         public AddingCatalogViewModel viewModel;
         public AddingCatalogsPage(MainViewModel vm, IState localVm)
         {
             InitializeComponent();
             viewModel = localVm as AddingCatalogViewModel;
         }
-         
-       
+
+
         private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (listItems.SelectedItem != null)
             {
-                // Получаем выбранный элемент как ListBoxItem
-                viewModel.IsEnabledNameField = false;
+                // Получаем выбранный элемент как ListBoxItem 
                 viewModel.IsEnabledAppend = false;
                 viewModel.IsEnabledSave = true;
                 var selectedItem = (OrderItem)listItems.SelectedItem;
@@ -48,14 +35,18 @@ namespace WmsDesktop.Pages
                 foreach (var item in viewModel.Barcodes.Where(item => item.CatalogId == selectedItem.id))
                 {
                     viewModel.SelectedBarcodes.Add(item);
-                };
+                }
+                ;
                 for (int i = 0; i < viewModel.Suppliers.Count; i++)
                 {
                     if (selectedItem.supplierName == viewModel.Suppliers[i].Name) { }
-                        //CBSuppliersCatalog.SelectedIndex = i;
+                    //CBSuppliersCatalog.SelectedIndex = i;
                 }
+                viewModel.SelectedCatalogItem =  viewModel.CatalogItems.FirstOrDefault(item => item.Id == selectedItem.id);
+
+                Console.WriteLine();
             }
-            
+
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)

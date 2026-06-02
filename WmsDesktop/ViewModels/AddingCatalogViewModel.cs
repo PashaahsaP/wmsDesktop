@@ -25,7 +25,6 @@ namespace WmsDesktop.ViewModels
         private string _tbSku = "";
         private string _tbBarcode = "";
         private string _tblockError = "";
-        private bool _isEnabled = true;
         private bool _isEnabledAppend = true;
         private bool _isEnabledSave = false;
 
@@ -37,7 +36,15 @@ namespace WmsDesktop.ViewModels
             {
                 _tbText = value;
                 Filter.Sort = _tbText;
-                _items = Filter.Apply();
+                _items = new ObservableCollection<OrderItem>( Filter.Apply().Select(item => new OrderItem()
+                {
+                    id = item.Id,
+                    name = item.Name,
+                    other = item.Other,
+                    sku = item.Sku,
+                    supplierId = item.SupplierId.ToString(),
+                    supplierName = Suppliers.FirstOrDefault(inner => inner.Id ==  item.SupplierId).ToString()
+                }));
                 OnPropertyChanged(nameof(TbText));
                 OnPropertyChanged(nameof(ItemsList));
 
@@ -91,28 +98,22 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(TblockError));
             }
         }
-        private ObservableCollection<CatalogItemBase> _items = new ObservableCollection<CatalogItemBase>();
+        private ObservableCollection<OrderItem> _items = new ObservableCollection<OrderItem>();
         private ObservableCollection<CatalogItemBase> _catalogItems = new ObservableCollection<CatalogItemBase>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>();
+        private ObservableCollection<Supplier> _mainSuppliers = new ObservableCollection<Supplier>();
         private Supplier _selectedSupplier = new Supplier() { Id = -1, Name = "" };
+        private Supplier _mainSelectedSupplier = new Supplier() { Id = -1, Name = "" };
         private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "" };
+        private CatalogItemBase _selectedCatalogItem = new CatalogItemBase();
+        private ObservableCollection<Barcode> _selectedBarcodes = new ObservableCollection<Barcode>();
+        
+
         public ICommand addBarcode { get; set; }
         public ICommand removeBarcode { get; set; }
         public ICommand clearFields { get; set; }
         public ICommand addEntity { get; set; }
         public ICommand updateEntity { get; set; }
-        public bool IsEnabledNameField
-        {
-            get
-            {
-                return _isEnabled;
-            }
-            set
-            {
-                _isEnabled = value;
-                OnPropertyChanged(nameof(IsEnabledNameField));
-            }
-        }
         public bool IsEnabledAppend
         {
             get
@@ -139,6 +140,28 @@ namespace WmsDesktop.ViewModels
         }
         public Visibility PartyVisibility { get; set; } = Visibility.Collapsed;
         public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
+        public CatalogItemBase SelectedCatalogItem
+        {
+            get
+            {
+                return _selectedCatalogItem;
+            }
+            set
+            {
+                _selectedCatalogItem = value;
+                OnPropertyChanged(nameof(SelectedCatalogItem));
+            }
+        } 
+        public Supplier MainSelectedSupplier
+        {
+            get => _mainSelectedSupplier;
+            set
+            {
+                _mainSelectedSupplier = value;               
+                OnPropertyChanged(nameof(MainSelectedSupplier));// Добавить применение фильтром и прочее
+                
+            }
+        }
         public Supplier SelectedSupplier
         {
             get => _selectedSupplier;
@@ -146,7 +169,7 @@ namespace WmsDesktop.ViewModels
             {
                 _selectedSupplier = value;
                 Filter.Supplier = _selectedSupplier;
-                _items = Filter.Apply();
+                _items = new ObservableCollection<OrderItem> (Filter.Apply().Select(item => new OrderItem() { id = item.Id, name = item.Name}));
                 OnPropertyChanged(nameof(SelectedSupplier));// Добавить применение фильтром и прочее
                 OnPropertyChanged(nameof(ItemsList));// Добавить применение фильтром и прочее
             }
@@ -167,7 +190,30 @@ namespace WmsDesktop.ViewModels
             }
         }
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
-        public ObservableCollection<Barcode> SelectedBarcodes {  get; set; } = new ObservableCollection<Barcode>();
+        public ObservableCollection<Barcode> SelectedBarcodes {  
+            get
+            {
+                return _selectedBarcodes;
+            }
+            set 
+            {
+                _selectedBarcodes = value;
+                OnPropertyChanged(nameof(SelectedBarcodes));
+
+            } 
+        }
+        public ObservableCollection<Supplier> MainSuppliers
+        {
+            get
+            {
+                return _mainSuppliers;
+            }
+            set
+            {
+                _suppliers = value;
+                OnPropertyChanged(nameof(MainSuppliers));
+            }
+        }
         public ObservableCollection<Supplier> Suppliers
         {
             get
@@ -180,7 +226,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Suppliers));
             }
         }
-        public ObservableCollection<CatalogItemBase> ItemsList { 
+        public ObservableCollection<OrderItem> ItemsList { 
             get
             {
                 return _items;
@@ -221,23 +267,45 @@ namespace WmsDesktop.ViewModels
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<CatalogItemBase>>(data);
             foreach (var item in parsedData)
             {
+                item.BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.Id).ToList();
                 CatalogItems.Add(item);
 
             }
-            var temp = new ObservableCollection<CatalogItemBase>(_catalogItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower())));
+            var temp = new ObservableCollection<OrderItem>(_catalogItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower()))
+                .Select(inner => new OrderItem() { 
+                id = inner.Id,
+                name = inner.Name,
+                other = inner.Other,
+                sku = inner.Sku,
+                supplierId = inner.SupplierId.ToString(),
+                supplierName = Suppliers.FirstOrDefault(item => item.Id == inner.SupplierId)?.Name,
+                }
+                ));
             ItemsList = temp;
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             
             Suppliers.Add(SelectedSupplier);
+            MainSuppliers.Add(MainSelectedSupplier);
             foreach (var item in supplierData)
             {
                 Suppliers.Add(item);
+                MainSuppliers.Add(item);
+
 
             }
-            
-            
-            Filter.Items = temp.ToList();
+
+
+            Filter.Items = temp.Select(item => new CatalogItemBase()
+            {
+                Id = item.id,
+                SupplierId = int.Parse(item.supplierId),
+                Name = item.name,
+                Sku = item.sku,
+                Other = item.other,
+                BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.id).ToList()
+
+            }).ToList();
             Filter.Barcodes = parsedBarcodes.ToList();
             removeBarcode = new RelayCommand(o =>
             {
@@ -256,7 +324,6 @@ namespace WmsDesktop.ViewModels
             clearFields = new RelayCommand(o => {
                 IsEnabledSave = false;
                 IsEnabledAppend = true;
-                IsEnabledNameField = true;
                 TbBarcode = "";
                 TbName = "";
                 TbSku = "";
@@ -266,10 +333,12 @@ namespace WmsDesktop.ViewModels
             });
             addBarcode = new RelayCommand(async o =>
             {
-                var curCatalog = CatalogItems.FirstOrDefault(it => it.Name == TbName) ;
+                var curCatalog = SelectedCatalogItem;
                 if (TbBarcode != "")
                 {
-                    SelectedBarcodes.Add(new Barcode("?", TbBarcode, curCatalog != null? curCatalog.Id : "none"));
+                    var newBarcode = new Barcode("?", TbBarcode, curCatalog != null ? curCatalog.Id : "none");
+                    SelectedBarcodes.Add(newBarcode);
+                    SelectedCatalogItem.BarcodeList = new List<Barcode>(SelectedBarcodes);
                     TbBarcode = "";
                 }
             });
@@ -297,39 +366,39 @@ namespace WmsDesktop.ViewModels
                         new BarcodeItem() { name = barcode.Name, supplierId = suppId, catalogId = catalogId }, ip);
                         Barcodes.Add(new Barcode(barcodeId, barcode.Name, catalogId));
                     }
-                    ItemsList.Add(new CatalogItemBase()
+                    ItemsList.Add(new OrderItem()
                     {
-                        Id = catalogId, 
-                        Name = TbName,
-                        Sku = TbSku,
-                        SupplierId = SelectedSupplierCatalog.Id 
+                        id = catalogId, 
+                        name = TbName,
+                        sku = TbSku,
+                        supplierId = SelectedSupplierCatalog.Id.ToString(), 
                     });
-                    Filter.Items = new List<CatalogItemBase>(ItemsList);
+                    Filter.Items = new List<CatalogItemBase>(ItemsList.Select(item => new CatalogItemBase() { 
+                        Id = item.id,
+                        Name = item.name,
+                        Sku = item.sku,
+                        Other = item.other,
+                        BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.id).ToList(),
+                        SupplierId = int.Parse(item.supplierId)
+                    }));
                     clearFields.Execute(null);
                 }
             });
             updateEntity = new RelayCommand(async o =>{
-                if(SelectedItem != null)
+                if(SelectedCatalogItem != null)
                 {
-                    var updateItem = new CatalogItemBase()
-                    {
-                        Id = SelectedItem.id,
-                        SupplierId = SelectedSupplierCatalog.Id,
-                        Name= TbName,
-                        Sku= TbSku
-                    };
-                    var updatedId = await client.UpdateCatalog(updateItem, ip);
+                    var updatedId = await client.UpdateCatalog(SelectedCatalogItem, ip);
                     if(updatedId == SelectedItem.id)
                     {
-                        var t = ItemsList.First(it => it.Id == SelectedItem.id);
-                        t.Name = TbName;
-                        t.Sku = TbSku;
-                        t.SupplierId = SelectedSupplierCatalog.Id;
-                        ItemsList = new ObservableCollection<CatalogItemBase>(ItemsList);
+                        var t = ItemsList.First(it => it.id == SelectedItem.id);
+                        t.name = TbName;
+                        t.sku = TbSku;
+                        t.supplierId = SelectedSupplierCatalog.Id.ToString();
+                        ItemsList = new ObservableCollection<OrderItem>(ItemsList);
                     }
 
 
-                    Barcodes.Where(bar => bar.CatalogId == updateItem.Id).ToList()
+                    Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.Id).ToList()
                         .ForEach(async item => {
                             if (!SelectedBarcodes.Any(it => it.Name == item.Name))
                             {
