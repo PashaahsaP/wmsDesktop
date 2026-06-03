@@ -39,8 +39,10 @@ namespace WmsDesktop.Pages
                 ;
                 for (int i = 0; i < viewModel.Suppliers.Count; i++)
                 {
-                    if (selectedItem.supplierName == viewModel.Suppliers[i].Name) { }
-                    //CBSuppliersCatalog.SelectedIndex = i;
+                    if (selectedItem.supplierName == viewModel.Suppliers[i].Name)
+                    {
+                        CBSuppliersCatalog.SelectedIndex = i;
+                    }
                 }
                 viewModel.SelectedCatalogItem =  viewModel.CatalogItems.FirstOrDefault(item => item.Id == selectedItem.id);
 

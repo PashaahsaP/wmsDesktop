@@ -157,7 +157,9 @@ namespace WmsDesktop.ViewModels
             get => _mainSelectedSupplier;
             set
             {
-                _mainSelectedSupplier = value;               
+                _mainSelectedSupplier = value;
+                if(SelectedCatalogItem != null)
+                    SelectedCatalogItem.SupplierId = value.Id;
                 OnPropertyChanged(nameof(MainSelectedSupplier));// Добавить применение фильтром и прочее
                 
             }
@@ -256,6 +258,16 @@ namespace WmsDesktop.ViewModels
 
         public  AddingCatalogViewModel(string data, string suppliers, string barcodes, string batches)
         {
+            var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
+            Suppliers.Add(SelectedSupplier);
+            MainSuppliers.Add(MainSelectedSupplier);
+            foreach (var item in supplierData)
+            {
+                Suppliers.Add(item);
+                MainSuppliers.Add(item);
+
+
+            }
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
             foreach (var item in parsedBarcodes)
@@ -283,18 +295,6 @@ namespace WmsDesktop.ViewModels
                 ));
             ItemsList = temp;
             //parse suppliers
-            var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
-            
-            Suppliers.Add(SelectedSupplier);
-            MainSuppliers.Add(MainSelectedSupplier);
-            foreach (var item in supplierData)
-            {
-                Suppliers.Add(item);
-                MainSuppliers.Add(item);
-
-
-            }
-
 
             Filter.Items = temp.Select(item => new CatalogItemBase()
             {
@@ -322,14 +322,15 @@ namespace WmsDesktop.ViewModels
                 
             });
             clearFields = new RelayCommand(o => {
+                
+                SelectedCatalogItem = null;
                 IsEnabledSave = false;
                 IsEnabledAppend = true;
                 TbBarcode = "";
                 TbName = "";
                 TbSku = "";
                 SelectedBarcodes.Clear();
-                SelectedSupplierCatalog = Suppliers.First();
-
+                MainSelectedSupplier = MainSuppliers.First();
             });
             addBarcode = new RelayCommand(async o =>
             {
@@ -393,8 +394,9 @@ namespace WmsDesktop.ViewModels
                         var t = ItemsList.First(it => it.id == SelectedItem.id);
                         t.name = TbName;
                         t.sku = TbSku;
-                        t.supplierId = SelectedSupplierCatalog.Id.ToString();
+                        t.supplierId = MainSelectedSupplier.Id.ToString();
                         ItemsList = new ObservableCollection<OrderItem>(ItemsList);
+                        SelectedSupplier = new Supplier() { Id = SelectedSupplier.Id, Name = SelectedSupplier.Name, Type = SelectedSupplier.Type};
                     }
 
 
@@ -417,9 +419,8 @@ namespace WmsDesktop.ViewModels
                             {
                                 name = item.Name,
                                 catalogId = item.CatalogId,
-                                supplierId = SelectedSupplierCatalog.Id
+                                supplierId = MainSelectedSupplier.Id
                             }, ip);
-                            Console.WriteLine();
                             //добавить в локальное хранилище
                         }
                     }

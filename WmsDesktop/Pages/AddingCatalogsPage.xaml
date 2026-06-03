@@ -143,12 +143,13 @@
                     <ColumnDefinition Width="0.7*"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox
+                    Name="CBSuppliersCatalog"
                     Grid.Row="0"
                     Grid.Column="0"
                     Height="30"
                     Width="100"
                     ItemsSource="{Binding MainSuppliers}"
-                    SelectedItem="{Binding MainSelectedSupplier}"
+                    SelectedItem="{Binding MainSelectedSupplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     >
                     
                 </ComboBox>
