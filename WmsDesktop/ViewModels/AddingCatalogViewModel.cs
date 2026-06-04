@@ -103,7 +103,7 @@ namespace WmsDesktop.ViewModels
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>();
         private ObservableCollection<Supplier> _mainSuppliers = new ObservableCollection<Supplier>();
         private Supplier _selectedSupplier = new Supplier() { Id = -1, Name = "" };
-        private Supplier _mainSelectedSupplier = new Supplier() { Id = -1, Name = "" };
+        private Supplier _mainSelectedSupplier;
         private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "" };
         private CatalogItemBase _selectedCatalogItem = new CatalogItemBase();
         private ObservableCollection<Barcode> _selectedBarcodes = new ObservableCollection<Barcode>();
@@ -260,7 +260,7 @@ namespace WmsDesktop.ViewModels
         {
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             Suppliers.Add(SelectedSupplier);
-            MainSuppliers.Add(MainSelectedSupplier);
+            //MainSuppliers.Add(MainSelectedSupplier);
             foreach (var item in supplierData)
             {
                 Suppliers.Add(item);
@@ -295,7 +295,6 @@ namespace WmsDesktop.ViewModels
                 ));
             ItemsList = temp;
             //parse suppliers
-
             Filter.Items = temp.Select(item => new CatalogItemBase()
             {
                 Id = item.id,
@@ -330,7 +329,7 @@ namespace WmsDesktop.ViewModels
                 TbName = "";
                 TbSku = "";
                 SelectedBarcodes.Clear();
-                MainSelectedSupplier = MainSuppliers.First();
+                MainSelectedSupplier = null;
             });
             addBarcode = new RelayCommand(async o =>
             {
@@ -389,12 +388,13 @@ namespace WmsDesktop.ViewModels
                 if(SelectedCatalogItem != null)
                 {
                     var updatedId = await client.UpdateCatalog(SelectedCatalogItem, ip);
-                    if(updatedId == SelectedItem.id)
+                    if(updatedId == SelectedCatalogItem.Id)
                     {
-                        var t = ItemsList.First(it => it.id == SelectedItem.id);
+                        var t = ItemsList.First(it => it.id == SelectedCatalogItem.Id);
                         t.name = TbName;
                         t.sku = TbSku;
                         t.supplierId = MainSelectedSupplier.Id.ToString();
+                        
                         ItemsList = new ObservableCollection<OrderItem>(ItemsList);
                         SelectedSupplier = new Supplier() { Id = SelectedSupplier.Id, Name = SelectedSupplier.Name, Type = SelectedSupplier.Type};
                     }
@@ -407,6 +407,7 @@ namespace WmsDesktop.ViewModels
                                 //удалить запись из бд
                                 var t = await client.RemoveBarcode(item, ip);
                                 //удалить запись из локальной
+                                Barcodes.Remove(item);
                             }
                             
                         });
@@ -415,13 +416,15 @@ namespace WmsDesktop.ViewModels
                         if (item.Id == "?")
                         {
                             //добавить в бд
-                            var addedId = await client.SendBarcode(new BarcodeItem()
+                            var newBarcode = new BarcodeItem()
                             {
                                 name = item.Name,
                                 catalogId = item.CatalogId,
                                 supplierId = MainSelectedSupplier.Id
-                            }, ip);
+                            };
+                            var addedId = await client.SendBarcode(newBarcode, ip);
                             //добавить в локальное хранилище
+                            Barcodes.Add(new Barcode(addedId, item.Name, item.CatalogId));
                         }
                     }
                 }

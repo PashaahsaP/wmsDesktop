@@ -37,9 +37,9 @@ namespace WmsDesktop.Pages
                     viewModel.SelectedBarcodes.Add(item);
                 }
                 ;
-                for (int i = 0; i < viewModel.Suppliers.Count; i++)
+                for (int i = 0; i < viewModel.MainSuppliers.Count; i++)
                 {
-                    if (selectedItem.supplierName == viewModel.Suppliers[i].Name)
+                    if (selectedItem.supplierName == viewModel.MainSuppliers[i].Name)
                     {
                         CBSuppliersCatalog.SelectedIndex = i;
                     }
