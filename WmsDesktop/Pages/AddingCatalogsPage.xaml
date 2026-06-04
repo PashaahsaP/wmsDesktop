@@ -27,7 +27,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Margin="5">Имя</TextBlock>
                         <TextBox Grid.Column="1" 
-                                 x:Name="tbName"  
+                                 x:Name="TbText"  
                                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Grid>
                     <Grid Margin="5">

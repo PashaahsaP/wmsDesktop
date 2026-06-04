@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,64 @@ namespace WmsDesktop
 
         public override string ToString() => Name;
     }
-    public class OrderItem
+    public class OrderItem : INotifyPropertyChanged     
     {
-        public string id { get; set; }
-        public string supplierId { get; set; }
-        public string name { get; set; }
-        public string supplierName { get; set; }
-        public string sku{ get; set; }
-        public string other {  get; set; }
+        public string _id;
+        public string _supplierId;
+        public string _name;
+        public string _supplierName;
+        public string _sku;
+        public string _other;
+        public string id { get => _id; set 
+            { 
+                _id = value;
+                OnPropertyChanged(nameof(id));
+            }
+        }
+        public string supplierId
+        {
+            get => _supplierId; set
+            {
+                _supplierId = value;
+                OnPropertyChanged(nameof(supplierId));
+            }
+        }
+        public string name
+        {
+            get => _name; set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(name));
+            }
+        }
+        public string supplierName
+        {
+            get => _supplierName; set
+            {
+                _supplierName = value;
+                OnPropertyChanged(nameof(supplierName));
+            }
+        }
+        public string sku
+        {
+            get => _sku; set
+            {
+                _sku = value;
+                OnPropertyChanged(nameof(sku));
+            }
+        }
+        public string other
+        {
+            get => _other; set
+            {
+                _other = value;
+                OnPropertyChanged(nameof(other));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public override string ToString() => name;
     }

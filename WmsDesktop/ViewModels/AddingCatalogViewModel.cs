@@ -391,26 +391,26 @@ namespace WmsDesktop.ViewModels
                     if(updatedId == SelectedCatalogItem.Id)
                     {
                         var t = ItemsList.First(it => it.id == SelectedCatalogItem.Id);
-                        t.name = TbName;
-                        t.sku = TbSku;
+                        t.name = SelectedCatalogItem.Name;
+                        t.sku = SelectedCatalogItem.Sku;
                         t.supplierId = MainSelectedSupplier.Id.ToString();
-                        
-                        ItemsList = new ObservableCollection<OrderItem>(ItemsList);
-                        SelectedSupplier = new Supplier() { Id = SelectedSupplier.Id, Name = SelectedSupplier.Name, Type = SelectedSupplier.Type};
+
+
+                        //ItemsList = new ObservableCollection<OrderItem>(ItemsList);
+                        //MainSelectedSupplier = SuppliersList.FirstOrDefault(s => s.Id == SelectedSupplier.Id);
+                        //SelectedSupplier = new Supplier() { Id = SelectedSupplier.Id, Name = SelectedSupplier.Name, Type = SelectedSupplier.Type};
                     }
 
 
-                    Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.Id).ToList()
-                        .ForEach(async item => {
-                            if (!SelectedBarcodes.Any(it => it.Name == item.Name))
-                            {
-                                //удалить запись из бд
-                                var t = await client.RemoveBarcode(item, ip);
-                                //удалить запись из локальной
-                                Barcodes.Remove(item);
-                            }
-                            
-                        });
+                    var barcodesToRemove = Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.Id).ToList();
+                    foreach (var item in barcodesToRemove)
+                    {
+                        if (!SelectedBarcodes.Any(it => it.Name == item.Name))
+                        {
+                            var q = await client.RemoveBarcode(item, ip);
+                            Barcodes.Remove(item); // Теперь это безопасно
+                        }
+                    }
                     foreach (var item in SelectedBarcodes)
                     {
                         if (item.Id == "?")
