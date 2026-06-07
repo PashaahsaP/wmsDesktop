@@ -390,10 +390,23 @@ namespace WmsDesktop.ViewModels
                     var updatedId = await client.UpdateCatalog(SelectedCatalogItem, ip);
                     if(updatedId == SelectedCatalogItem.Id)
                     {
+                        //сброс коллекции
+                        var curSup = Filter.Supplier;
+                        Filter.Supplier = Suppliers.First();
+                        ItemsList = new ObservableCollection<OrderItem>( Filter.Apply().Select(item =>
+                        new OrderItem() { id = item.Id, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name}));
+
+                        
+
                         var t = ItemsList.First(it => it.id == SelectedCatalogItem.Id);
                         t.name = SelectedCatalogItem.Name;
                         t.sku = SelectedCatalogItem.Sku;
                         t.supplierId = MainSelectedSupplier.Id.ToString();
+
+                        //обработка коллекции. TODO сделать коллецию в которой базовая коллекция хранится
+                        Filter.Supplier = curSup;
+                        ItemsList = new ObservableCollection<OrderItem>(Filter.Apply().Select(item =>
+                        new OrderItem() { id = item.Id, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name }));
 
 
                         //ItemsList = new ObservableCollection<OrderItem>(ItemsList);

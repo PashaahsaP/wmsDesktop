@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -143,7 +145,6 @@ namespace WmsDesktop
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-          
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
             ip = setting["Ip"];
