@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
+using WmsDesktop.Enums;
 using WmsDesktop.vm;
 
 namespace WmsDesktop.ViewModels
@@ -192,6 +193,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
+        public List<Batch> Batches {  get; set; } = new List<Batch>();
         public ObservableCollection<Barcode> SelectedBarcodes {  
             get
             {
@@ -258,6 +260,9 @@ namespace WmsDesktop.ViewModels
 
         public  AddingCatalogViewModel(string data, string suppliers, string barcodes, string batches)
         {
+            var batchData = JsonConvert.DeserializeObject<List<Batch>>(batches);
+            Batches = batchData;
+
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             Suppliers.Add(SelectedSupplier);
             //MainSuppliers.Add(MainSelectedSupplier);
@@ -265,8 +270,6 @@ namespace WmsDesktop.ViewModels
             {
                 Suppliers.Add(item);
                 MainSuppliers.Add(item);
-
-
             }
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);
@@ -280,7 +283,59 @@ namespace WmsDesktop.ViewModels
             foreach (var item in parsedData)
             {
                 item.BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.Id).ToList();
-                CatalogItems.Add(item);
+                //sorting by type of supplier
+                var sup = Suppliers.First(x => x.Id == item.SupplierId);
+                switch(sup.SupplierType)
+                {
+                    case  (int)ClientType.Base:
+                        CatalogItems.Add(item);
+                        break;
+                    case (int)ClientType.WithDate:
+                        var newObj = new WithDate()
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            Sku = item.Sku,
+                            SupplierId = item.SupplierId,
+                            Barcode = item.Barcode,
+                            BarcodeList = item.BarcodeList,
+                            Other = item.Other,
+                        };
+                        if(item.Other != null & item.Other != "")
+                        {
+                            var dateInMilisecond = JsonConvert.DeserializeObject<DateOfSupplier>(item.Other);
+                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(dateInMilisecond.Date);
+                            DateTime utcDateTime = dateTimeOffset.UtcDateTime;
+                            newObj.Date = utcDateTime;
+                        }
+                        else
+                        {
+                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(1);
+                            DateTime utcDateTime = dateTimeOffset.UtcDateTime;
+                            newObj.Date = utcDateTime;
+                        }
+                        CatalogItems.Add(newObj);
+                        break;
+                    case (int)ClientType.WithBatch:
+                        var newObjWithBathc = new WithBatch()
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            Sku = item.Sku,
+                            SupplierId = item.SupplierId,
+                            Barcode = item.Barcode,
+                            BarcodeList = item.BarcodeList,
+                            Other = item.Other,
+                            Batches = Batches.Where(inner => item.Id == inner.CatalogId).ToList(),
+                        };
+                        CatalogItems.Add(newObjWithBathc);
+                        
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                
+                
 
             }
             var temp = new ObservableCollection<OrderItem>(_catalogItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower()))

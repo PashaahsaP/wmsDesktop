@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
+     
+    public class DateOfSupplier
+    {
+        public long Date { get; set; }
+    }
     public class Supplier
     {
         public int Id { get; set; }
-        public int Type { get; set; }
+        public int SupplierType { get; set; }
         public string Name { get; set; }
 
         public override string ToString() => Name;

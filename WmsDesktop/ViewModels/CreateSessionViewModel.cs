@@ -269,9 +269,9 @@ namespace WmsDesktop.ViewModels
             {
                 
                 var sup = Suppliers.FirstOrDefault(inner => inner.Id == item.SupplierId);
-                if (Enum.IsDefined(typeof(ClientType), sup.Type))
+                if (Enum.IsDefined(typeof(ClientType), sup.SupplierType))
                 {
-                    ClientType currentStatus = (ClientType)sup.Type;
+                    ClientType currentStatus = (ClientType)sup.SupplierType;
 
                     switch (currentStatus)
                     {
