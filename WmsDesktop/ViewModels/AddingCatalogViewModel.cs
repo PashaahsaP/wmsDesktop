@@ -111,6 +111,7 @@ namespace WmsDesktop.ViewModels
         
 
         public ICommand addBarcode { get; set; }
+        public ICommand addLot { get; set; }
         public ICommand removeBarcode { get; set; }
         public ICommand clearFields { get; set; }
         public ICommand addEntity { get; set; }
@@ -301,19 +302,6 @@ namespace WmsDesktop.ViewModels
                             BarcodeList = item.BarcodeList,
                             Other = item.Other,
                         };
-                        if(item.Other != null & item.Other != "")
-                        {
-                            var dateInMilisecond = JsonConvert.DeserializeObject<DateOfSupplier>(item.Other);
-                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(dateInMilisecond.Date);
-                            DateTime utcDateTime = dateTimeOffset.UtcDateTime;
-                            newObj.Date = utcDateTime;
-                        }
-                        else
-                        {
-                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(1);
-                            DateTime utcDateTime = dateTimeOffset.UtcDateTime;
-                            newObj.Date = utcDateTime;
-                        }
                         CatalogItems.Add(newObj);
                         break;
                     case (int)ClientType.WithBatch:
@@ -396,6 +384,14 @@ namespace WmsDesktop.ViewModels
                     SelectedCatalogItem.BarcodeList = new List<Barcode>(SelectedBarcodes);
                     TbBarcode = "";
                 }
+            });   
+            addLot = new RelayCommand(async o =>
+            {
+                var t = SelectedCatalogItem as WithBatch;
+                var newBatch = new Batch() { CatalogId = t.Id, Id = -1, Name = t.SearchLine};
+                Batches.Add(newBatch);
+                t.Batches.Add(newBatch);
+                t.SearchLine = t.SearchLine;
             });
             addEntity = new RelayCommand(async o => {
                 var text = "";
@@ -469,16 +465,17 @@ namespace WmsDesktop.ViewModels
                         //SelectedSupplier = new Supplier() { Id = SelectedSupplier.Id, Name = SelectedSupplier.Name, Type = SelectedSupplier.Type};
                     }
 
-
+                    //remove barcodes
                     var barcodesToRemove = Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.Id).ToList();
                     foreach (var item in barcodesToRemove)
                     {
                         if (!SelectedBarcodes.Any(it => it.Name == item.Name))
                         {
                             var q = await client.RemoveBarcode(item, ip);
-                            Barcodes.Remove(item); // Теперь это безопасно
+                            Barcodes.Remove(item);
                         }
                     }
+                    //send barcodes
                     foreach (var item in SelectedBarcodes)
                     {
                         if (item.Id == "?")
@@ -493,6 +490,15 @@ namespace WmsDesktop.ViewModels
                             var addedId = await client.SendBarcode(newBarcode, ip);
                             //добавить в локальное хранилище
                             Barcodes.Add(new Barcode(addedId, item.Name, item.CatalogId));
+                        }
+                    }
+                    //send batches
+                    foreach (var item in Batches)
+                    {
+                        if (item.Id == -1)//not in bd
+                        {
+                            var addedId = await client.SendBatch(item, ip);
+                            item.Id = addedId;
                         }
                     }
                 }

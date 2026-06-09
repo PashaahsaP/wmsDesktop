@@ -45,6 +45,7 @@ namespace WmsDesktop
         public string id { get; set; }
 
     }
+    
     public class Name
     {
         public string name { get; set; }

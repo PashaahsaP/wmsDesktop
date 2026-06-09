@@ -345,9 +345,10 @@ namespace WmsDesktop
 
             return barcodeId;
         }
-        internal async Task<string> SendBatch(Batch batch, string ip)
+
+        internal async Task<int> SendBatch(Batch batch, string ip)
         {
-            string barcodeId = null;
+            int barcodeId = -1;
             try
             {
                 var json = JsonConvert.SerializeObject(batch);
@@ -355,7 +356,8 @@ namespace WmsDesktop
                 var response = await client.PostAsync($"http://{ip}:3000/batch/", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                barcodeId = JsonConvert.DeserializeObject<StringID>(data).id;
+                barcodeId = JsonConvert.DeserializeObject<int>(data);
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
