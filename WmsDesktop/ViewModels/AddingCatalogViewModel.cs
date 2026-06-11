@@ -523,7 +523,7 @@ namespace WmsDesktop.ViewModels
                             item.Id = addedId;
                         }
                     }
-                    //update ui
+                    //TODO update ui
                     ItemsList.Add(new OrderItem()
                     {
                         id = catalogId, 
