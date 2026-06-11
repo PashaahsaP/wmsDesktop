@@ -105,7 +105,7 @@ namespace WmsDesktop.ViewModels
         private ObservableCollection<Supplier> _mainSuppliers = new ObservableCollection<Supplier>();
         private Supplier _selectedSupplier = new Supplier() { Id = -1, Name = "" };
         private Supplier _mainSelectedSupplier;
-        private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "" };
+        private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "", SupplierType = -1 };
         private CatalogItemBase _selectedCatalogItem = new CatalogItemBase();
         private ObservableCollection<Barcode> _selectedBarcodes = new ObservableCollection<Barcode>();
         
@@ -159,9 +159,103 @@ namespace WmsDesktop.ViewModels
             get => _mainSelectedSupplier;
             set
             {
+                //set prop
                 _mainSelectedSupplier = value;
-                if(SelectedCatalogItem != null)
+                //set id for selectedCatalogItem and change type. if is new copy data, else copy from collection
+                if (SelectedCatalogItem != null)
+                {
                     SelectedCatalogItem.SupplierId = value.Id;
+                    if(SelectedCatalogItem.Id == "")// copy of data in new type
+                    {
+                        switch (MainSelectedSupplier.SupplierType)
+                        {
+                            case (int)ClientType.Base: SelectedCatalogItem = new CatalogItemBase()
+                            { 
+                                Barcode = SelectedCatalogItem.Barcode,
+                                BarcodeList = SelectedCatalogItem.BarcodeList,
+                                Name = SelectedCatalogItem.Name,
+                                Other = SelectedCatalogItem.Other,
+                                Sku = SelectedCatalogItem.Sku,
+                                SupplierId = MainSelectedSupplier.Id,
+                            }; break;
+                            case (int)ClientType.WithDate: SelectedCatalogItem = new WithDate()
+                            {
+                                Barcode = SelectedCatalogItem.Barcode,
+                                BarcodeList = SelectedCatalogItem.BarcodeList,
+                                Name = SelectedCatalogItem.Name,
+                                Other = SelectedCatalogItem.Other,
+                                Sku = SelectedCatalogItem.Sku,
+                                SupplierId = MainSelectedSupplier.Id,
+                            }; break;
+                            case (int)ClientType.WithBatch: SelectedCatalogItem = new WithBatch()
+                            {
+                                Barcode = SelectedCatalogItem.Barcode,
+                                BarcodeList = SelectedCatalogItem.BarcodeList,
+                                Name = SelectedCatalogItem.Name,
+                                Other = SelectedCatalogItem.Other,
+                                Sku = SelectedCatalogItem.Sku,
+                                SupplierId = MainSelectedSupplier.Id,
+                            }; break;
+                        }
+                    }
+                    else// copy of data in new type. if data is "", copy from old collection
+                    {
+                        var valueInCollection = CatalogItems.First(item => item.Id == SelectedCatalogItem.Id);
+                        switch (MainSelectedSupplier.SupplierType)
+                        {
+                            case (int)ClientType.Base:
+                                SelectedCatalogItem = new CatalogItemBase()
+                                {
+                                    Barcode = SelectedCatalogItem.Barcode,
+                                    BarcodeList = SelectedCatalogItem.BarcodeList,
+                                    Name = SelectedCatalogItem.Name,
+                                    Other = SelectedCatalogItem.Other,
+                                    Sku = SelectedCatalogItem.Sku,
+                                    SupplierId = MainSelectedSupplier.Id,
+                                    Id = SelectedCatalogItem.Id
+                                }; break;
+                            case (int)ClientType.WithDate:
+                                SelectedCatalogItem = new WithDate()
+                                {
+                                    Barcode = SelectedCatalogItem.Barcode,
+                                    BarcodeList = SelectedCatalogItem.BarcodeList,
+                                    Name = SelectedCatalogItem.Name,
+                                    Other = SelectedCatalogItem.Other,
+                                    Sku = SelectedCatalogItem.Sku,
+                                    SupplierId = MainSelectedSupplier.Id,
+                                    Id = SelectedCatalogItem.Id
+                                }; break;
+                            case (int)ClientType.WithBatch:
+                                SelectedCatalogItem = new WithBatch()
+                                {
+                                    Barcode = SelectedCatalogItem.Barcode,
+                                    BarcodeList = SelectedCatalogItem.BarcodeList,
+                                    Name = SelectedCatalogItem.Name,
+                                    Other = SelectedCatalogItem.Other,
+                                    Sku = SelectedCatalogItem.Sku,
+                                    SupplierId = MainSelectedSupplier.Id,
+                                    Id = SelectedCatalogItem.Id,
+                                    Batches = valueInCollection as WithBatch != null &&  ((WithBatch)valueInCollection).Batches.Count != 0 
+                                        ? ((WithBatch)valueInCollection).Batches 
+                                        : Batches.Where(item => item.CatalogId == SelectedCatalogItem.Id).ToList(),
+                                }; break;
+                        }
+                    }
+                }
+                //change class type
+                if (SelectedCatalogItem == null && MainSelectedSupplier != null)//при отсутствующем левом поле, т.е. элемент не выбран
+                {
+                    switch (MainSelectedSupplier.SupplierType)
+                    {
+                       case (int)ClientType.Base: SelectedCatalogItem = new CatalogItemBase(); break;   
+                       case (int)ClientType.WithDate: SelectedCatalogItem = new WithDate(); break;   
+                       case (int)ClientType.WithBatch: SelectedCatalogItem = new WithBatch(); break;
+                    }
+                }
+                else if(SelectedCatalogItem != null && MainSelectedSupplier != null)
+                {
+
+                }
                 OnPropertyChanged(nameof(MainSelectedSupplier));// Добавить применение фильтром и прочее
                 
             }

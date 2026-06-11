@@ -56,5 +56,7 @@ namespace WmsDesktop.Pages
             DataContext = viewModel;
             CBSuppliers.SelectedItem = viewModel.Suppliers.First();
         }
+
+      
     }
 }
