@@ -106,7 +106,7 @@ namespace WmsDesktop.ViewModels
         private Supplier _selectedSupplier = new Supplier() { Id = -1, Name = "" };
         private Supplier _mainSelectedSupplier;
         private Supplier _selectedSupplierCatalog = new Supplier() { Id = -1, Name = "", SupplierType = -1 };
-        private CatalogItemBase _selectedCatalogItem = new CatalogItemBase();
+        private CatalogItemBase _selectedCatalogItem = null;
         private ObservableCollection<Barcode> _selectedBarcodes = new ObservableCollection<Barcode>();
         
 
@@ -482,6 +482,8 @@ namespace WmsDesktop.ViewModels
             addLot = new RelayCommand(async o =>
             {
                 var t = SelectedCatalogItem as WithBatch;
+                if (Batches.Any(item => item.Name == t.SearchLine))
+                    return;
                 var newBatch = new Batch() { CatalogId = t.Id, Id = -1, Name = t.SearchLine};
                 Batches.Add(newBatch);
                 t.Batches.Add(newBatch);
@@ -490,11 +492,11 @@ namespace WmsDesktop.ViewModels
             addEntity = new RelayCommand(async o => {
                 var text = "";
                 bool isOk = true;
-                if (SelectedSupplierCatalog.Name == "") {
+                if (MainSelectedSupplier.Name == "") {
                     isOk = false;
                     text = "Выберите поставщика\n";
                 }
-                if (TbName == "")
+                if (SelectedCatalogItem.Name == "")
                 {
                     isOk = false;
                     text += "Добавьте наименование товара\n";
@@ -502,15 +504,26 @@ namespace WmsDesktop.ViewModels
 
                 TblockError = text;
                 if (isOk) {
+                    // update db
                     var suppId = SelectedSupplierCatalog.Id;
-                    var catalogId = await client.SendCatalog(new Catalog() { name = TbName, supplierId = suppId, sku = TbSku}, ip);
+                    var catalogId = await client.SendCatalog(new Catalog() { name = SelectedCatalogItem.Name, supplierId = MainSelectedSupplier.Id, sku = SelectedCatalogItem.Sku}, ip);
                     var barcodeId = "";
                     foreach (var barcode in SelectedBarcodes)
                     {
                         barcodeId = await client.SendBarcode(
-                        new BarcodeItem() { name = barcode.Name, supplierId = suppId, catalogId = catalogId }, ip);
+                        new BarcodeItem() { name = barcode.Name, supplierId = MainSelectedSupplier.Id, catalogId = catalogId }, ip);
                         Barcodes.Add(new Barcode(barcodeId, barcode.Name, catalogId));
                     }
+                    foreach (var item in Batches)
+                    {
+                        item.CatalogId = catalogId;
+                        if (item.Id == -1)//not in bd
+                        {
+                            var addedId = await client.SendBatch(item, ip);
+                            item.Id = addedId;
+                        }
+                    }
+                    //update ui
                     ItemsList.Add(new OrderItem()
                     {
                         id = catalogId, 
