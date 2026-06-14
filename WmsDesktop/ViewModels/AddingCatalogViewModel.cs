@@ -267,7 +267,15 @@ namespace WmsDesktop.ViewModels
             {
                 _selectedSupplier = value;
                 Filter.Supplier = _selectedSupplier;
-                _items = new ObservableCollection<OrderItem> (Filter.Apply().Select(item => new OrderItem() { id = item.Id, name = item.Name}));
+                _items = new ObservableCollection<OrderItem> (Filter.Apply().Select(item => new OrderItem() 
+                { 
+                    id = item.Id, 
+                    name = item.Name, 
+                    sku= item.Sku, 
+                    other = item.Other, 
+                    supplierId = item.SupplierId.ToString(), 
+                    supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name
+                }));
                 OnPropertyChanged(nameof(SelectedSupplier));// Добавить применение фильтром и прочее
                 OnPropertyChanged(nameof(ItemsList));// Добавить применение фильтром и прочее
             }
