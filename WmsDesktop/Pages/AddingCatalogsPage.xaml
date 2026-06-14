@@ -73,9 +73,12 @@
                 Margin="5"
                 IsEnabled="{Binding DataContext.IsEnabledAppend, RelativeSource={RelativeSource AncestorType=ContentControl} }"
                 Command="{Binding DataContext.addEntity, RelativeSource={RelativeSource AncestorType=ContentControl} }">Добавить</Button>
-                    <TextBlock x:Name="tbError" 
-       Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
-       ></TextBlock>
+                    <TextBlock 
+                       Text="{Binding DataContext.TblockError, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Mode=TwoWay,
+                        RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    ></TextBlock>   
                 </StackPanel>
 
                 <ItemsControl
@@ -211,9 +214,12 @@
           Margin="5"
           IsEnabled="{Binding DataContext.IsEnabledAppend, RelativeSource={RelativeSource AncestorType=ContentControl} }"
           Command="{Binding DataContext.addEntity, RelativeSource={RelativeSource AncestorType=ContentControl} }">Добавить</Button>
-                    <TextBlock x:Name="tbError" 
- Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
- ></TextBlock>
+                    <TextBlock 
+   Text="{Binding DataContext.TblockError, 
+    UpdateSourceTrigger=PropertyChanged, 
+    Mode=TwoWay,
+    RelativeSource={RelativeSource AncestorType=ContentControl}}"
+></TextBlock>
                 </StackPanel>
 
                 <ItemsControl
@@ -328,9 +334,12 @@ RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         Margin="5"
                         IsEnabled="{Binding DataContext.IsEnabledAppend, RelativeSource={RelativeSource AncestorType=ContentControl} }"
                         Command="{Binding DataContext.addEntity, RelativeSource={RelativeSource AncestorType=ContentControl} }">Добавить</Button>
-                    <TextBlock x:Name="tbError" 
-               Text="{Binding TblockError, UpdateSourceTrigger=PropertyChanged}"
-               ></TextBlock>
+                    <TextBlock 
+                       Text="{Binding DataContext.TblockError, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Mode=TwoWay,
+                        RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    ></TextBlock>
                 </StackPanel>
 
                 <ItemsControl

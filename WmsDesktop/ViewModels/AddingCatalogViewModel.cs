@@ -465,6 +465,7 @@ namespace WmsDesktop.ViewModels
                 TbBarcode = "";
                 TbName = "";
                 TbSku = "";
+                TblockError = "";
                 SelectedBarcodes.Clear();
                 MainSelectedSupplier = null;
             });
@@ -504,6 +505,8 @@ namespace WmsDesktop.ViewModels
 
                 TblockError = text;
                 if (isOk) {
+                    //clear field
+                    TblockError = "";
                     // update db
                     var suppId = SelectedSupplierCatalog.Id;
                     var catalogId = await client.SendCatalog(new Catalog() { name = SelectedCatalogItem.Name, supplierId = MainSelectedSupplier.Id, sku = SelectedCatalogItem.Sku}, ip);
