@@ -529,10 +529,11 @@ namespace WmsDesktop.ViewModels
                     //TODO update ui
                     ItemsList.Add(new OrderItem()
                     {
-                        id = catalogId, 
-                        name = TbName,
-                        sku = TbSku,
-                        supplierId = SelectedSupplierCatalog.Id.ToString(), 
+                        id = catalogId,
+                        name = SelectedCatalogItem.Name,
+                        sku = SelectedCatalogItem.Sku,
+                        supplierId = MainSelectedSupplier.Id.ToString(),
+                        supplierName = MainSelectedSupplier.Name
                     });
                     Filter.Items = new List<CatalogItemBase>(ItemsList.Select(item => new CatalogItemBase() { 
                         Id = item.id,
@@ -542,6 +543,7 @@ namespace WmsDesktop.ViewModels
                         BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.id).ToList(),
                         SupplierId = int.Parse(item.supplierId)
                     }));
+                    CatalogItems.Add(Filter.Items.Last());
                     clearFields.Execute(null);
                 }
             });
