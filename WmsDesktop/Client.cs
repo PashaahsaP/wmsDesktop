@@ -491,7 +491,7 @@ namespace WmsDesktop
             var result = "";
             try
             {
-                var response = await client.GetAsync($"http://{ip}:3000/cellTypes/0");
+                var response = await client.GetAsync($"http://{ip}:3000/cellTypesIncomeSession/0");
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
                 result = data;
