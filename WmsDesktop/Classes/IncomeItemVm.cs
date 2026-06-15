@@ -10,7 +10,7 @@ namespace WmsDesktop
     {
         public string CatalogId { get; set; } = string.Empty;
         public string Sku { get; set; } = string.Empty;
-        public List<string> TE { get; set; } = new List<string>();
+        public List<Cell> TE { get; set; } = new List<Cell>();
         public string Name { get; set; } = string.Empty;
         public string Other {  get; set; } = string.Empty;
         public int Count { get; set; } = 1;

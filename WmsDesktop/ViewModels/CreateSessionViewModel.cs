@@ -123,6 +123,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Date));
             }
         }
+        public List<Cell> IncomeCells {  get; set; }
         public List<Cell> Cells {  get; set; }
         public List<Goods> Goods {  get; set; }
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
@@ -154,7 +155,7 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches,string cells, string goods, Window window)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches,string cells, string goods, string cellTypes, Window window)
         {
             _window = window;
             Items = new ObservableCollection<IncomeItemVm>();
@@ -251,13 +252,27 @@ namespace WmsDesktop.ViewModels
             // creating income session items for each type
             // var temp = new IncomeBaseItem();
             //parse cells
-            var parsedCells = JsonConvert.DeserializeObject<List<Cell>>(incomeCells);
+            var parsedIncomeCells = JsonConvert.DeserializeObject<List<Cell>>(incomeCells);
+            foreach (var item in parsedIncomeCells)
+            {
+                Cells.Add(item);
+
+            }
+            var parsedCells = JsonConvert.DeserializeObject<List<Cell>>(cells);
             foreach (var item in parsedCells)
             {
                 Cells.Add(item);
 
             }
+            //parse goods
+            var parsedGoods = JsonConvert.DeserializeObject<List<Goods>>(cells);
+            foreach (var item in parsedGoods)
+            {
+                Goods.Add(item);
 
+            }
+            //parse cellTypes
+            var parsedCellTypes = JsonConvert.DeserializeObject<List<CellTypes>>(cells);
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<IncomeItemEntity>>(catalogAndSuppliers);
             IncomeItemEntity temp = new IncomeItemEntity();
 
@@ -304,7 +319,10 @@ namespace WmsDesktop.ViewModels
                 }
 
                 CatalogData.Add(temp);
-                Items.Add(temp.ToVm(parsedCells));
+                var teOfGoods = Goods.Where(innerGoods => innerGoods.CatalogId == temp.CatalogId)
+                    .Select(inner => Cells
+                    .First( cell => cell.id == inner.CellId &&  IsTE(cell, parsedCellTypes))).ToList();
+                Items.Add(temp.ToVm(teOfGoods));
 
             }
             Filter.Items = parsedData.ToList();
@@ -326,6 +344,30 @@ namespace WmsDesktop.ViewModels
 
         }
 
+        private bool IsTE(Cell cell, List<CellTypes> list)
+        {
+            return list.Any(cellType =>
+            {
+                var mask = cellType.Mask;
+                if (mask == null)
+                    return false;
+
+                return mask.Length == cell.name.Length &&
+                       mask.Select((c, i) => new { MaskChar = c, Index = i })
+                           .All(x =>
+                           {
+                               switch (x.MaskChar)
+                               {
+                                   case '#':
+                                       return char.IsDigit(cell.name[x.Index]);
+
+                                   default:
+                                       return x.MaskChar == cell.name[x.Index];
+                               }
+                           });
+            });
+        }
+
         public static async Task<CreateSessionViewModel> CreateAsync(Window window)
         {
             var jsonIp = File.ReadAllText("config.json");
@@ -338,7 +380,8 @@ namespace WmsDesktop.ViewModels
             var incomeCells = await client.GetIncomeCells(ip);
             var cells = await client.GetCellsIncomeSession(ip);
             var goods = await client.GetGoodsIncomeSession(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, cells, goods, window);
+            var cellTypes = await client.GetCellTypes(ip);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, cells, goods, cellTypes, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

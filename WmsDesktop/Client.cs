@@ -486,6 +486,23 @@ namespace WmsDesktop
 
             return result;
         }
+        internal async Task<string> GetCellTypes(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/cellTypes/0");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
         internal async Task<string> GetBatches(string ip)
         {
             var result = "";

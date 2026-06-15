@@ -5,29 +5,36 @@ namespace WmsDesktop.Converter
 {
     public static class Mapper
     {
-        public static IncomeItemVm ToVm(this BaseIncomeItemEntity item)
+        public static IncomeItemVm ToVm(this IncomeItemEntity item, List<Cell> cells)
         {
-            return new BaseIncomeItemVm();
+            return new IncomeItemVm()
+            {
+                CatalogId = item.CatalogId,
+                Name = item.Name,
+                Other = item.Other,
+                Sku = item.Sku,
+                TE = cells,
+            };
         }
-        public static List<IncomeItemVm> ToVmList(this List<BaseIncomeItemEntity> item)
+        public static List<IncomeItemVm> ToVmList(this List<IncomeItemEntity> item)
         {
             return new List<IncomeItemVm>();
         }
-        public static List<IncomeItemVm> ToVmList(this IEnumerable<BaseIncomeItemEntity> item)
+        public static List<IncomeItemVm> ToVmList(this IEnumerable<IncomeItemEntity> item)
         {
             return new List<IncomeItemVm>();
         }
-        public static BaseIncomeItemEntity ToEntity(this IncomeItemVm item)
+        public static IncomeItemEntity ToEntity(this IncomeItemVm item)
         {
-            return new BaseIncomeItemEntity();
+            return new IncomeItemEntity();
         }
-        public static List<BaseIncomeItemEntity> ToEntityList(this List<IncomeItemVm> item)
+        public static List<IncomeItemEntity> ToEntityList(this List<IncomeItemVm> item)
         {
-            return new List<BaseIncomeItemEntity>();
+            return new List<IncomeItemEntity>();
         }
-        public static List<BaseIncomeItemEntity> ToEntityList(this IEnumerable<IncomeItemVm> item)
+        public static List<IncomeItemEntity> ToEntityList(this IEnumerable<IncomeItemVm> item)
         {
-            return new List<BaseIncomeItemEntity>();
+            return new List<IncomeItemEntity>();
         }
     }
 }
