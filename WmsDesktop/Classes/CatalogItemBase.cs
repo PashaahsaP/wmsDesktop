@@ -17,6 +17,10 @@ namespace WmsDesktop
         public List<Barcode> BarcodeList { get; set; } = new List<Barcode>();
         public string Barcode { get; set; } = string.Empty;
         public string Other {  get; set; } = string.Empty;
+        public override string ToString()
+        {
+            return Name;
+        }
 
     }
     public class WithDate : CatalogItemBase { 
