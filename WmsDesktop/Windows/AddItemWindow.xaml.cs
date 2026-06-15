@@ -24,7 +24,7 @@ namespace WmsDesktop.Windows
     {
         public AddItemViewModel localVm = null;
         public OrderItem orderItem = null;
-        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<BaseIncomeItemEntity> catalogItems)
+        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<IncomeItemEntity> catalogItems)
         {
             InitializeComponent();
             localVm = new AddItemViewModel(new System.Collections.ObjectModel.ObservableCollection<IncomeItemVm>(catalogItems.ToVmList()));

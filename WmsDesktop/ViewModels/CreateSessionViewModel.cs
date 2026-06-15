@@ -23,7 +23,7 @@ namespace WmsDesktop.ViewModels
 {
     internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
-        public Filter Filter { get; set; } = new Filter(new List<BaseIncomeItemEntity>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<IncomeItemEntity>(), new List<Barcode>());
         private Window _window;
         private int _supplier;
         private static readonly Client client = new Client();
@@ -31,7 +31,6 @@ namespace WmsDesktop.ViewModels
         private bool _isSupplierSelected = false;
         private ObservableCollection<IncomeItemVm> _borkItems = new ObservableCollection<IncomeItemVm>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>(); 
-        private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
         private ObservableCollection<IncomeItemVm> _items;
         private Supplier _selectedSupplier;
         private DateTime? _date = new DateTime?();
@@ -78,7 +77,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
-        public List<BaseIncomeItemEntity> CatalogData {  get; set; } = new List<BaseIncomeItemEntity>();
+        public List<IncomeItemEntity> CatalogData {  get; set; } = new List<IncomeItemEntity>();
         public ObservableCollection<Supplier> Suppliers
         {
             get
@@ -124,18 +123,8 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Date));
             }
         }
-        public ObservableCollection<Cell> Cells
-        {
-            get
-            {
-                return _cells;
-            }
-            set
-            {
-                _cells = value;
-                OnPropertyChanged(nameof(Cells));
-            }
-        }
+        public List<Cell> Cells {  get; set; }
+        public List<Goods> Goods {  get; set; }
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
         public PageStates PageState => PageStates.CreateSessionPage;
         public bool IsSupplierSelected
@@ -165,7 +154,7 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, string batches, Window window)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches,string cells, string goods, Window window)
         {
             _window = window;
             Items = new ObservableCollection<IncomeItemVm>();
@@ -261,8 +250,16 @@ namespace WmsDesktop.ViewModels
             // make switch case for client types
             // creating income session items for each type
             // var temp = new IncomeBaseItem();
-            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<BaseIncomeItemEntity>>(catalogAndSuppliers);
-            BaseIncomeItemEntity temp = new BaseIncomeItemEntity();
+            //parse cells
+            var parsedCells = JsonConvert.DeserializeObject<List<Cell>>(incomeCells);
+            foreach (var item in parsedCells)
+            {
+                Cells.Add(item);
+
+            }
+
+            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<IncomeItemEntity>>(catalogAndSuppliers);
+            IncomeItemEntity temp = new IncomeItemEntity();
 
             foreach (var item in parsedData)
             {
@@ -275,39 +272,39 @@ namespace WmsDesktop.ViewModels
                     switch (currentStatus)
                     {
                         case ClientType.Base:
-                            temp = new BaseIncomeItemEntity() { 
+                            temp = new IncomeItemEntity() { 
                                 Name = item.Name, 
                                 Sku = item.Sku,  
-                                Id = item.Id, 
+                                CatalogId = item.CatalogId, 
                                 SupplierId = sup.Id,
                                 SupplierName = sup.Name,
                                 Other = item.Other };
                             break;
                         case ClientType.WithDate:
-                            temp = new WithDateIncomeItemEntity() { 
+                            temp = new IncomeItemWithDateEntity() { 
                                 Name = item.Name, 
                                 Sku = item.Sku, 
-                                Id = item.Id,
+                                CatalogId = item.CatalogId,
                                 SupplierId = sup.Id,
                                 SupplierName = sup.Name,
                                 Other = item.Other,
                                 Date = item.Other };
                             break;
                         case ClientType.WithBatch:
-                            temp = new WithBatchIncomeItemEntity() { 
+                            temp = new IncomeItemWithBatchEntity() { 
                                 Name = item.Name, 
                                 Sku = item.Sku,  
-                                Id = item.Id,
+                                CatalogId = item.CatalogId,
                                 SupplierId = sup.Id,
                                 SupplierName = sup.Name,
                                 Other = item.Other, 
-                                Batches = this.Batches.Where(inner => inner.CatalogId == item.Id).ToList() };
+                                Batches = this.Batches.Where(inner => inner.CatalogId == item.CatalogId).ToList() };
                             break;
                     }
                 }
 
                 CatalogData.Add(temp);
-                Items.Add(temp.ToVm());
+                Items.Add(temp.ToVm(parsedCells));
 
             }
             Filter.Items = parsedData.ToList();
@@ -319,13 +316,7 @@ namespace WmsDesktop.ViewModels
                 Barcodes.Add(item);
 
             }
-            //parse cells
-            var parsedCells = JsonConvert.DeserializeObject<ObservableCollection<Cell>>(cells);
-            foreach (var item in parsedCells)
-            {
-                Cells.Add(item);
-
-            }
+            
             //parse batches
             var parsedBatches = JsonConvert.DeserializeObject<ObservableCollection<Batch>>(batches);
             foreach (var item in parsedBatches)
@@ -345,7 +336,9 @@ namespace WmsDesktop.ViewModels
             var batches = await client.GetBatches(ip);
             var barcodes = await client.GetBarcodes(ip);
             var incomeCells = await client.GetIncomeCells(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, window);
+            var cells = await client.GetCellsIncomeSession(ip);
+            var goods = await client.GetGoodsIncomeSession(ip);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, cells, goods, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

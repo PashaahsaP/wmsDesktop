@@ -14,9 +14,9 @@ namespace WmsDesktop
         public string Sort { get; set; } = "";
         public Supplier Supplier { get; set; }
         public string Text {  get; set; }
-        public List<BaseIncomeItemEntity> Items{  get; set; }
+        public List<IncomeItemEntity> Items{  get; set; }
         public List<Barcode> Barcodes {  get; set; }
-        public Filter(List<BaseIncomeItemEntity> items, List<Barcode> barcodes) 
+        public Filter(List<IncomeItemEntity> items, List<Barcode> barcodes) 
         {
             Items = items;
             Barcodes = barcodes;
@@ -39,7 +39,7 @@ namespace WmsDesktop
                 result = new ObservableCollection<IncomeItemVm>(result.Where(item =>
                 {
                     var barcodes = new List<Barcode>(Barcodes.Where(it => 
-                        it.CatalogId == item.Id
+                        it.CatalogId == item.CatalogId
                         && it.Name.Contains(Sort.ToLower())));
 
                     return item.Name.ToLower().Contains(Sort.ToLower()) 

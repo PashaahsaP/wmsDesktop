@@ -29,7 +29,7 @@ namespace WmsDesktop.ViewModels
 
             }
         }
-        public Filter Filter { get; set; } = new Filter(new List<BaseIncomeItemEntity>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<IncomeItemEntity>(), new List<Barcode>());
         public string TbText {  
             get
             {

@@ -71,19 +71,19 @@ namespace WmsDesktop.Pages
         {
             var ui = (sender as FrameworkElement);
             var context = ui.DataContext;
-            var element = context as BaseIncomeItemVm;
+            var element = context as IncomeItemVm;
             var result = new List<IncomeItemVm>();
             
             foreach (var item in localVm.Items)
             {
                 if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
                 {
-                    var temp = new IncomeBaseSelectedItem() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, CatalogId = element.CatalogId };//selected
                     result.Add(temp);
                 }
-                else if (item is IncomeBaseSelectedItem)
+                else if (item is IncomeItemVm)//selected
                 {
-                    var temp = new BaseIncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, CatalogId = element.CatalogId };
                     result.Add(temp);
                 }
                 else
@@ -102,18 +102,18 @@ namespace WmsDesktop.Pages
 
             var frameElem = (sender as TextBox);
             var context = (sender as FrameworkElement).DataContext;
-            var element = context as IncomeBaseSelectedItem;
+            var element = context as IncomeItemVm; // selected
             var result = new List<IncomeItemVm>();
             foreach (var item in localVm.Items)
             {
-                if (item.Id == element.Id && item.Name == element.Name && item.Sku == element.Sku)
+                if (item.CatalogId == element.CatalogId && item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new BaseIncomeItemVm() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, Id = element.Id };
+                    var temp = new IncomeItemVm() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, CatalogId = element.CatalogId };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new BaseIncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
+                    var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
                     result.Add(temp);
                 }
             }
@@ -131,8 +131,8 @@ namespace WmsDesktop.Pages
 
         private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            var dialog = new AddItemWindow(new ObservableCollection<Classes.BaseIncomeItemEntity>(localVm.CatalogItems.ToEntityList()));
-            var uiItem = (sender as FrameworkElement).DataContext as IncomeSessionWrongItem;
+            var dialog = new AddItemWindow(new ObservableCollection<Classes.IncomeItemEntity>(localVm.CatalogItems.ToEntityList()));
+            var uiItem = (sender as FrameworkElement).DataContext as IncomeItemVm;//wrong item was
             dialog.Owner = _window;
 
             bool? result = dialog.ShowDialog();
@@ -146,7 +146,7 @@ namespace WmsDesktop.Pages
                 foreach (var item in localVm.Items)
                 {
                     if (item == uiItem)
-                        resultCollection.Add(new BaseIncomeItemVm() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", Id = data.id });
+                        resultCollection.Add(new IncomeItemVm() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", CatalogId = data.id });
                     else
                         resultCollection.Add(item);
 
@@ -159,7 +159,7 @@ namespace WmsDesktop.Pages
         private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var t = localVm.SelectedCatalogItem;
-            localVm.Items.Add(new BaseIncomeItemVm() { Count = 1, isValid = true, Name = t.name, Sku = t.sku });
+            localVm.Items.Add(new IncomeItemVm() { Count = 1, isValid = true, Name = t.name, Sku = t.sku });
         }
 
       
@@ -171,18 +171,18 @@ namespace WmsDesktop.Pages
 
             var frameElem = (sender as TextBox);
             var context = (sender as FrameworkElement).DataContext;
-            var element = context as IncomeBaseSelectedItem;
+            var element = context as IncomeItemVm;
             var result = new List<IncomeItemVm>();
             foreach (var item in localVm.Items)
             {
-                if (item.Id == element.Id &&  item.Name == element.Name && item.Sku == element.Sku)
+                if (item.CatalogId == element.CatalogId &&  item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new BaseIncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, Id = element.Id };
+                    var temp = new IncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, CatalogId = element.CatalogId };
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new BaseIncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, Id = item.Id };
+                    var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
                     result.Add(temp);
                 }
             }
