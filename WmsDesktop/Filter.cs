@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WmsDesktop.Classes;
+using WmsDesktop.Converter;
 
 namespace WmsDesktop
 {
@@ -12,9 +14,9 @@ namespace WmsDesktop
         public string Sort { get; set; } = "";
         public Supplier Supplier { get; set; }
         public string Text {  get; set; }
-        public List<CatalogItemBase> Items{  get; set; }
+        public List<BaseIncomeItemEntity> Items{  get; set; }
         public List<Barcode> Barcodes {  get; set; }
-        public Filter(List<CatalogItemBase> items, List<Barcode> barcodes) 
+        public Filter(List<BaseIncomeItemEntity> items, List<Barcode> barcodes) 
         {
             Items = items;
             Barcodes = barcodes;
@@ -23,18 +25,18 @@ namespace WmsDesktop
         /// Apply filters and return data
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<CatalogItemBase> Apply()
+        public ObservableCollection<IncomeItemVm> Apply()
         {
-            var result = new ObservableCollection<CatalogItemBase>(Items);
+            var result = new ObservableCollection<IncomeItemVm>(Items.ToVmLsit());
 
             //apply supplier filter
             if (Supplier != null && Supplier.Id != -1 && Supplier.Name != "")
-                result = new ObservableCollection<CatalogItemBase>(Items.Where(item => item.SupplierId == Supplier.Id));
+                result = new ObservableCollection<IncomeItemVm>(Items.Where(item => item.SupplierId == Supplier.Id).ToVmLsit());
 
 
             //apply text sorting
             if (Sort != "")
-                result = new ObservableCollection<CatalogItemBase>(result.Where(item =>
+                result = new ObservableCollection<IncomeItemVm>(result.Where(item =>
                 {
                     var barcodes = new List<Barcode>(Barcodes.Where(it => 
                         it.CatalogId == item.Id

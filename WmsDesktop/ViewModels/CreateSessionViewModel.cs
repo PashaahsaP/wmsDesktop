@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WmsDesktop;
+using WmsDesktop.Classes;
+using WmsDesktop.Converter;
 using WmsDesktop.Enums;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
@@ -21,7 +23,7 @@ namespace WmsDesktop.ViewModels
 {
     internal class CreateSessionViewModel : INotifyPropertyChanged,IState
     {
-        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<BaseIncomeItemEntity>(), new List<Barcode>());
         private Window _window;
         private int _supplier;
         private static readonly Client client = new Client();
@@ -30,7 +32,7 @@ namespace WmsDesktop.ViewModels
         private ObservableCollection<CatalogItemBase> _borkItems = new ObservableCollection<CatalogItemBase>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>(); 
         private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
-        private ObservableCollection<IncomeItem> _items;
+        private ObservableCollection<IncomeItemVm> _items;
         private Supplier _selectedSupplier;
         private DateTime? _date = new DateTime?();
 
@@ -53,7 +55,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public int Supplier { get => _supplier; set { _supplier = value; } }
-        public ObservableCollection<IncomeItem> Items
+        public ObservableCollection<IncomeItemVm> Items
         {
             get => _items;
             set
@@ -76,7 +78,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(CatalogItems));
             }
         }
-        public List<CatalogItemBase> CatalogData {  get; set; } = new List<CatalogItemBase>();
+        public List<BaseIncomeItemEntity> CatalogData {  get; set; } = new List<BaseIncomeItemEntity>();
         public ObservableCollection<Supplier> Suppliers
         {
             get
@@ -166,7 +168,7 @@ namespace WmsDesktop.ViewModels
         public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string cells, string batches, Window window)
         {
             _window = window;
-            Items = new ObservableCollection<IncomeItem>();
+            Items = new ObservableCollection<IncomeItemVm>();
             selectAtomy = new RelayCommand(o =>
             {
                 _supplier = 0;
@@ -195,7 +197,7 @@ namespace WmsDesktop.ViewModels
             });
             clearItems = new RelayCommand(o =>
             {
-                Items = new ObservableCollection<IncomeItem>();
+                Items = new ObservableCollection<IncomeItemVm>();
             });
             createSession = new RelayCommand(async o =>
             {
@@ -247,12 +249,9 @@ namespace WmsDesktop.ViewModels
             });
             removeLine = new RelayCommand(async o =>
             {
-                Items.Remove(o as IncomeItem);
+                Items.Remove(o as IncomeItemVm);
             });
 
-
-            
-            
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             foreach (var item in supplierData)
@@ -262,8 +261,8 @@ namespace WmsDesktop.ViewModels
             // make switch case for client types
             // creating income session items for each type
             // var temp = new IncomeBaseItem();
-            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<CatalogItemBase>>(catalogAndSuppliers);
-            IncomeItem temp = new IncomeBaseItem();
+            var parsedData = JsonConvert.DeserializeObject<ObservableCollection<BaseIncomeItemEntity>>(catalogAndSuppliers);
+            BaseIncomeItemEntity temp = new BaseIncomeItemEntity();
 
             foreach (var item in parsedData)
             {
@@ -276,39 +275,39 @@ namespace WmsDesktop.ViewModels
                     switch (currentStatus)
                     {
                         case ClientType.Base:
-                            temp = new IncomeBaseItem() { 
+                            temp = new BaseIncomeItemEntity() { 
                                 Name = item.Name, 
-                                Sku = item.Sku, 
-                                Count = 1, 
-                                isValid = true, 
+                                Sku = item.Sku,  
                                 Id = item.Id, 
+                                SupplierId = sup.Id,
+                                SupplierName = sup.Name,
                                 Other = item.Other };
                             break;
                         case ClientType.WithDate:
-                            temp = new IncomeWithDateItem() { 
+                            temp = new WithDateIncomeItemEntity() { 
                                 Name = item.Name, 
                                 Sku = item.Sku, 
-                                Count = 1, 
-                                isValid = true, 
-                                Id = item.Id, 
+                                Id = item.Id,
+                                SupplierId = sup.Id,
+                                SupplierName = sup.Name,
                                 Other = item.Other,
                                 Date = item.Other };
                             break;
                         case ClientType.WithBatch:
-                            temp = new IncomeWithBatchItem() { 
+                            temp = new WithBatchIncomeItemEntity() { 
                                 Name = item.Name, 
-                                Sku = item.Sku, 
-                                Count = 1, 
-                                isValid = true, 
-                                Id = item.Id, 
+                                Sku = item.Sku,  
+                                Id = item.Id,
+                                SupplierId = sup.Id,
+                                SupplierName = sup.Name,
                                 Other = item.Other, 
                                 Batches = this.Batches.Where(inner => inner.CatalogId == item.Id).ToList() };
                             break;
                     }
                 }
 
-                CatalogData.Add(item);
-                Items.Add(temp);
+                CatalogData.Add(temp);
+                Items.Add(temp.ToVm());
 
             }
             Filter.Items = parsedData.ToList();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
-    public abstract class IncomeItem
+    public abstract class IncomeItemVm
     {
         public string Id { get; set; } = string.Empty;
         public string Sku { get; set; } = string.Empty;
@@ -18,14 +18,14 @@ namespace WmsDesktop
 
     }
 
-    public class IncomeBaseItem: IncomeItem { }
-    public class IncomeBaseSelectedItem: IncomeItem { }
-    public class IncomeSessionWrongItem: IncomeItem { }
-    public class IncomeWithDateItem: IncomeItem 
+    public class BaseIncomeItemVm: IncomeItemVm { }
+    public class IncomeBaseSelectedItem: IncomeItemVm { }
+    public class IncomeSessionWrongItem: IncomeItemVm { }
+    public class IncomeWithDateItem: IncomeItemVm 
     {
         public string Date { get; set; } = string.Empty;    
     }
-    public class IncomeWithBatchItem: IncomeItem 
+    public class IncomeWithBatchItem: IncomeItemVm 
     {
         public List<Batch> Batches { get; set; } = new List<Batch>();
     }
