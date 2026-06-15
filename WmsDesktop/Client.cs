@@ -400,6 +400,23 @@ namespace WmsDesktop
 
             return result;
         }
+        internal async Task<string> GetGoodsIncomeSession(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/goods/incomeSession/0");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
+        }
         internal async Task<string> GetBarcodes(string ip)
         {
             var result = "";
@@ -434,6 +451,23 @@ namespace WmsDesktop
             }
 
             return str[0].id;
+        }
+        internal async Task<string> GetCellsIncomeSession(string ip)
+        {
+            var result = "";
+            try
+            {
+                var response = await client.GetAsync($"http://{ip}:3000/cells/incomeSession/0");
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                result = data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            return result;
         }
         internal async Task<string> GetIncomeCells(string ip)
         {
