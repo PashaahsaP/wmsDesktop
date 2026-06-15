@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop.Classes
 {
-    public class BaseIncomeItemEntity
+    public class IncomeItemEntity
     {
-        public string Id { get; set; } = string.Empty;
+        public string CatalogId { get; set; } = string.Empty;
         public int SupplierId { get; set; } = 0;
 
         public string Name { get; set; } = string.Empty;
@@ -16,11 +16,11 @@ namespace WmsDesktop.Classes
         public string Sku { get; set; } = string.Empty;
         public string Other { get; set; } = string.Empty;
     }
-    public class WithDateIncomeItemEntity : BaseIncomeItemEntity
+    public class IncomeItemWithDateEntity : IncomeItemEntity
     {
         public string Date { get; set;  } = string.Empty;
     }
-    public class WithBatchIncomeItemEntity : BaseIncomeItemEntity 
+    public class IncomeItemWithBatchEntity : IncomeItemEntity 
     {
         public List<Batch> Batches { get; set; } = new List<Batch>();
     }

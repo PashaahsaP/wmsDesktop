@@ -6,26 +6,27 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
-    public abstract class IncomeItemVm
+    public class IncomeItemVm
     {
-        public string Id { get; set; } = string.Empty;
+        public string CatalogId { get; set; } = string.Empty;
         public string Sku { get; set; } = string.Empty;
-        public string TE { get; set; } = string.Empty;
+        public List<string> TE { get; set; } = new List<string>();
         public string Name { get; set; } = string.Empty;
         public string Other {  get; set; } = string.Empty;
-        public int Count { get; set; } = 0;
+        public int Count { get; set; } = 1;
         public bool isValid { get; set; } = true;
-
+        public bool isSelected { get; set; } = false;
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
-    public class BaseIncomeItemVm: IncomeItemVm { }
-    public class IncomeBaseSelectedItem: IncomeItemVm { }
-    public class IncomeSessionWrongItem: IncomeItemVm { }
-    public class IncomeWithDateItem: IncomeItemVm 
+    public class IncomeItemWithDateVm: IncomeItemVm 
     {
         public string Date { get; set; } = string.Empty;    
     }
-    public class IncomeWithBatchItem: IncomeItemVm 
+    public class IncomeItemWithBatchVm: IncomeItemVm 
     {
         public List<Batch> Batches { get; set; } = new List<Batch>();
     }
