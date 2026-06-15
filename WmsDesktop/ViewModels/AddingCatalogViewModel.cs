@@ -141,7 +141,7 @@ namespace WmsDesktop.ViewModels
             }
         }
         public Visibility PartyVisibility { get; set; } = Visibility.Collapsed;
-        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
+        public CatalogFilter Filter { get; set; } = new CatalogFilter(new List<CatalogItemBase>(), new List<Barcode>());
         public CatalogItemBase SelectedCatalogItem
         {
             get

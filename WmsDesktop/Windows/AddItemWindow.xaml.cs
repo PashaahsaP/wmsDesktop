@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WmsDesktop.Classes;
+using WmsDesktop.Converter;
 using WmsDesktop.ViewModels;
 
 namespace WmsDesktop.Windows
@@ -22,10 +24,10 @@ namespace WmsDesktop.Windows
     {
         public AddItemViewModel localVm = null;
         public OrderItem orderItem = null;
-        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<CatalogItemBase> catalogItems)
+        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<BaseIncomeItemEntity> catalogItems)
         {
             InitializeComponent();
-            localVm = new AddItemViewModel(catalogItems);
+            localVm = new AddItemViewModel(new System.Collections.ObjectModel.ObservableCollection<IncomeItemVm>(catalogItems.ToVmList()));
             DataContext = localVm;
             
         }

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using WmsDesktop.Converter;
 using WmsDesktop.ViewModels;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
@@ -130,7 +131,7 @@ namespace WmsDesktop.Pages
 
         private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            var dialog = new AddItemWindow(localVm.CatalogItems);
+            var dialog = new AddItemWindow(new ObservableCollection<Classes.BaseIncomeItemEntity>(localVm.CatalogItems.ToEntityList()));
             var uiItem = (sender as FrameworkElement).DataContext as IncomeSessionWrongItem;
             dialog.Owner = _window;
 

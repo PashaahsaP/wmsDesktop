@@ -5,16 +5,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WmsDesktop.Classes;
+using WmsDesktop.Converter;
 
 namespace WmsDesktop.ViewModels
 {
     public class AddItemViewModel : INotifyPropertyChanged
     {
         public string _tbText = string.Empty;
-        public ObservableCollection<CatalogItemBase> _items = new ObservableCollection<CatalogItemBase>();
+        public ObservableCollection<IncomeItemVm> _items = new ObservableCollection<IncomeItemVm>();
 
         public OrderItem SelectedItem { get; set; }
-        public ObservableCollection<CatalogItemBase>  Items
+        public ObservableCollection<IncomeItemVm>  Items
         {
             get
             {
@@ -27,7 +29,7 @@ namespace WmsDesktop.ViewModels
 
             }
         }
-        public Filter Filter { get; set; } = new Filter(new List<CatalogItemBase>(), new List<Barcode>());
+        public Filter Filter { get; set; } = new Filter(new List<BaseIncomeItemEntity>(), new List<Barcode>());
         public string TbText {  
             get
             {
@@ -44,10 +46,10 @@ namespace WmsDesktop.ViewModels
             }
         }
 
-        public AddItemViewModel(ObservableCollection<CatalogItemBase> items)
+        public AddItemViewModel(ObservableCollection<IncomeItemVm> items)
         {
             Items = items;
-            Filter.Items = items.ToList();
+            Filter.Items = items.ToEntityList();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

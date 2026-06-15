@@ -29,7 +29,7 @@ namespace WmsDesktop.ViewModels
         private static readonly Client client = new Client();
         private string _tbText = "";
         private bool _isSupplierSelected = false;
-        private ObservableCollection<CatalogItemBase> _borkItems = new ObservableCollection<CatalogItemBase>();
+        private ObservableCollection<IncomeItemVm> _borkItems = new ObservableCollection<IncomeItemVm>();
         private ObservableCollection<Supplier> _suppliers = new ObservableCollection<Supplier>(); 
         private ObservableCollection<Cell> _cells = new ObservableCollection<Cell>();
         private ObservableCollection<IncomeItemVm> _items;
@@ -66,7 +66,7 @@ namespace WmsDesktop.ViewModels
         }
         public List<CatalogItemBase> CatalogBorkItems { get; set; }
         public List<Batch> Batches { get; set; } = new List<Batch>();
-        public ObservableCollection<CatalogItemBase> CatalogItems
+        public ObservableCollection<IncomeItemVm> CatalogItems
         {
             get
             {
@@ -104,7 +104,7 @@ namespace WmsDesktop.ViewModels
                 );
                 if (isEnabled) { 
                     var selectedItems = CatalogData.Where(item => item.SupplierId == value.Id).ToList();
-                    CatalogItems = new ObservableCollection<CatalogItemBase>(selectedItems);
+                    CatalogItems = new ObservableCollection<IncomeItemVm>(selectedItems.ToVmList());
                 }
                 IsSupplierSelected = isEnabled;
                 OnPropertyChanged(nameof(SelectedSupplier));
