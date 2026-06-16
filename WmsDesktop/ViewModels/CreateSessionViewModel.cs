@@ -123,9 +123,9 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(Date));
             }
         }
-        public List<Cell> IncomeCells {  get; set; }
-        public List<Cell> Cells {  get; set; }
-        public List<Goods> Goods {  get; set; }
+        public List<Cell> IncomeCells {  get; set; } = new List<Cell>();
+        public List<Cell> Cells { get; set; } = new List<Cell>();
+        public List<Goods> Goods {  get; set; } = new List<Goods> ();
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
         public PageStates PageState => PageStates.CreateSessionPage;
         public bool IsSupplierSelected
@@ -265,14 +265,14 @@ namespace WmsDesktop.ViewModels
 
             }
             //parse goods
-            var parsedGoods = JsonConvert.DeserializeObject<List<Goods>>(cells);
+            var parsedGoods = JsonConvert.DeserializeObject<List<Goods>>(goods);
             foreach (var item in parsedGoods)
             {
                 Goods.Add(item);
 
             }
             //parse cellTypes
-            var parsedCellTypes = JsonConvert.DeserializeObject<List<CellTypes>>(cells);
+            var parsedCellTypes = JsonConvert.DeserializeObject<List<CellTypes>>(cellTypes);
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<IncomeItemEntity>>(catalogAndSuppliers);
             IncomeItemEntity temp = new IncomeItemEntity();
 
@@ -321,7 +321,7 @@ namespace WmsDesktop.ViewModels
                 CatalogData.Add(temp);
                 var teOfGoods = Goods.Where(innerGoods => innerGoods.CatalogId == temp.CatalogId)
                     .Select(inner => Cells
-                    .First( cell => cell.id == inner.CellId &&  IsTE(cell, parsedCellTypes))).ToList();
+                    .First( cell => cell.id == inner.CellId &&  IsTE(cell, parsedCellTypes.Where(type => type.Type == "te").ToList()))).ToList();
                 Items.Add(temp.ToVm(teOfGoods));
 
             }
@@ -346,7 +346,7 @@ namespace WmsDesktop.ViewModels
 
         private bool IsTE(Cell cell, List<CellTypes> list)
         {
-            return list.Any(cellType =>
+            var t = list.Any(cellType =>
             {
                 var mask = cellType.Mask;
                 if (mask == null)
@@ -366,6 +366,8 @@ namespace WmsDesktop.ViewModels
                                }
                            });
             });
+
+            return t;
         }
 
         public static async Task<CreateSessionViewModel> CreateAsync(Window window)

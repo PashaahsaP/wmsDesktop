@@ -146,7 +146,7 @@ namespace WmsDesktop.Pages
                 foreach (var item in localVm.Items)
                 {
                     if (item == uiItem)
-                        resultCollection.Add(new IncomeItemVm() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", CatalogId = data.id });
+                        resultCollection.Add(new IncomeItemVm() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = new List<Cell>(), CatalogId = data.id });
                     else
                         resultCollection.Add(item);
 
@@ -177,7 +177,7 @@ namespace WmsDesktop.Pages
             {
                 if (item.CatalogId == element.CatalogId &&  item.Name == element.Name && item.Sku == element.Sku)
                 {
-                    var temp = new IncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = frameElem.Text, CatalogId = element.CatalogId };
+                    var temp = new IncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = new List<Cell>(), CatalogId = element.CatalogId };
                     result.Add(temp);
                 }
                 else
