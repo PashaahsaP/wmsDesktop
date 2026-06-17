@@ -13,6 +13,7 @@ namespace WmsDesktop
     {
         public string Sort { get; set; } = "";
         public Supplier Supplier { get; set; }
+        public List<Cell> Cells { get; set; }
         public string Text {  get; set; }
         public List<IncomeItemEntity> Items{  get; set; }
         public List<Barcode> Barcodes {  get; set; }
@@ -38,13 +39,7 @@ namespace WmsDesktop
             if (Sort != "")
                 result = new ObservableCollection<IncomeItemVm>(result.Where(item =>
                 {
-                    var barcodes = new List<Barcode>(Barcodes.Where(it => 
-                        it.CatalogId == item.CatalogId
-                        && it.Name.Contains(Sort.ToLower())));
-
-                    return item.Name.ToLower().Contains(Sort.ToLower()) 
-                    || item.Sku.ToLower().Contains(Sort.ToLower())
-                    || barcodes.Count != 0;
+                    return item.Name.ToLower().Contains(Sort.ToLower());
                 }));
 
             return result;

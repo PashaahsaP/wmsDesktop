@@ -159,7 +159,7 @@ namespace WmsDesktop.Pages
         private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var t = localVm.SelectedCatalogItem;
-            localVm.Items.Add(t.ToVm(localVm.Cells));
+            localVm.Items.Add(t.ToVm());
         }
 
       

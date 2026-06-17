@@ -264,6 +264,7 @@ namespace WmsDesktop.ViewModels
                 Cells.Add(item);
 
             }
+            Filter.Cells = Cells;
             //parse goods
             var parsedGoods = JsonConvert.DeserializeObject<List<Goods>>(goods);
             foreach (var item in parsedGoods)
@@ -323,10 +324,11 @@ namespace WmsDesktop.ViewModels
                     .Select(inner => Cells
                     .First( cell => cell.id == inner.CellId &&  IsTE(cell, parsedCellTypes.Where(type => type.Type == "te").ToList()))).ToList();
                 Items.Add(temp.ToVm(teOfGoods));
-               // CatalogItems.Add(temp.ToVm(teOfGoods));
+                CatalogItems.Add(temp.ToVm(teOfGoods));
 
             }
             Filter.Items = parsedData.ToList();
+            
 
             //parse barcodes
             var parsedBarcodes = JsonConvert.DeserializeObject<ObservableCollection<Barcode>>(barcodes);

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using WmsDesktop.Classes;
 
 namespace WmsDesktop.Converter
 {
     public static class Mapper
     {
-        public static IncomeItemVm ToVm(this IncomeItemEntity item, List<Cell> cells)
+        public static IncomeItemVm ToVm(this IncomeItemEntity item)
         {
             return new IncomeItemVm()
             {
@@ -13,16 +15,26 @@ namespace WmsDesktop.Converter
                 Name = item.Name,
                 Other = item.Other,
                 Sku = item.Sku,
-                TE = cells,
+                TE = new List<Cell>(),
             };
         }
-        public static List<IncomeItemVm> ToVmList(this List<IncomeItemEntity> item)
+        public static List<IncomeItemVm> ToVmList(this List<IncomeItemEntity> collection)
         {
-            return new List<IncomeItemVm>();
+            var result = new List<IncomeItemVm>(); 
+            foreach (var item in collection)
+            {
+                result.Add(item.ToVm());
+            }
+            return result;
         }
-        public static List<IncomeItemVm> ToVmList(this IEnumerable<IncomeItemEntity> item)
+        public static List<IncomeItemVm> ToVmList(this IEnumerable<IncomeItemEntity> collection)
         {
-            return new List<IncomeItemVm>();
+            var result = new List<IncomeItemVm>();
+            foreach (var item in collection)
+            {
+                result.Add(item.ToVm());
+            }
+            return result;
         }
         public static IncomeItemEntity ToEntity(this IncomeItemVm item)
         {
