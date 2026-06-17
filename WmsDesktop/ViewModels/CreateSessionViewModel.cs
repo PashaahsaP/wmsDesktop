@@ -109,7 +109,7 @@ namespace WmsDesktop.ViewModels
                 OnPropertyChanged(nameof(SelectedSupplier));
             } 
         }
-        public OrderItem SelectedCatalogItem { get; set; }
+        public IncomeItemEntity SelectedCatalogItem { get; set; }
         public Cell SelectedCell {  get; set; }
         public DateTime? Date
         {
@@ -323,6 +323,7 @@ namespace WmsDesktop.ViewModels
                     .Select(inner => Cells
                     .First( cell => cell.id == inner.CellId &&  IsTE(cell, parsedCellTypes.Where(type => type.Type == "te").ToList()))).ToList();
                 Items.Add(temp.ToVm(teOfGoods));
+               // CatalogItems.Add(temp.ToVm(teOfGoods));
 
             }
             Filter.Items = parsedData.ToList();
