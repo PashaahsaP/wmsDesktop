@@ -15,7 +15,7 @@ namespace WmsDesktop.Converter
                 Name = item.Name,
                 Other = item.Other,
                 Sku = item.Sku,
-                TE = new List<Cell>(),
+                TE = "345",
             };
         }
         public static List<IncomeItemVm> ToVmList(this List<IncomeItemEntity> collection)

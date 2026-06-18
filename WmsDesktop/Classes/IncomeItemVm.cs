@@ -10,7 +10,7 @@ namespace WmsDesktop
     {
         public string CatalogId { get; set; } = string.Empty;
         public string Sku { get; set; } = string.Empty;
-        public List<Cell> TE { get; set; } = new List<Cell>();
+        public string TE { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Other {  get; set; } = string.Empty;
         public int Count { get; set; } = 1;
@@ -28,7 +28,11 @@ namespace WmsDesktop
     }
     public class IncomeItemWithBatchVm: IncomeItemVm 
     {
-        public List<Batch> Batches { get; set; } = new List<Batch>();
+        public string Batches { get; set; } = string.Empty;
     }
 
+    //Selected. Для отображения от типа класса DataTemplate. via binding
+    public class SelectedIncomeItemVm : IncomeItemVm {}
+    public class SelectedIncomeItemWithDateVm: IncomeItemWithDateVm { }
+    public class SelectedIncomeItemWithBatchVM: IncomeItemWithBatchVm { }
 }

@@ -299,17 +299,19 @@ namespace WmsDesktop.ViewModels
                                 SupplierId = sup.Id,
                                 SupplierName = sup.Name,
                                 Other = item.Other,
-                                Date = item.Other };
+                                Date = "10.10.2024" };
                             break;
                         case ClientType.WithBatch:
-                            temp = new IncomeItemWithBatchEntity() { 
-                                Name = item.Name, 
-                                Sku = item.Sku,  
+                            temp = new IncomeItemWithBatchEntity()
+                            {
+                                Name = item.Name,
+                                Sku = item.Sku,
                                 CatalogId = item.CatalogId,
                                 SupplierId = sup.Id,
                                 SupplierName = sup.Name,
-                                Other = item.Other, 
-                                Batches = this.Batches.Where(inner => inner.CatalogId == item.CatalogId).ToList() };
+                                Other = item.Other,
+                                Batches = "234"
+                            };
                             break;
                     }
                 }

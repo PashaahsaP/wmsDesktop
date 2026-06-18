@@ -26,8 +26,8 @@
                     
                     >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
                         <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.4*"/>
                         <ColumnDefinition Width="0.1*"/>
@@ -56,6 +56,49 @@
                 </Grid>
             </Border>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:SelectedIncomeItemVm}">
+            <Border
+         Margin="0 0 5 0"
+         BorderBrush="#efefef"
+         BorderThickness="2">
+                <Grid 
+             Grid.Row="0"
+             Grid.Column="0"
+             Grid.ColumnSpan="2"
+             MouseDown="Grid_MouseDown"
+             
+             >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.4*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock 
+                 Padding="5"
+                 Grid.Column="0"
+                 Text="{Binding Sku}"
+                 ></TextBlock>
+                    <TextBox 
+                  Padding="5"
+                  Grid.Column="1"
+                  Text="{Binding TE}"
+                  ></TextBox>
+                    <TextBlock 
+                 Padding="5"
+                 Grid.Column="2"
+                 Text="{Binding Name}"
+                 ></TextBlock>
+                    <TextBlock 
+                 Padding="5"
+                 Grid.Column="4"
+                 HorizontalAlignment="Center"
+                 Text="{Binding Count}"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type local:IncomeItemWithDateVm}">
             <Grid 
                 Grid.Row="0"
@@ -65,8 +108,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="0.1*"/>
                 </Grid.ColumnDefinitions>
 
@@ -77,6 +120,57 @@
                     ></TextBlock>
                 <TextBox 
                     KeyDown="TextBox_KeyDown_1"
+                    Padding="5"
+                    Grid.Column="1"
+                    Text="{Binding TE}"></TextBox>
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="2"
+                    Text="{Binding Name}"></TextBlock>
+                <DatePicker 
+                    MaxHeight="35"
+                    Grid.Row="0"
+                    SelectedDate="{Binding Date, Mode=TwoWay}"
+                    IsEnabled="False"
+                    Grid.Column="3"
+                    Margin="15 10 15 10"/>
+                <Button
+                    Grid.Column="4"
+                    Content="delete"
+                    Width="100"
+                    Command="{Binding DataContext.removeLine,
+                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding}"></Button>
+                <TextBox
+                    Loaded="TextBox_Loaded"
+                    KeyDown="TextBox_KeyDown"
+                    Padding="5"
+                    Grid.Column="5"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Count}"></TextBox>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:SelectedIncomeItemWithDateVm}">
+            <Grid 
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="0"
+                    Text="{Binding Sku}"
+                    ></TextBlock>
+                <TextBox 
+                      KeyDown="TextBox_KeyDown_1"
                       Padding="5"
                       Grid.Column="1"
                       Text="{Binding TE}"
@@ -85,24 +179,27 @@
                     Padding="5"
                     Grid.Column="2"
                     Text="{Binding Name}"></TextBlock>
-                <Button
+                <DatePicker 
+                    MaxHeight="35"
+                    Grid.Row="0"
+                    SelectedDate="{Binding Date, Mode=TwoWay}"
+                    IsEnabled="True"
                     Grid.Column="3"
+                    Margin="15 10 15 10"/>
+                <Button
+                    Grid.Column="4"
                     Content="delete"
                     Width="100"
                     Command="{Binding DataContext.removeLine,
                                 RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}">
-                    
-                </Button>
+                    CommandParameter="{Binding}"></Button>
                 <TextBox
                     Loaded="TextBox_Loaded"
                     KeyDown="TextBox_KeyDown"
                     Padding="5"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}">
-
-                </TextBox>
+                    Text="{Binding Count}"></TextBox>
             </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:IncomeItemWithBatchVm}">
@@ -111,13 +208,13 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Background="#FF3131"
-                MouseDown="Grid_MouseDown_1"
-                >
+                MouseDown="Grid_MouseDown_1">
                 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.1*"/>
                 </Grid.ColumnDefinitions>
 
@@ -130,16 +227,70 @@
                     Padding="5"
                     Grid.Column="1"
                     Text="{Binding Name}"></TextBlock>
+                <TextBlock 
+                      Padding="5"
+                      Grid.Column="2"
+                      Text="{Binding Batches}"
+                      ></TextBlock>
+                <Button
+                     Grid.Column="3"
+                     Content="delete"
+                     Width="100"
+                     Command="{Binding DataContext.removeLine,
+                                 RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                     CommandParameter="{Binding}"></Button>
                 <TextBlock
                     Padding="5"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}">
-                    
-                </TextBlock>
+                    Text="{Binding Count}"></TextBlock>
             </Grid>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:SelectedIncomeItemWithBatchVM}">
+            <Grid 
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Background="#FF3131"
+                MouseDown="Grid_MouseDown_1"
+                >
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="0"
+                    Text="{Binding Sku}"
+                    ></TextBlock>
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="1"
+                    Text="{Binding Name}"></TextBlock>
+                <TextBox 
+                      Padding="5"
+                      Grid.Column="2"
+                      Text="{Binding Batches}"
+                      ></TextBox>
+                <Button
+                     Grid.Column="3"
+                     Content="delete"
+                     Width="100"
+                     Command="{Binding DataContext.removeLine,
+                         RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding}"></Button>
+                <TextBlock
+                    Padding="5"
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Count}"></TextBlock>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
 

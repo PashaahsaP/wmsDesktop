@@ -26,6 +26,6 @@ namespace WmsDesktop.Classes
     }
     public class IncomeItemWithBatchEntity : IncomeItemEntity 
     {
-        public List<Batch> Batches { get; set; } = new List<Batch>();
+        public string Batches { get; set; } = string.Empty;
     }
 }
