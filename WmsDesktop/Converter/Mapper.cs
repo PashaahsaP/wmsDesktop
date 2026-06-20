@@ -9,14 +9,44 @@ namespace WmsDesktop.Converter
     {
         public static IncomeItemVm ToVm(this IncomeItemEntity item)
         {
-            return new IncomeItemVm()
+            if(item is IncomeItemWithDateEntity)
             {
-                CatalogId = item.CatalogId,
-                Name = item.Name,
-                Other = item.Other,
-                Sku = item.Sku,
-                TE = "345",
-            };
+                return new IncomeItemWithDateVm()
+                {
+                    CatalogId = item.CatalogId,
+                    Name = item.Name,
+                    Other = item.Other,
+                    Sku = item.Sku,
+                    Date = (item as IncomeItemWithDateEntity).Date,
+                    TE = "345"
+
+                };
+            }
+            else if (item is IncomeItemWithBatchEntity)
+            {
+                return new IncomeItemWithBatchVm()
+                {
+                    CatalogId = item.CatalogId,
+                    Name = item.Name,
+                    Other = item.Other,
+                    Sku = item.Sku,
+                    Batches = (item as IncomeItemWithBatchEntity).Batches,
+                    TE = "345"
+                    
+                };
+            }
+            else
+            {
+                return new IncomeItemVm()
+                {
+                    CatalogId = item.CatalogId,
+                    Name = item.Name,
+                    Other = item.Other,
+                    Sku = item.Sku,
+                    TE = "345",
+                };
+            }
+            
         }
         public static List<IncomeItemVm> ToVmList(this List<IncomeItemEntity> collection)
         {

@@ -32,7 +32,6 @@ namespace WmsDesktop.Pages
         private readonly Client client = new Client();
         private MainViewModel _vm = null;
         private CreateSessionViewModel localVm = null;
-        private string ip = "192.168.0.11";
         private Window _window = null;
       
         public CreateSessionPage(MainViewModel vm, Window window, IState state)
@@ -124,8 +123,8 @@ namespace WmsDesktop.Pages
         private void TextBox_Loaded(object sender, RoutedEventArgs e)
         {
             var ui = (sender as TextBox);
-            ui.Focus();
-            ui.SelectAll();
+            //ui.Focus();
+            //ui.SelectAll();
 
         }
 
