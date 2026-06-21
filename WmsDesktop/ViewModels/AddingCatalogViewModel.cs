@@ -39,7 +39,7 @@ namespace WmsDesktop.ViewModels
                 Filter.Sort = _tbText;
                 _items = new ObservableCollection<OrderItem>( Filter.Apply().Select(item => new OrderItem()
                 {
-                    id = item.Id,
+                    id = item.CatalogId,
                     name = item.Name,
                     other = item.Other,
                     sku = item.Sku,
@@ -165,7 +165,7 @@ namespace WmsDesktop.ViewModels
                 if (SelectedCatalogItem != null)
                 {
                     SelectedCatalogItem.SupplierId = value.Id;
-                    if(SelectedCatalogItem.Id == "")// copy of data in new type
+                    if(SelectedCatalogItem.CatalogId == "")// copy of data in new type
                     {
                         switch (MainSelectedSupplier.SupplierType)
                         {
@@ -200,7 +200,7 @@ namespace WmsDesktop.ViewModels
                     }
                     else// copy of data in new type. if data is "", copy from old collection
                     {
-                        var valueInCollection = CatalogItems.First(item => item.Id == SelectedCatalogItem.Id);
+                        var valueInCollection = CatalogItems.First(item => item.CatalogId == SelectedCatalogItem.CatalogId);
                         switch (MainSelectedSupplier.SupplierType)
                         {
                             case (int)ClientType.Base:
@@ -212,7 +212,7 @@ namespace WmsDesktop.ViewModels
                                     Other = SelectedCatalogItem.Other,
                                     Sku = SelectedCatalogItem.Sku,
                                     SupplierId = MainSelectedSupplier.Id,
-                                    Id = SelectedCatalogItem.Id
+                                    CatalogId = SelectedCatalogItem.CatalogId
                                 }; break;
                             case (int)ClientType.WithDate:
                                 SelectedCatalogItem = new WithDate()
@@ -223,7 +223,7 @@ namespace WmsDesktop.ViewModels
                                     Other = SelectedCatalogItem.Other,
                                     Sku = SelectedCatalogItem.Sku,
                                     SupplierId = MainSelectedSupplier.Id,
-                                    Id = SelectedCatalogItem.Id
+                                    CatalogId = SelectedCatalogItem.CatalogId
                                 }; break;
                             case (int)ClientType.WithBatch:
                                 SelectedCatalogItem = new WithBatch()
@@ -234,10 +234,10 @@ namespace WmsDesktop.ViewModels
                                     Other = SelectedCatalogItem.Other,
                                     Sku = SelectedCatalogItem.Sku,
                                     SupplierId = MainSelectedSupplier.Id,
-                                    Id = SelectedCatalogItem.Id,
+                                    CatalogId = SelectedCatalogItem.CatalogId,
                                     Batches = valueInCollection as WithBatch != null &&  ((WithBatch)valueInCollection).Batches.Count != 0 
                                         ? ((WithBatch)valueInCollection).Batches 
-                                        : Batches.Where(item => item.CatalogId == SelectedCatalogItem.Id).ToList(),
+                                        : Batches.Where(item => item.CatalogId == SelectedCatalogItem.CatalogId).ToList(),
                                 }; break;
                         }
                     }
@@ -269,7 +269,7 @@ namespace WmsDesktop.ViewModels
                 Filter.Supplier = _selectedSupplier;
                 _items = new ObservableCollection<OrderItem> (Filter.Apply().Select(item => new OrderItem() 
                 { 
-                    id = item.Id, 
+                    id = item.CatalogId, 
                     name = item.Name, 
                     sku= item.Sku, 
                     other = item.Other, 
@@ -385,7 +385,7 @@ namespace WmsDesktop.ViewModels
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<CatalogItemBase>>(data);
             foreach (var item in parsedData)
             {
-                item.BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.Id).ToList();
+                item.BarcodeList = Barcodes.Where(inner => inner.CatalogId == item.CatalogId).ToList();
                 //sorting by type of supplier
                 var sup = Suppliers.First(x => x.Id == item.SupplierId);
                 switch(sup.SupplierType)
@@ -396,7 +396,7 @@ namespace WmsDesktop.ViewModels
                     case (int)ClientType.WithDate:
                         var newObj = new WithDate()
                         {
-                            Id = item.Id,
+                            CatalogId = item.CatalogId,
                             Name = item.Name,
                             Sku = item.Sku,
                             SupplierId = item.SupplierId,
@@ -407,18 +407,18 @@ namespace WmsDesktop.ViewModels
                         CatalogItems.Add(newObj);
                         break;
                     case (int)ClientType.WithBatch:
-                        var newObjWithBathc = new WithBatch()
+                        var newObjWithBatch = new WithBatch()
                         {
-                            Id = item.Id,
+                            CatalogId = item.CatalogId,
                             Name = item.Name,
                             Sku = item.Sku,
                             SupplierId = item.SupplierId,
                             Barcode = item.Barcode,
                             BarcodeList = item.BarcodeList,
                             Other = item.Other,
-                            Batches = Batches.Where(inner => item.Id == inner.CatalogId).ToList(),
+                            Batches = Batches.Where(inner => item.CatalogId == inner.CatalogId).ToList(),
                         };
-                        CatalogItems.Add(newObjWithBathc);
+                        CatalogItems.Add(newObjWithBatch);
                         
                         break;
                     default:
@@ -430,7 +430,7 @@ namespace WmsDesktop.ViewModels
             }
             var temp = new ObservableCollection<OrderItem>(_catalogItems.Where(x => x.Name.ToLower().Contains(TbText.ToLower()))
                 .Select(inner => new OrderItem() { 
-                id = inner.Id,
+                id = inner.CatalogId,
                 name = inner.Name,
                 other = inner.Other,
                 sku = inner.Sku,
@@ -442,7 +442,7 @@ namespace WmsDesktop.ViewModels
             //parse suppliers
             Filter.Items = temp.Select(item => new CatalogItemBase()
             {
-                Id = item.id,
+                CatalogId = item.id,
                 SupplierId = int.Parse(item.supplierId),
                 Name = item.name,
                 Sku = item.sku,
@@ -482,7 +482,7 @@ namespace WmsDesktop.ViewModels
                 var curCatalog = SelectedCatalogItem;
                 if (TbBarcode != "")
                 {
-                    var newBarcode = new Barcode("?", TbBarcode, curCatalog != null ? curCatalog.Id : "none");
+                    var newBarcode = new Barcode("?", TbBarcode, curCatalog != null ? curCatalog.CatalogId : "none");
                     SelectedBarcodes.Add(newBarcode);
                     SelectedCatalogItem.BarcodeList = new List<Barcode>(SelectedBarcodes);
                     TbBarcode = "";
@@ -493,7 +493,7 @@ namespace WmsDesktop.ViewModels
                 var t = SelectedCatalogItem as WithBatch;
                 if (Batches.Any(item => item.Name == t.SearchLine))
                     return;
-                var newBatch = new Batch() { CatalogId = t.Id, Id = -1, Name = t.SearchLine};
+                var newBatch = new Batch() { CatalogId = t.CatalogId, Id = -1, Name = t.SearchLine};
                 Batches.Add(newBatch);
                 t.Batches.Add(newBatch);
                 t.SearchLine = t.SearchLine;
@@ -544,7 +544,7 @@ namespace WmsDesktop.ViewModels
                         supplierName = MainSelectedSupplier.Name
                     });
                     Filter.Items = new List<CatalogItemBase>(ItemsList.Select(item => new CatalogItemBase() { 
-                        Id = item.id,
+                        CatalogId = item.id,
                         Name = item.name,
                         Sku = item.sku,
                         Other = item.other,
@@ -559,17 +559,17 @@ namespace WmsDesktop.ViewModels
                 if(SelectedCatalogItem != null)
                 {
                     var updatedId = await client.UpdateCatalog(SelectedCatalogItem, ip);
-                    if(updatedId == SelectedCatalogItem.Id)
+                    if(updatedId == SelectedCatalogItem.CatalogId)
                     {
                         //сброс коллекции
                         var curSup = Filter.Supplier;
                         Filter.Supplier = Suppliers.First();
                         ItemsList = new ObservableCollection<OrderItem>( Filter.Apply().Select(item =>
-                        new OrderItem() { id = item.Id, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name}));
+                        new OrderItem() { id = item.CatalogId, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name}));
 
                         
 
-                        var t = ItemsList.First(it => it.id == SelectedCatalogItem.Id);
+                        var t = ItemsList.First(it => it.id == SelectedCatalogItem.CatalogId);
                         t.name = SelectedCatalogItem.Name;
                         t.sku = SelectedCatalogItem.Sku;
                         t.supplierId = MainSelectedSupplier.Id.ToString();
@@ -577,7 +577,7 @@ namespace WmsDesktop.ViewModels
                         //обработка коллекции. TODO сделать коллецию в которой базовая коллекция хранится
                         Filter.Supplier = curSup;
                         ItemsList = new ObservableCollection<OrderItem>(Filter.Apply().Select(item =>
-                        new OrderItem() { id = item.Id, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name }));
+                        new OrderItem() { id = item.CatalogId, name = item.Name, other = item.Other, sku = item.Sku, supplierId = item.SupplierId.ToString(), supplierName = Suppliers.First(inner => inner.Id == item.SupplierId).Name }));
 
 
                         //ItemsList = new ObservableCollection<OrderItem>(ItemsList);
@@ -586,7 +586,7 @@ namespace WmsDesktop.ViewModels
                     }
 
                     //remove barcodes
-                    var barcodesToRemove = Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.Id).ToList();
+                    var barcodesToRemove = Barcodes.Where(bar => bar.CatalogId == SelectedCatalogItem.CatalogId).ToList();
                     foreach (var item in barcodesToRemove)
                     {
                         if (!SelectedBarcodes.Any(it => it.Name == item.Name))

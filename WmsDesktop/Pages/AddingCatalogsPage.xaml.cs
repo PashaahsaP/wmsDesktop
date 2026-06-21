@@ -44,7 +44,7 @@ namespace WmsDesktop.Pages
                         CBSuppliersCatalog.SelectedIndex = i;
                     }
                 }
-                viewModel.SelectedCatalogItem =  viewModel.CatalogItems.FirstOrDefault(item => item.Id == selectedItem.id);
+                viewModel.SelectedCatalogItem =  viewModel.CatalogItems.FirstOrDefault(item => item.CatalogId == selectedItem.id);
 
                 Console.WriteLine();
             }

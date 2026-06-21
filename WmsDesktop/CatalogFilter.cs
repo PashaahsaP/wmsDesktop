@@ -40,7 +40,7 @@ namespace WmsDesktop
                 result = new ObservableCollection<CatalogItemBase>(result.Where(item =>
                 {
                     var barcodes = new List<Barcode>(Barcodes.Where(it =>
-                        it.CatalogId == item.Id
+                        it.CatalogId == item.CatalogId
                         && it.Name.Contains(Sort.ToLower())));
 
                     return item.Name.ToLower().Contains(Sort.ToLower())
