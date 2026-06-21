@@ -65,10 +65,7 @@
              Grid.Row="0"
              Grid.Column="0"
              Grid.ColumnSpan="2"
-             Background="#FF3131"
-             MouseDown="Grid_MouseDown"
-             
-             >
+             Background="#FF3131">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.3*"/>
@@ -220,7 +217,7 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                MouseDown="Grid_MouseDown_1">
+                MouseDown="Grid_MouseDown">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.2*"/>
@@ -265,7 +262,6 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Background="#FF3131"
-                MouseDown="Grid_MouseDown_1"
                 >
 
                 <Grid.ColumnDefinitions>

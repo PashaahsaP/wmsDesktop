@@ -66,32 +66,134 @@ namespace WmsDesktop.Pages
 
         }
 
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)// для выделения элемента
         {
             var ui = (sender as FrameworkElement);
             var context = ui.DataContext;
             var element = context as IncomeItemVm;
             var result = new List<IncomeItemVm>();
-            
+            // Сбросить выделения всех элементов
+                // Определить тип и присвоить соответствующий тип
+            // Определить тип нового выделенного элемента и присвоить соответствующий
             foreach (var item in localVm.Items)
             {
-                if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
+               // if(item.Name == element.Name && item.Sku == element.Sku && item.Count == element.Count)
+                if (item == element)
                 {
-                    var temp = new IncomeItemVm() { Count = element.Count, Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, CatalogId = element.CatalogId };//selected
-                    result.Add(temp);
-                }
-                else if (item is IncomeItemVm)//selected
-                {
-                    var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = element.TE, CatalogId = element.CatalogId };
+                    IncomeItemVm temp = CreateSelectedItems(element, item);
                     result.Add(temp);
                 }
                 else
-                {
-                    result.Add(item);
+                {//надо определить что за тип сначало, а потом создать соответствующий
+                    IncomeItemVm temp = CreateUnselectedItem(element, item);
+
+                    result.Add(temp);
                 }
             }
 
             localVm.Items = new ObservableCollection<IncomeItemVm>(result);
+        }
+
+        private static IncomeItemVm CreateSelectedItems(IncomeItemVm element, IncomeItemVm item)
+        {
+            var temp = new IncomeItemVm();
+            if (element is IncomeItemWithDateVm)
+            {
+
+                temp = new SelectedIncomeItemWithDateVm()
+                {
+                    Count = element.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = element.TE,
+                    CatalogId = element.CatalogId,
+                    isSelected = false,
+                    Other = element.Other,
+                    Date = ((IncomeItemWithDateVm)element).Date
+                };
+            }
+            else if (element is IncomeItemWithBatchVm)
+            {
+                temp = new SelectedIncomeItemWithBatchVM()
+                {
+                    Count = element.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = element.TE,
+                    CatalogId = element.CatalogId,
+                    isSelected = false,
+                    Other = element.Other,
+                    Batches = ((IncomeItemWithBatchVm)element).Batches
+                };
+            }
+            else
+            {
+                temp = new SelectedIncomeItemVm()
+                {
+                    Count = element.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = element.TE,
+                    CatalogId = element.CatalogId,
+                    isSelected = false,
+                    Other = element.Other
+                };
+            }
+
+            return temp;
+        }
+        private static IncomeItemVm CreateUnselectedItem(IncomeItemVm element, IncomeItemVm item)
+        {
+            var temp = new IncomeItemVm();
+            if (item is IncomeItemWithDateVm || item is SelectedIncomeItemWithDateVm)
+            {
+                temp = new IncomeItemWithDateVm()
+                {
+                    Count = item.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = item.TE,
+                    CatalogId = item.CatalogId,
+                    isSelected = false,
+                    Other = item.Other,
+                    Date = ((IncomeItemWithDateVm)item).Date
+                };
+            }
+            else if (item is IncomeItemWithBatchVm || item is SelectedIncomeItemWithBatchVM)
+            {
+                temp = new IncomeItemWithBatchVm()
+                {
+                    Count = item.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = item.TE,
+                    CatalogId = item.CatalogId,
+                    isSelected = false,
+                    Other = item.Other,
+                    Batches = ((IncomeItemWithBatchVm)item).Batches
+                };
+            }
+            else
+            {
+                temp = new IncomeItemVm()
+                {
+                    Count = item.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = item.TE,
+                    CatalogId = item.CatalogId,
+                    isSelected = false,
+                    Other = item.Other
+                };
+            }
+
+            return temp;
         }
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -128,7 +230,7 @@ namespace WmsDesktop.Pages
 
         }
 
-        private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)// когда элемента нет в каталоге
         {
             var dialog = new AddItemWindow(new ObservableCollection<Classes.IncomeItemEntity>(localVm.CatalogItems.ToEntityList()));
             var uiItem = (sender as FrameworkElement).DataContext as IncomeItemVm;//wrong item was
