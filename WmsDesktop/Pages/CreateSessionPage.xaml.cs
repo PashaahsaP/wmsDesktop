@@ -259,8 +259,8 @@ namespace WmsDesktop.Pages
 
         private void listItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var t = localVm.SelectedCatalogItem;
-            localVm.Items.Add(t.ToVm());
+            var selectedItem = (IncomeItemVm)listItems.SelectedItem;
+            localVm.Items.Add(selectedItem);
         }
 
       
