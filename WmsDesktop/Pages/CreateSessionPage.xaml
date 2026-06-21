@@ -26,11 +26,11 @@
                     
                     >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.3*"/>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.05*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock 
@@ -67,30 +67,30 @@
              Grid.ColumnSpan="2"
              Background="#FF3131">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.3*"/>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.05*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock 
                  Padding="5"
-                 Grid.Column="1"
+                 Grid.Column="0"
                  Text="{Binding Sku}"
                  ></TextBlock>
                     <TextBox 
                   Padding="5"
-                  Grid.Column="2"
+                  Grid.Column="1"
                   Text="{Binding TE}"
                   ></TextBox>
                     <TextBlock 
                  Padding="5"
-                 Grid.Column="3"
+                 Grid.Column="2"
                  Text="{Binding Name}"
                  ></TextBlock>
                     <Button
-                Grid.Column="4"
+                Grid.Column="3"
                 Content="delete"
                 Width="100"
                 Command="{Binding DataContext.removeLine,
@@ -98,7 +98,7 @@
                 CommandParameter="{Binding}"></Button>
                     <TextBlock 
                  Padding="5"
-                 Grid.Column="5"
+                 Grid.Column="4"
                  HorizontalAlignment="Center"
                  Text="{Binding Count}"></TextBlock>
                 </Grid>
@@ -112,14 +112,16 @@
                 <Grid 
                 Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="2">
+                Grid.ColumnSpan="2"
+                MouseDown="Grid_MouseDown">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.3*"/>
-                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
                         <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.05*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock 
@@ -147,7 +149,7 @@
                     Loaded="TextBox_Loaded"
                     KeyDown="TextBox_KeyDown"
                     Padding="5"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Center"
                     Text="{Binding Count}"></TextBlock>
                 </Grid>
@@ -163,11 +165,12 @@
                 >
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.1*"/>
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.05*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock 
@@ -220,11 +223,12 @@
                 MouseDown="Grid_MouseDown">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.3*"/>
-                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
                         <ColumnDefinition Width="0.2*"/>
                         <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.05*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock 
@@ -236,7 +240,7 @@
                     <TextBlock 
                      Padding="5"
                      Grid.Column="1"
-                     Text="{Binding Sku}"
+                     Text="{Binding TE}"
 
                      ></TextBlock>
                     <TextBlock 
@@ -250,7 +254,7 @@
                       ></TextBlock>
                     <TextBlock
                     Padding="5"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Center"
                     Text="{Binding Count}"></TextBlock>
                 </Grid>
@@ -265,11 +269,12 @@
                 >
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.1*"/>
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.05*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock 
@@ -277,17 +282,22 @@
                     Grid.Column="0"
                     Text="{Binding Sku}"
                     ></TextBlock>
-                <TextBlock 
+                <TextBox 
                     Padding="5"
                     Grid.Column="1"
+                    Text="{Binding TE}"
+                ></TextBox>
+                <TextBlock 
+                    Padding="5"
+                    Grid.Column="2"
                     Text="{Binding Name}"></TextBlock>
                 <TextBox 
                       Padding="5"
-                      Grid.Column="2"
+                      Grid.Column="3"
                       Text="{Binding Batches}"
                       ></TextBox>
                 <Button
-                     Grid.Column="3"
+                     Grid.Column="4"
                      Content="delete"
                      Width="100"
                      Command="{Binding DataContext.removeLine,
@@ -295,7 +305,7 @@
                     CommandParameter="{Binding}"></Button>
                 <TextBlock
                     Padding="5"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Center"
                     Text="{Binding Count}"></TextBlock>
             </Grid>
