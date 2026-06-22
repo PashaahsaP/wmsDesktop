@@ -19,11 +19,9 @@
                 BorderBrush="#efefef"
                 BorderThickness="2">
                 <Grid 
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    MouseDown="Grid_MouseDown"
                     
+                    MouseDown="Grid_MouseDown"
+                    Background="Transparent"
                     >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*"/>
@@ -110,9 +108,7 @@
                 BorderBrush="#efefef"
                 BorderThickness="2">
                 <Grid 
-                Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
+               Background="Transparent"
                 MouseDown="Grid_MouseDown">
 
                     <Grid.ColumnDefinitions>
@@ -217,9 +213,7 @@
                 BorderBrush="#efefef"
                 BorderThickness="2">
                 <Grid 
-                Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
+                    Background="Transparent"
                 MouseDown="Grid_MouseDown">
 
                     <Grid.ColumnDefinitions>
