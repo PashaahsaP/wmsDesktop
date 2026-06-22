@@ -108,7 +108,7 @@ namespace WmsDesktop.Pages
                     isValid = item.isValid,
                     TE = element.TE,
                     CatalogId = element.CatalogId,
-                    isSelected = false,
+                    isSelected = true,
                     Other = element.Other,
                     Date = ((IncomeItemWithDateVm)element).Date
                 };
@@ -123,7 +123,7 @@ namespace WmsDesktop.Pages
                     isValid = item.isValid,
                     TE = element.TE,
                     CatalogId = element.CatalogId,
-                    isSelected = false,
+                    isSelected = true,
                     Other = element.Other,
                     Batches = ((IncomeItemWithBatchVm)element).Batches
                 };
@@ -138,7 +138,7 @@ namespace WmsDesktop.Pages
                     isValid = item.isValid,
                     TE = element.TE,
                     CatalogId = element.CatalogId,
-                    isSelected = false,
+                    isSelected = true,
                     Other = element.Other
                 };
             }

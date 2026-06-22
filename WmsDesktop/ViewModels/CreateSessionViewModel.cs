@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using WmsDesktop;
 using WmsDesktop.Classes;
@@ -151,7 +152,7 @@ namespace WmsDesktop.ViewModels
         public ICommand selectAtomy { get; set; }
         public ICommand loadFile { get; set; }
         public ICommand removeLine {  get; set; }
-
+        public ICommand pressEnterInTb { get; set; }
 
 
 
@@ -241,7 +242,75 @@ namespace WmsDesktop.ViewModels
             {
                 Items.Remove(o as IncomeItemVm);
             });
+            pressEnterInTb = new RelayCommand(async o =>
+            {
+                foreach (var item in Items)
+                {
+                    Console.WriteLine();
+                }
 
+                var element = Items.FirstOrDefault(inner => inner.isSelected);
+                var temp = new IncomeItemVm();
+                foreach (var item in Items)
+                {
+                    if (item == element)
+                    {
+                        if (element is IncomeItemWithDateVm)
+                        {
+                            temp = new IncomeItemWithDateVm()
+                            {
+                                Count = Count,
+                                Sku = element.Sku,
+                                Name = element.Name,
+                                isValid = element.isValid,
+                                TE = element.TE,
+                                CatalogId = element.CatalogId,
+                                Date = ((IncomeItemWithDateVm)element).Date,
+                                isSelected = element.isSelected,
+                                Other = element.Other
+                            };
+
+                        }
+                        else if (element is IncomeItemWithBatchVm)
+                        {
+                            temp = new IncomeItemWithBatchVm()
+                            {
+                                Count = int.Parse(frameElem.Text),
+                                Sku = element.Sku,
+                                Name = element.Name,
+                                isValid = element.isValid,
+                                TE = element.TE,
+                                CatalogId = element.CatalogId,
+                                Batches = ((IncomeItemWithBatchVm)element).Batches,
+                                isSelected = element.isSelected,
+                                Other = element.Other
+                            };
+                        }
+                        else
+                        {
+                            temp = new IncomeItemVm()
+                            {
+                                Count = int.Parse(frameElem.Text),
+                                Sku = element.Sku,
+                                Name = element.Name,
+                                isValid = element.isValid,
+                                TE = element.TE,
+                                CatalogId = element.CatalogId
+                            };
+                        }
+
+                        result.Add(temp);
+                    }
+                    else
+                    {
+                        // var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
+                        result.Add(item);
+                    }
+                }
+
+                localVm.Items = new ObservableCollection<IncomeItemVm>(result);
+
+            });
             //parse suppliers
             var supplierData = JsonConvert.DeserializeObject<ObservableCollection<Supplier>>(suppliers);
             foreach (var item in supplierData)

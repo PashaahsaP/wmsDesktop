@@ -81,7 +81,13 @@
                   Padding="5"
                   Grid.Column="1"
                   Text="{Binding TE}"
-                  ></TextBox>
+                  >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" 
+         Command="{Binding DataContext.pressEnterInTb, 
+         RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <TextBlock 
                  Padding="5"
                  Grid.Column="2"
@@ -98,8 +104,13 @@
                          Padding="5"
                          Grid.Column="4"
                          HorizontalAlignment="Center"
-                        KeyDown="TextBox_KeyDown_Count"
-                         Text="{Binding Count}"></TextBox>
+                         Text="{Binding Count}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" 
+                                Command="{Binding DataContext.pressEnterInTb, 
+                        RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -179,7 +190,13 @@
                       Padding="5"
                       Grid.Column="1"
                       Text="{Binding TE}"
-                    ></TextBox>
+                    >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+         Command="{Binding DataContext.pressEnterInTb, 
+         RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <TextBlock 
                     Padding="5"
                     Grid.Column="2"
@@ -190,7 +207,9 @@
                     SelectedDate="{Binding Date, Mode=TwoWay}"
                     IsEnabled="True"
                     Grid.Column="3"
-                    Margin="15 10 15 10"/>
+                    Margin="15 10 15 10">
+                    
+                </DatePicker>
                 <Button
                     Grid.Column="4"
                     Content="delete"
@@ -200,11 +219,16 @@
                     CommandParameter="{Binding}"></Button>
                 <TextBox
                     Loaded="TextBox_Loaded"
-                    KeyDown="TextBox_KeyDown_Count"
                     Padding="5"
                     Grid.Column="5"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}"></TextBox>
+                    Text="{Binding Count}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+                             Command="{Binding DataContext.pressEnterInTb, 
+                             RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
             </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:IncomeItemWithBatchVm}">
@@ -280,7 +304,13 @@
                     Padding="5"
                     Grid.Column="1"
                     Text="{Binding TE}"
-                ></TextBox>
+                >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+         Command="{Binding DataContext.pressEnterInTb, 
+         RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <TextBlock 
                     Padding="5"
                     Grid.Column="2"
@@ -289,7 +319,13 @@
                       Padding="5"
                       Grid.Column="3"
                       Text="{Binding Batches}"
-                      ></TextBox>
+                      >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+         Command="{Binding DataContext.pressEnterInTb, 
+         RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <Button
                      Grid.Column="4"
                      Content="delete"
@@ -302,7 +338,13 @@
                     Grid.Column="5"
                     KeyDown="TextBox_KeyDown_Count"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}"></TextBox>
+                    Text="{Binding Count}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+                             Command="{Binding DataContext.pressEnterInTb, 
+                             RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
             </Grid>
         </DataTemplate>
     </Page.Resources>
