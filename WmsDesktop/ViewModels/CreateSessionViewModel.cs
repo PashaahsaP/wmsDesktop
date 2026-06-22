@@ -248,18 +248,18 @@ namespace WmsDesktop.ViewModels
                 {
                     Console.WriteLine();
                 }
-
+                var result = new List<IncomeItemVm>();
                 var element = Items.FirstOrDefault(inner => inner.isSelected);
-                var temp = new IncomeItemVm();
+                var temprary = new IncomeItemVm();
                 foreach (var item in Items)
                 {
                     if (item == element)
                     {
                         if (element is IncomeItemWithDateVm)
                         {
-                            temp = new IncomeItemWithDateVm()
+                            temprary = new IncomeItemWithDateVm()
                             {
-                                Count = Count,
+                                Count = element.Count,
                                 Sku = element.Sku,
                                 Name = element.Name,
                                 isValid = element.isValid,
@@ -273,9 +273,9 @@ namespace WmsDesktop.ViewModels
                         }
                         else if (element is IncomeItemWithBatchVm)
                         {
-                            temp = new IncomeItemWithBatchVm()
+                            temprary = new IncomeItemWithBatchVm()
                             {
-                                Count = int.Parse(frameElem.Text),
+                                Count = item.Count,
                                 Sku = element.Sku,
                                 Name = element.Name,
                                 isValid = element.isValid,
@@ -288,9 +288,9 @@ namespace WmsDesktop.ViewModels
                         }
                         else
                         {
-                            temp = new IncomeItemVm()
+                            temprary = new IncomeItemVm()
                             {
-                                Count = int.Parse(frameElem.Text),
+                                Count = item.Count,
                                 Sku = element.Sku,
                                 Name = element.Name,
                                 isValid = element.isValid,
@@ -299,7 +299,7 @@ namespace WmsDesktop.ViewModels
                             };
                         }
 
-                        result.Add(temp);
+                        result.Add(temprary);
                     }
                     else
                     {
@@ -308,7 +308,7 @@ namespace WmsDesktop.ViewModels
                     }
                 }
 
-                localVm.Items = new ObservableCollection<IncomeItemVm>(result);
+                Items = new ObservableCollection<IncomeItemVm>(result);
 
             });
             //parse suppliers
