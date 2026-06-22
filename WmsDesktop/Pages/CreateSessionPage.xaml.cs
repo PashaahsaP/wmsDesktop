@@ -196,7 +196,7 @@ namespace WmsDesktop.Pages
             return temp;
         }
 
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox_KeyDown_Count(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
                 return;
@@ -205,17 +205,124 @@ namespace WmsDesktop.Pages
             var context = (sender as FrameworkElement).DataContext;
             var element = context as IncomeItemVm; // selected
             var result = new List<IncomeItemVm>();
+            var temp = new IncomeItemVm();
             foreach (var item in localVm.Items)
             {
-                if (item.CatalogId == element.CatalogId && item.Name == element.Name && item.Sku == element.Sku)
+                if (item == element)
                 {
-                    var temp = new IncomeItemVm() { Count = int.Parse(frameElem.Text), Sku = element.Sku, Name = element.Name, isValid = element.isValid, TE = element.TE, CatalogId = element.CatalogId };
+                    if(element is IncomeItemWithDateVm)
+                    {
+                        temp = new IncomeItemWithDateVm() { 
+                            Count = int.Parse(frameElem.Text), 
+                            Sku = element.Sku, 
+                            Name = element.Name, 
+                            isValid = element.isValid, 
+                            TE = element.TE, 
+                            CatalogId = element.CatalogId,
+                            Date = ((IncomeItemWithDateVm)element).Date,
+                            isSelected = element.isSelected,
+                            Other = element.Other
+                        };
+
+                    }
+                    else if (element is IncomeItemWithBatchVm)
+                    {
+                        temp = new IncomeItemWithBatchVm()
+                        {
+                            Count = int.Parse(frameElem.Text),
+                            Sku = element.Sku,
+                            Name = element.Name,
+                            isValid = element.isValid,
+                            TE = element.TE,
+                            CatalogId = element.CatalogId,
+                            Batches = ((IncomeItemWithBatchVm)element).Batches,
+                            isSelected = element.isSelected,
+                            Other = element.Other   
+                        };
+                    }
+                    else
+                    {
+                        temp = new IncomeItemVm() { 
+                            Count = int.Parse(frameElem.Text), 
+                            Sku = element.Sku, 
+                            Name = element.Name, 
+                            isValid = element.isValid, 
+                            TE = element.TE, 
+                            CatalogId = element.CatalogId };
+                    }
+                    
                     result.Add(temp);
                 }
                 else
                 {
-                    var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
+                   // var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
+                    result.Add(item);
+                }
+            }
+
+            localVm.Items = new ObservableCollection<IncomeItemVm>(result);
+        }
+        private void TextBox_KeyDown_TE(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            var frameElem = (sender as TextBox);
+            var context = (sender as FrameworkElement).DataContext;
+            var element = context as IncomeItemVm; // selected
+            var result = new List<IncomeItemVm>();
+            var temp = new IncomeItemVm();
+            foreach (var item in localVm.Items)
+            {
+                if (item == element)
+                {
+                    if(element is IncomeItemWithDateVm)
+                    {
+                        temp = new IncomeItemWithDateVm() { 
+                            Count = element.Count, 
+                            Sku = element.Sku, 
+                            Name = element.Name, 
+                            isValid = element.isValid, 
+                            TE = frameElem.Text, 
+                            CatalogId = element.CatalogId,
+                            Date = ((IncomeItemWithDateVm)element).Date,
+                            isSelected = element.isSelected,
+                            Other = element.Other
+                        };
+
+                    }
+                    else if (element is IncomeItemWithBatchVm)
+                    {
+                        temp = new IncomeItemWithBatchVm()
+                        {
+                            Count = int.Parse(frameElem.Text),
+                            Sku = element.Sku,
+                            Name = element.Name,
+                            isValid = element.isValid,
+                            TE = element.TE,
+                            CatalogId = element.CatalogId,
+                            Batches = ((IncomeItemWithBatchVm)element).Batches,
+                            isSelected = element.isSelected,
+                            Other = element.Other   
+                        };
+                    }
+                    else
+                    {
+                        temp = new IncomeItemVm() { 
+                            Count = int.Parse(frameElem.Text), 
+                            Sku = element.Sku, 
+                            Name = element.Name, 
+                            isValid = element.isValid, 
+                            TE = element.TE, 
+                            CatalogId = element.CatalogId };
+                    }
+                    
                     result.Add(temp);
+                }
+                else
+                {
+                   // var temp = new IncomeItemVm() { Count = item.Count, Sku = item.Sku, Name = item.Name, isValid = item.isValid, TE = item.TE, CatalogId = item.CatalogId };
+                    result.Add(item);
                 }
             }
 

@@ -94,11 +94,12 @@
                 Command="{Binding DataContext.removeLine,
                             RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                 CommandParameter="{Binding}"></Button>
-                    <TextBlock 
-                 Padding="5"
-                 Grid.Column="4"
-                 HorizontalAlignment="Center"
-                 Text="{Binding Count}"></TextBlock>
+                    <TextBox 
+                         Padding="5"
+                         Grid.Column="4"
+                         HorizontalAlignment="Center"
+                        KeyDown="TextBox_KeyDown_Count"
+                         Text="{Binding Count}"></TextBox>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -143,7 +144,7 @@
                     Margin="15 10 15 10"/>
                     <TextBlock
                     Loaded="TextBox_Loaded"
-                    KeyDown="TextBox_KeyDown"
+                    KeyDown="TextBox_KeyDown_Count"
                     Padding="5"
                     Grid.Column="5"
                     HorizontalAlignment="Center"
@@ -175,7 +176,6 @@
                     Text="{Binding Sku}"
                     ></TextBlock>
                 <TextBox 
-                      KeyDown="TextBox_KeyDown_1"
                       Padding="5"
                       Grid.Column="1"
                       Text="{Binding TE}"
@@ -200,7 +200,7 @@
                     CommandParameter="{Binding}"></Button>
                 <TextBox
                     Loaded="TextBox_Loaded"
-                    KeyDown="TextBox_KeyDown"
+                    KeyDown="TextBox_KeyDown_Count"
                     Padding="5"
                     Grid.Column="5"
                     HorizontalAlignment="Center"
@@ -297,11 +297,12 @@
                      Command="{Binding DataContext.removeLine,
                          RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                     CommandParameter="{Binding}"></Button>
-                <TextBlock
+                <TextBox
                     Padding="5"
                     Grid.Column="5"
+                    KeyDown="TextBox_KeyDown_Count"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}"></TextBlock>
+                    Text="{Binding Count}"></TextBox>
             </Grid>
         </DataTemplate>
     </Page.Resources>
