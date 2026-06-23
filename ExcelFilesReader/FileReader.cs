@@ -7,12 +7,20 @@ using System.Text;
 
 namespace ExcelFileParser
 {
+    public class Supplier//dto
+    {
+        public int Id { get; set; }
+        public int SupplierType { get; set; }
+        public string Name { get; set; }
+
+        public override string ToString() => Name;
+    }
     public class FileReader
     {
         public FileInfo fileInfo = null;
-        public FileReader(string path)
+        public FileReader(string path, List<(Supplier, bool)> suppliers)
         {
-            fileInfo = new FileInfo(path);
+            fileInfo = new FileInfo(path, suppliers);
             using (var package = new ExcelPackage(fileInfo.Path))
             {
                 var lines = new List<List<string>>();

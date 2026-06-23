@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
-    public class AddingExcelFile
+    public class AddingExcelFile//view class
     {
         public string FieldName { get; set; } = "";
         public List<Tuple<string, int>> FileField { get; set; } = new List<Tuple<string, int>>();

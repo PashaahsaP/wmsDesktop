@@ -225,7 +225,14 @@ namespace WmsDesktop.ViewModels
                 if (result == true)
                 {
                     string path = dialog.FileName;
-                    FileReader reader = new FileReader(path);
+                    FileReader reader = new FileReader(path, Suppliers.Select(item => (
+                    new ExcelFileParser.Supplier()
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        SupplierType = item.SupplierType,
+                    }, 
+                    item == SelectedSupplier)).ToList());
 
                     var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(), reader.fileInfo);
                     innerDialog.Owner = _window;
