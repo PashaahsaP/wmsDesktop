@@ -1,34 +1,162 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WmsDesktop
 {
-    public class IncomeItemVm
+    public class IncomeItemVm : INotifyPropertyChanged
     {
-        public string CatalogId { get; set; } = string.Empty;
-        public string Sku { get; set; } = string.Empty;
-        public string TE { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Other {  get; set; } = string.Empty;
-        public int Count { get; set; } = 1;
-        public bool isValid { get; set; } = true;
-        public bool isSelected { get; set; } = false;
+        string _catalogId = string.Empty;
+        private string _sku = string.Empty;
+        private string _te = string.Empty;
+        private string _name = string.Empty;
+        private string _other = string.Empty;
+        private int _count = 1;
+        private bool _isValid = true;
+        private bool _isSelected = false;
+
+
+        public string CatalogId 
+        {
+            get
+            {
+                return _catalogId;
+            }
+            set
+            {
+                _catalogId = value;
+                OnPropertyChanged(nameof(CatalogId));
+            }
+        }
+        public string Sku
+        {
+            get => _sku;
+            set
+            {
+                if (_sku != value)
+                {
+                    _sku = value;
+                    OnPropertyChanged(nameof(Sku));
+                }
+            }
+        }
+        public string TE
+        {
+            get => _te;
+            set
+            {
+                if (_te != value)
+                {
+                    _te = value;
+                    OnPropertyChanged(nameof(TE));
+                }
+            }
+        }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+        public string Other
+        {
+            get => _other;
+            set
+            {
+                if (_other != value)
+                {
+                    _other = value;
+                    OnPropertyChanged(nameof(Other));
+                }
+            }
+        }
+        public int Count
+        {
+            get => _count;
+            set
+            {
+                if (_count != value)
+                {
+                    _count = value;
+                    OnPropertyChanged(nameof(Count));
+                }
+            }
+        }
+        public bool isValid
+        {
+            get => _isValid;
+            set
+            {
+                if (_isValid != value)
+                {
+                    _isValid = value;
+                    OnPropertyChanged(nameof(isValid));
+                }
+            }
+        }
+        public bool isSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(isSelected));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public override string ToString()
         {
             return Name;
         }
+        public void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public class IncomeItemWithDateVm: IncomeItemVm 
     {
-        public string Date { get; set; } = string.Empty;    
+        string _date = string.Empty;
+        public string Date
+        {
+            get
+            {
+                return _date;
+            }
+            set
+            {
+                _date = value;
+                OnPropertyChanged(nameof(Date));
+            }
+        }
     }
     public class IncomeItemWithBatchVm: IncomeItemVm 
     {
-        public string Batches { get; set; } = string.Empty;
+        string _batch = string.Empty;
+        public string Batches 
+            {
+                get
+                {
+                    return _batch;
+                }
+                set
+                { 
+                    _batch = value;
+                    OnPropertyChanged(Batches);
+                }
+            }
     }
 
     //Selected. Для отображения от типа класса DataTemplate. via binding

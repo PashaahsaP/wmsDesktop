@@ -244,10 +244,7 @@ namespace WmsDesktop.ViewModels
             });
             pressEnterInTb = new RelayCommand(async o =>
             {
-                foreach (var item in Items)
-                {
-                    Console.WriteLine();
-                }
+               
                 var result = new List<IncomeItemVm>();
                 var element = Items.FirstOrDefault(inner => inner.isSelected);
                 var temprary = new IncomeItemVm();
@@ -275,7 +272,7 @@ namespace WmsDesktop.ViewModels
                         {
                             temprary = new IncomeItemWithBatchVm()
                             {
-                                Count = item.Count,
+                                Count = element.Count,
                                 Sku = element.Sku,
                                 Name = element.Name,
                                 isValid = element.isValid,
@@ -290,7 +287,7 @@ namespace WmsDesktop.ViewModels
                         {
                             temprary = new IncomeItemVm()
                             {
-                                Count = item.Count,
+                                Count = element.Count,
                                 Sku = element.Sku,
                                 Name = element.Name,
                                 isValid = element.isValid,

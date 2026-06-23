@@ -80,7 +80,7 @@
                     <TextBox 
                   Padding="5"
                   Grid.Column="1"
-                  Text="{Binding TE}"
+                  Text="{Binding TE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   >
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" 
@@ -104,7 +104,7 @@
                          Padding="5"
                          Grid.Column="4"
                          HorizontalAlignment="Center"
-                         Text="{Binding Count}">
+                         Text="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" 
                                 Command="{Binding DataContext.pressEnterInTb, 
@@ -189,7 +189,7 @@
                 <TextBox 
                       Padding="5"
                       Grid.Column="1"
-                      Text="{Binding TE}"
+                      Text="{Binding TE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     >
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" 
@@ -222,7 +222,7 @@
                     Padding="5"
                     Grid.Column="5"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}">
+                    Text="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" 
                              Command="{Binding DataContext.pressEnterInTb, 
@@ -303,7 +303,7 @@
                 <TextBox 
                     Padding="5"
                     Grid.Column="1"
-                    Text="{Binding TE}"
+                    Text="{Binding TE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 >
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" 
@@ -318,7 +318,7 @@
                 <TextBox 
                       Padding="5"
                       Grid.Column="3"
-                      Text="{Binding Batches}"
+                      Text="{Binding Batches, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       >
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" 
@@ -338,7 +338,7 @@
                     Grid.Column="5"
                     KeyDown="TextBox_KeyDown_Count"
                     HorizontalAlignment="Center"
-                    Text="{Binding Count}">
+                    Text="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" 
                              Command="{Binding DataContext.pressEnterInTb, 
