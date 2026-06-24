@@ -234,7 +234,7 @@ namespace WmsDesktop.ViewModels
                     }, 
                     item == SelectedSupplier)).ToList());
 
-                    var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(), reader.fileInfo);
+                    var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(), reader);
                     innerDialog.Owner = _window;
 
                     bool? innerResult = innerDialog.ShowDialog();
