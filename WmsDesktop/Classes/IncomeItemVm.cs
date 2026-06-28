@@ -115,6 +115,7 @@ namespace WmsDesktop
                 }
             }
         }
+        public string Barcode { get; set; } = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 

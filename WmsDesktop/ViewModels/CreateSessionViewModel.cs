@@ -240,11 +240,27 @@ namespace WmsDesktop.ViewModels
                     bool? innerResult = innerDialog.ShowDialog();
                     if (innerResult == true)
                     {
+                        var isValid = false;
                         // надо для каждого элемента получить каталог id и дальше...)
+                        foreach (var item in innerDialog.Result)
+                        {
+                            isValid = false;
+                            if(Items.Any(inner => inner.Sku == item.Sku))
+                            {
+                                isValid = true;
+                                item.CatalogId = Items.FirstOrDefault(inner => inner.Sku == item.Sku).CatalogId;
+                            }
+                            if(Barcodes.Any(inner => inner.Name == item.Name)) 
+                            {
+                                isValid = true;
+                                item.CatalogId = Barcodes.FirstOrDefault(inner => inner.Name == item.Barcode).CatalogId;
+                            }
+                            item.isValid = isValid;
+                        }
                         Items = new ObservableCollection<IncomeItemVm>(innerDialog.Result);
-                    }
-
+                        Console.WriteLine();
                 }
+            }
             });
             removeLine = new RelayCommand(async o =>
             {

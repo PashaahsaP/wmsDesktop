@@ -93,6 +93,7 @@ namespace WmsDesktop
                         result.Add(new IncomeItemWithDateVm() 
                         {
                             CatalogId = "",
+                            Barcode = line[Data.FirstOrDefault(item => item.FieldName == "barcode").SelectedItem.Item2],
                             Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
                             Date = line[Data.FirstOrDefault(item => item.FieldName == "date").SelectedItem.Item2],
                             Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
@@ -105,6 +106,7 @@ namespace WmsDesktop
                         result.Add(new IncomeItemVm()
                         {
                             CatalogId = "",
+                            Barcode = line[Data.FirstOrDefault(item => item.FieldName == "barcode").SelectedItem.Item2],
                             Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
                             Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
                             Sku = line[Data.FirstOrDefault(item => item.FieldName == "sku").SelectedItem.Item2],
@@ -117,6 +119,7 @@ namespace WmsDesktop
                         result.Add(new IncomeItemWithBatchVm()
                         {
                             CatalogId = "",
+                            Barcode = line[Data.FirstOrDefault(item => item.FieldName == "barcode").SelectedItem.Item2],
                             Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
                             Batches = line[Data.FirstOrDefault(item => item.FieldName == "batch").SelectedItem.Item2],
                             Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
@@ -128,6 +131,7 @@ namespace WmsDesktop
 
                 }
                 Dialog.Result = result;
+                Dialog.DialogResult = true;
             });
         }
         public event PropertyChangedEventHandler PropertyChanged;
