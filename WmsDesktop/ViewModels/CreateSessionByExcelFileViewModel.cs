@@ -83,17 +83,51 @@ namespace WmsDesktop
         {
             parseData = new RelayCommand(o =>
             {
+                var selectedSupplier = Reader.fileInfo.Suppliers.FirstOrDefault(inner => inner.Item2 == true);
+                var result = new List<IncomeItemVm>();
+                Reader.fileInfo.Data.RemoveAt(0);
                 foreach (var line in Reader.fileInfo.Data)
                 {
-                    // Получается устанавливаем свойство для элемента, делаю переборку Data и ищу нужное свойство.
-                    // Дальше идет обращение к line по данному индексу полученному из Data
-                    // !!! Надо предварительно узнать какой клиент
-                    Console.WriteLine();
+                    if(selectedSupplier.Item1.SupplierType == 1)
+                    {
+                        result.Add(new IncomeItemWithDateVm() 
+                        {
+                            CatalogId = "",
+                            Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
+                            Date = line[Data.FirstOrDefault(item => item.FieldName == "date").SelectedItem.Item2],
+                            Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
+                            Sku = line[Data.FirstOrDefault(item => item.FieldName == "sku").SelectedItem.Item2],
+                            TE = line[Data.FirstOrDefault(item => item.FieldName == "te").SelectedItem.Item2],
+                        }
+                        );
+                    }else if(selectedSupplier.Item1.SupplierType == 0)
+                    {
+                        result.Add(new IncomeItemVm()
+                        {
+                            CatalogId = "",
+                            Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
+                            Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
+                            Sku = line[Data.FirstOrDefault(item => item.FieldName == "sku").SelectedItem.Item2],
+                            TE = line[Data.FirstOrDefault(item => item.FieldName == "te").SelectedItem.Item2],
+                        }
+                        );
+                    }
+                    else if (selectedSupplier.Item1.SupplierType == 2)
+                    {
+                        result.Add(new IncomeItemWithBatchVm()
+                        {
+                            CatalogId = "",
+                            Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
+                            Batches = line[Data.FirstOrDefault(item => item.FieldName == "batch").SelectedItem.Item2],
+                            Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
+                            Sku = line[Data.FirstOrDefault(item => item.FieldName == "sku").SelectedItem.Item2],
+                            TE = line[Data.FirstOrDefault(item => item.FieldName == "te").SelectedItem.Item2],
+                        }
+                        );
+                    }
+
                 }
-                Dialog.Result = new List<IncomeItemVm> { new IncomeItemVm() };
-                // Надо сделать переборку данных за исключением первой строки
-                // Дальше в зависимости от выбраного клиента создавать объекты класса. !!!что за клиент!!!
-                // Как то сопаставить свойство объекта и данные сопостовителя
+                Dialog.Result = result;
             });
         }
         public event PropertyChangedEventHandler PropertyChanged;

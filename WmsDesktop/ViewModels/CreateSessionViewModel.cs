@@ -240,6 +240,7 @@ namespace WmsDesktop.ViewModels
                     bool? innerResult = innerDialog.ShowDialog();
                     if (innerResult == true)
                     {
+                        // надо для каждого элемента получить каталог id и дальше...)
                         Items = new ObservableCollection<IncomeItemVm>(innerDialog.Result);
                     }
 

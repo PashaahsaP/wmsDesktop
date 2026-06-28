@@ -33,10 +33,12 @@ namespace ExcelFileParser
                 }
             }
         }
+        public List<(Supplier, bool)> Suppliers {  get; set; }
         #endregion
         #region ctor
         public FileInfo(string path, List<(Supplier, bool)> supplier)// надо сюда передавать тип клиента, для настройки полей
         {
+            Suppliers = supplier;
             Path = path;
             var selectedSup = supplier.FirstOrDefault(item => item.Item2);
             switch (selectedSup.Item1.SupplierType)
