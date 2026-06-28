@@ -240,7 +240,7 @@ namespace WmsDesktop.ViewModels
                     bool? innerResult = innerDialog.ShowDialog();
                     if (innerResult == true)
                     {
-                         
+                        Items = new ObservableCollection<IncomeItemVm>(innerDialog.Result);
                     }
 
                 }

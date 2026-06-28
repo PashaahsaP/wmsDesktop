@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WmsDesktop.vm;
+using WmsDesktop.Windows;
 
 namespace WmsDesktop
 {
@@ -75,15 +76,24 @@ namespace WmsDesktop
         } 
         public ICommand parseData { get; set; }
         public FileReader Reader { get; set; }
+        public CreateSessionByExcelFile Dialog { get; set; }
 
 
         public CreateSessionByExcelFileViewModel()
         {
             parseData = new RelayCommand(o =>
             {
-                Console.WriteLine();
-                var q = Data;
-                Console.WriteLine();
+                foreach (var line in Reader.fileInfo.Data)
+                {
+                    // Получается устанавливаем свойство для элемента, делаю переборку Data и ищу нужное свойство.
+                    // Дальше идет обращение к line по данному индексу полученному из Data
+                    // !!! Надо предварительно узнать какой клиент
+                    Console.WriteLine();
+                }
+                Dialog.Result = new List<IncomeItemVm> { new IncomeItemVm() };
+                // Надо сделать переборку данных за исключением первой строки
+                // Дальше в зависимости от выбраного клиента создавать объекты класса. !!!что за клиент!!!
+                // Как то сопаставить свойство объекта и данные сопостовителя
             });
         }
         public event PropertyChangedEventHandler PropertyChanged;

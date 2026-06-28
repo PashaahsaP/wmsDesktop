@@ -21,11 +21,13 @@ namespace WmsDesktop.Windows
     /// </summary>
     public partial class CreateSessionByExcelFile : Window
     {
+        public List<IncomeItemVm> Result = new List<IncomeItemVm>();
         public CreateSessionByExcelFile(CreateSessionByExcelFileViewModel vm, FileReader reader)
         {
             foreach (var item in reader.fileInfo.SessionField)
             {
                 vm.Data.Add(new AddingExcelFile() { FieldName = item, FileField = reader.fileInfo.FileField});
+                vm.Dialog = this;
                 vm.Reader = reader;
             }
             DataContext = vm;
