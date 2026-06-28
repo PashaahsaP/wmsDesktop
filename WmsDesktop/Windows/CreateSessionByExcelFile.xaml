@@ -22,7 +22,9 @@
                     Text="{Binding FieldName}"></TextBlock>
                 <ComboBox 
                     Grid.Column="1"
-                    ItemsSource="{Binding FileField}"></ComboBox>
+                    ItemsSource="{Binding FileField}"
+                    SelectedItem="{Binding SelectedItem}"
+                    ></ComboBox>
             </Grid>
             
         </DataTemplate>
