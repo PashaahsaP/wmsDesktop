@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,18 +91,20 @@ namespace WmsDesktop
                 {
                     if(selectedSupplier.Item1.SupplierType == 1)
                     {
-                        result.Add(new IncomeItemWithDateVm() 
+                        var newDate = line[Data.FirstOrDefault(item => item.FieldName == "date").SelectedItem.Item2];
+                        result.Add(new IncomeItemWithDateVm()
                         {
                             CatalogId = "",
                             Barcode = line[Data.FirstOrDefault(item => item.FieldName == "barcode").SelectedItem.Item2],
                             Count = int.Parse(line[Data.FirstOrDefault(item => item.FieldName == "count").SelectedItem.Item2]),
-                            Date = line[Data.FirstOrDefault(item => item.FieldName == "date").SelectedItem.Item2],
+                            Date = DateTime.ParseExact(newDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),
                             Name = line[Data.FirstOrDefault(item => item.FieldName == "name").SelectedItem.Item2],
                             Sku = line[Data.FirstOrDefault(item => item.FieldName == "sku").SelectedItem.Item2],
                             TE = line[Data.FirstOrDefault(item => item.FieldName == "te").SelectedItem.Item2],
                         }
-                        );
-                    }else if(selectedSupplier.Item1.SupplierType == 0)
+                        ); 
+                    }
+                    else if(selectedSupplier.Item1.SupplierType == 0)
                     {
                         result.Add(new IncomeItemVm()
                         {

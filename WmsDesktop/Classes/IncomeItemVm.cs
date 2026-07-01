@@ -129,8 +129,8 @@ namespace WmsDesktop
 
     public class IncomeItemWithDateVm: IncomeItemVm 
     {
-        string _date = string.Empty;
-        public string Date
+        DateTime _date;
+        public DateTime Date
         {
             get
             {

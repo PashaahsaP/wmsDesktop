@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using WmsDesktop.Classes;
 
@@ -17,7 +19,7 @@ namespace WmsDesktop.Converter
                     Name = item.Name,
                     Other = item.Other,
                     Sku = item.Sku,
-                    Date = (item as IncomeItemWithDateEntity).Date,
+                    Date = DateTime.ParseExact((item as IncomeItemWithDateEntity).Date, "dd.MM.yyyy", CultureInfo.InvariantCulture),
                     TE = "345"
 
                 };
