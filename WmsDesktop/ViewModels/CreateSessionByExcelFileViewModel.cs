@@ -6,9 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
+
+using Tabula;
+using Tabula.Extractors;
+using UglyToad.PdfPig;
 
 namespace WmsDesktop
 {
@@ -87,6 +92,9 @@ namespace WmsDesktop
                 var selectedSupplier = Reader.fileInfo.Suppliers.FirstOrDefault(inner => inner.Item2 == true);
                 var result = new List<IncomeItemVm>();
                 Reader.fileInfo.Data.RemoveAt(0);
+                //
+               
+                //
                 foreach (var line in Reader.fileInfo.Data)
                 {
                     if(selectedSupplier.Item1.SupplierType == 1)

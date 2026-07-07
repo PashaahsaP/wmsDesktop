@@ -3,7 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using Tabula;
+using Tabula.Extractors;
+using UglyToad.PdfPig;
 
 namespace ExcelFileParser
 {
@@ -21,6 +25,42 @@ namespace ExcelFileParser
         public FileReader(string path, List<(Supplier, bool)> suppliers)
         {
             fileInfo = new FileInfo(path, suppliers);
+            //
+            using (PdfDocument document = PdfDocument.Open(fileInfo.Path))
+            {
+                // 2. Создаем объект для парсинга структуры страниц Tabula
+                PageArea page = ObjectExtractor.ExtractPage(document, 1);
+
+                // 3. Используем алгоритм SpreadsheetExtractionAlgorithm 
+                // (подходит для таблиц с видимыми линиями/границами)
+                var algorithm = new SpreadsheetExtractionAlgorithm();
+
+
+                // Извлекаем все таблицы со страницы
+                var tables = algorithm.Extract(page).Where(inner => inner.Cells.Count > 5);
+                foreach (var table in tables)
+                {
+                    Console.WriteLine("--- Найдена таблица ---");
+
+                    // Перебираем строки таблицы
+                    foreach (var row in table.Rows)
+                    {
+                        List<string> rowCells = new List<string>();
+
+                        // Перебираем ячейки в строке
+                        foreach (var cell in row)
+                        {
+                            // Очищаем текст от лишних пробелов и переносов строк
+                            string cellText = cell.GetText().Trim().Replace("\r\n", " ");
+                            rowCells.Add(cellText);
+                        }
+
+                        // Выводим строку, разделяя ячейки знаком табуляции
+                        Console.WriteLine(string.Join("\t | \t", rowCells));
+                    }
+                }
+            }
+            //
             using (var package = new ExcelPackage(fileInfo.Path))
             {
                 var lines = new List<List<string>>();
