@@ -16,7 +16,6 @@ namespace ExcelFileParser
         public int Id { get; set; }
         public int SupplierType { get; set; }
         public string Name { get; set; }
-
         public override string ToString() => Name;
     }
     public class FileReader
@@ -24,74 +23,87 @@ namespace ExcelFileParser
         public FileInfo fileInfo = null;
         public FileReader(string path, List<(Supplier, bool)> suppliers)
         {
+            var split = path.Split('.');
+            var ext = split[split.Length - 1];
             fileInfo = new FileInfo(path, suppliers);
-            //
-            using (PdfDocument document = PdfDocument.Open(fileInfo.Path))
+
+            // надо сделать коллекцию для таблиц
+            // дефолтно присваивать первый элемент для data
+            if (ext == "pdf")
             {
-                // 2. Создаем объект для парсинга структуры страниц Tabula
-                PageArea page = ObjectExtractor.ExtractPage(document, 1);
-
-                // 3. Используем алгоритм SpreadsheetExtractionAlgorithm 
-                // (подходит для таблиц с видимыми линиями/границами)
-                var algorithm = new SpreadsheetExtractionAlgorithm();
-
-
-                // Извлекаем все таблицы со страницы
-                var tables = algorithm.Extract(page).Where(inner => inner.Cells.Count > 5);
-                foreach (var table in tables)
+                using (PdfDocument document = PdfDocument.Open(fileInfo.Path))
                 {
-                    Console.WriteLine("--- Найдена таблица ---");
+                    // 2. Создаем объект для парсинга структуры страниц Tabula
+                    PageArea page = ObjectExtractor.ExtractPage(document, 1);
 
-                    // Перебираем строки таблицы
-                    foreach (var row in table.Rows)
+                    // 3. Используем алгоритм SpreadsheetExtractionAlgorithm 
+                    // (подходит для таблиц с видимыми линиями/границами)
+                    var algorithm = new SpreadsheetExtractionAlgorithm();
+
+
+                    // Извлекаем все таблицы со страницы
+                    var tables = algorithm.Extract(page).Where(inner => inner.Cells.Count > 5);
+                    foreach (var table in tables)
                     {
-                        List<string> rowCells = new List<string>();
+                        Console.WriteLine("--- Найдена таблица ---");
 
-                        // Перебираем ячейки в строке
-                        foreach (var cell in row)
+                        // Перебираем строки таблицы
+                        foreach (var row in table.Rows)
                         {
-                            // Очищаем текст от лишних пробелов и переносов строк
-                            string cellText = cell.GetText().Trim().Replace("\r\n", " ");
-                            rowCells.Add(cellText);
-                        }
+                            List<string> rowCells = new List<string>();
 
-                        // Выводим строку, разделяя ячейки знаком табуляции
-                        Console.WriteLine(string.Join("\t | \t", rowCells));
+                            // Перебираем ячейки в строке
+                            foreach (var cell in row)
+                            {
+                                // Очищаем текст от лишних пробелов и переносов строк
+                                string cellText = cell.GetText().Trim().Replace("\r\n", " ");
+                                rowCells.Add(cellText);
+                            }
+
+                            // Выводим строку, разделяя ячейки знаком табуляции
+                            Console.WriteLine(string.Join("\t | \t", rowCells));
+                        }
                     }
                 }
             }
-            //
-            using (var package = new ExcelPackage(fileInfo.Path))
+            else if (ext == "xlsx")
             {
-                var lines = new List<List<string>>();
-                var ws = package.Workbook.Worksheets[0];
-
-                int lastRow = 0;
-                int lastColumn = 0;
-                if (ws.Dimension != null)
+                using (var package = new ExcelPackage(fileInfo.Path))
                 {
-                    var notEmptyCells = ws.Cells.Where(cell => cell.Value != null);
+                    var lines = new List<List<string>>();
+                    var ws = package.Workbook.Worksheets[0];
 
-                    if (notEmptyCells.Any())
+                    int lastRow = 0;
+                    int lastColumn = 0;
+                    if (ws.Dimension != null)
                     {
-                        lastRow = notEmptyCells.Max(cell => cell.Start.Row);
-                        lastColumn = notEmptyCells.Max(cell => cell.Start.Column);
-                    }
-                }
+                        var notEmptyCells = ws.Cells.Where(cell => cell.Value != null);
 
-                for (int row = 1; row < lastRow + 1; row++)
-                {
-                    var temp = new List<string>();
-                    for (int column = 1; column < lastColumn + 1; column++)
-                    {
-                        var data = ws.Cells[row, column].Text;
-                        temp.Add(data);
+                        if (notEmptyCells.Any())
+                        {
+                            lastRow = notEmptyCells.Max(cell => cell.Start.Row);
+                            lastColumn = notEmptyCells.Max(cell => cell.Start.Column);
+                        }
                     }
-                    lines.Add(new List<string>(temp));
+
+                    for (int row = 1; row < lastRow + 1; row++)
+                    {
+                        var temp = new List<string>();
+                        for (int column = 1; column < lastColumn + 1; column++)
+                        {
+                            var data = ws.Cells[row, column].Text;
+                            temp.Add(data);
+                        }
+                        lines.Add(new List<string>(temp));
+                    }
+                    fileInfo.Data = lines;
+
                 }
-                fileInfo.Data = lines;
-            
+            }
+            else
+            {
+
+            }
         }
-    }
     }
 }

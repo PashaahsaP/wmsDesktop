@@ -22,7 +22,6 @@ namespace WmsDesktop
         private string _fieldName = "";
         private List<Tuple<string, int>> _fileField = new List<Tuple<string, int>>();
         private Tuple<string, int> _selectedItem;
-
         public string FieldName
         {
             get => _fieldName;
