@@ -67,6 +67,7 @@ namespace WmsDesktop
     public class CreateSessionByExcelFileViewModel : INotifyPropertyChanged
     {
         private List<AddingExcelFile> _data = new List<AddingExcelFile>();
+        private string _fileType;
         public List<AddingExcelFile >Data 
         {
             get
@@ -78,14 +79,30 @@ namespace WmsDesktop
                 _data = value;
                 OnPropertyChanged(nameof(Data));
             }
-        } 
-        public ICommand parseData { get; set; }
+        }
+        public string FileType
+        {
+            get => _fileType;
+            set
+            {
+                if (_fileType != value)
+                {
+                    _fileType = value;
+                    OnPropertyChanged(nameof(FileType)); // Оповещаем интерфейс об изменении
+                }
+            }
+        }
         public FileReader Reader { get; set; }
         public CreateSessionByExcelFile Dialog { get; set; }
 
 
-        public CreateSessionByExcelFileViewModel()
+
+        public ICommand parseData { get; set; }
+        
+
+        public CreateSessionByExcelFileViewModel(string fileType)
         {
+            FileType = fileType;
             parseData = new RelayCommand(o =>
             {
                 var selectedSupplier = Reader.fileInfo.Suppliers.FirstOrDefault(inner => inner.Item2 == true);

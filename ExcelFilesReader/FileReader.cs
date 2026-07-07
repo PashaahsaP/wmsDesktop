@@ -26,7 +26,7 @@ namespace ExcelFileParser
             var split = path.Split('.');
             var ext = split[split.Length - 1];
             fileInfo = new FileInfo(path, suppliers);
-
+            fileInfo.FileType = ext;
             // надо сделать коллекцию для таблиц
             // дефолтно присваивать первый элемент для data
             if (ext == "pdf")

@@ -234,7 +234,7 @@ namespace WmsDesktop.ViewModels
                     }, 
                     item == SelectedSupplier)).ToList());
                     // проверять тип файла и запускать нужное окно
-                    var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(), reader);
+                    var innerDialog = new CreateSessionByExcelFile(new CreateSessionByExcelFileViewModel(reader.fileInfo.FileType), reader);
                     innerDialog.Owner = _window;
 
                     bool? innerResult = innerDialog.ShowDialog();

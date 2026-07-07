@@ -28,21 +28,30 @@
             </Grid>
             
         </DataTemplate>
+        <local:FileTypeToVisibilityConverter x:Key="FileTypeToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.9*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.8*"/>
             <RowDefinition Height="0.1*"/>
         </Grid.RowDefinitions>
-        <ItemsControl
+        <ComboBox
+            Visibility="{Binding FileType, Mode=TwoWay, Converter={StaticResource FileTypeToVisibilityConverter}}"
             Grid.Row="0"
+            Height="25"
+            HorizontalAlignment="Left"
+            Width="90">
+        </ComboBox>
+        <ItemsControl
+            Grid.Row="1"
             ItemsSource="{Binding Data}">
 
         </ItemsControl>
         <Button
             Command="{Binding parseData}"
-            Grid.Row="1"
+            Grid.Row="2"
             Height="30"
             Width="100"
             Content="Сохранить"></Button>
