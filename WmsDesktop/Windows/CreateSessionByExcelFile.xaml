@@ -39,6 +39,8 @@
         </Grid.RowDefinitions>
         <ComboBox
             Visibility="{Binding FileType, Mode=TwoWay, Converter={StaticResource FileTypeToVisibilityConverter}}"
+            ItemsSource="{Binding TablesList}"
+            SelectedItem="{Binding SelectedTable}"
             Grid.Row="0"
             Height="25"
             HorizontalAlignment="Left"

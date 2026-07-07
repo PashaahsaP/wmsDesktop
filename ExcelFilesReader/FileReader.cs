@@ -21,6 +21,7 @@ namespace ExcelFileParser
     public class FileReader
     {
         public FileInfo fileInfo = null;
+        public List<string> TablesList { get; set; }
         public FileReader(string path, List<(Supplier, bool)> suppliers)
         {
             var split = path.Split('.');
@@ -43,6 +44,7 @@ namespace ExcelFileParser
 
                     // Извлекаем все таблицы со страницы
                     var tables = algorithm.Extract(page).Where(inner => inner.Cells.Count > 5);
+                    TablesList = tables.Select(inner => $"Таблица {inner.Rows.Count}").ToList();
                     foreach (var table in tables)
                     {
                         Console.WriteLine("--- Найдена таблица ---");

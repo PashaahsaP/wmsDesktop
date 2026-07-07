@@ -68,6 +68,9 @@ namespace WmsDesktop
     {
         private List<AddingExcelFile> _data = new List<AddingExcelFile>();
         private string _fileType;
+        private List<string> _tablesList = new List<string>() {};
+        private string _selectedList;
+
         public List<AddingExcelFile >Data 
         {
             get
@@ -80,6 +83,19 @@ namespace WmsDesktop
                 OnPropertyChanged(nameof(Data));
             }
         }
+
+        public List<string> TablesList
+        {
+            get => _tablesList;
+            set
+            {
+                if (_tablesList != value)
+                {
+                    _tablesList = value;
+                    OnPropertyChanged(nameof(TablesList)); // Уведомляет UI о замене всего списка
+                }
+            }
+        }
         public string FileType
         {
             get => _fileType;
@@ -89,6 +105,19 @@ namespace WmsDesktop
                 {
                     _fileType = value;
                     OnPropertyChanged(nameof(FileType)); // Оповещаем интерфейс об изменении
+                }
+            }
+        }
+
+        public string SelectedList
+        {
+            get => _selectedList;
+            set
+            {
+                if (_selectedList != value)
+                {
+                    _selectedList = value;
+                    OnPropertyChanged(nameof(SelectedList)); // Уведомляем UI об изменении выбранного элемента
                 }
             }
         }

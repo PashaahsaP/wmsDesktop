@@ -29,6 +29,7 @@ namespace WmsDesktop.Windows
                 vm.Data.Add(new AddingExcelFile() { FieldName = item, FileField = reader.fileInfo.FileField});
                 vm.Dialog = this;
                 vm.Reader = reader;
+                vm.TablesList = reader.TablesList;
             }
             DataContext = vm;
             InitializeComponent();

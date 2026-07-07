@@ -258,7 +258,6 @@ namespace WmsDesktop.ViewModels
                             item.isValid = isValid;
                         }
                         Items = new ObservableCollection<IncomeItemVm>(innerDialog.Result);
-                        Console.WriteLine();
                 }
             }
             });
