@@ -1,11 +1,7 @@
 ﻿using OfficeOpenXml;
-using OfficeOpenXml.Table.PivotTable;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using Tabula;
 using Tabula.Extractors;
 using UglyToad.PdfPig;
@@ -50,7 +46,7 @@ namespace ExcelFileParser
                         var data = new List<List<string>>();
                         foreach (var row in table.Rows)
                         {
-                            data.Add(row.Select(item => item.TextElements.Count == 0 ? "": item.TextElements[0].GetText())
+                            data.Add(row.Select(item => item.TextElements.Count == 0 ? "" : item.TextElements[0].GetText())
                                 .ToList());//надо нормальный данные получить, сделал чтобы ошибки исправить
                             Console.WriteLine();
                         }
