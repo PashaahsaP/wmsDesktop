@@ -24,13 +24,16 @@ namespace WmsDesktop.Windows
         public List<IncomeItemVm> Result = new List<IncomeItemVm>();
         public CreateSessionByExcelFile(CreateSessionByExcelFileViewModel vm, FileReader reader)
         {
-            foreach (var item in reader.fileInfo.SessionField)
-            {
-                vm.Data.Add(new AddingExcelFile() { FieldName = item, FileField = reader.fileInfo.FileField});
-                vm.Dialog = this;
-                vm.Reader = reader;
-                vm.TablesList = reader.TablesList;
-            }
+            
+                foreach (var item in reader.filesInfo[0].SessionField)
+                {
+                    // в вм добавить коллецию из коллеций
+                    vm.Data.Add(new AddingExcelFile() { FieldName = item, FileField = reader.filesInfo[0].FileField });
+                    vm.Dialog = this;
+                    vm.Reader = reader;
+                    vm.TablesList = reader.TablesList;
+                }
+            
             DataContext = vm;
             InitializeComponent();
         }

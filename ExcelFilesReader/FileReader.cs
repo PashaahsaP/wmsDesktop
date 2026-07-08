@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.Table.PivotTable;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,19 +21,17 @@ namespace ExcelFileParser
     }
     public class FileReader
     {
-        public FileInfo fileInfo = null;
+        public List<FileInfo> filesInfo = new List<FileInfo>();
         public List<string> TablesList { get; set; }
         public FileReader(string path, List<(Supplier, bool)> suppliers)
         {
             var split = path.Split('.');
             var ext = split[split.Length - 1];
-            fileInfo = new FileInfo(path, suppliers);
-            fileInfo.FileType = ext;
             // надо сделать коллекцию для таблиц
             // дефолтно присваивать первый элемент для data
             if (ext == "pdf")
             {
-                using (PdfDocument document = PdfDocument.Open(fileInfo.Path))
+                using (PdfDocument document = PdfDocument.Open(path))
                 {
                     // 2. Создаем объект для парсинга структуры страниц Tabula
                     PageArea page = ObjectExtractor.ExtractPage(document, 1);
@@ -47,34 +46,27 @@ namespace ExcelFileParser
                     TablesList = tables.Select(inner => $"Таблица {inner.Rows.Count}").ToList();
                     foreach (var table in tables)
                     {
-                        Console.WriteLine("--- Найдена таблица ---");
-
-                        // Перебираем строки таблицы
+                        var newFileInfo = new FileInfo(path, suppliers) { FileType = ext };
+                        var data = new List<List<string>>();
                         foreach (var row in table.Rows)
                         {
-                            List<string> rowCells = new List<string>();
-
-                            // Перебираем ячейки в строке
-                            foreach (var cell in row)
-                            {
-                                // Очищаем текст от лишних пробелов и переносов строк
-                                string cellText = cell.GetText().Trim().Replace("\r\n", " ");
-                                rowCells.Add(cellText);
-                            }
-
-                            // Выводим строку, разделяя ячейки знаком табуляции
-                            Console.WriteLine(string.Join("\t | \t", rowCells));
+                            data.Add(row.Select(item => item.TextElements.Count == 0 ? "": item.TextElements[0].GetText())
+                                .ToList());//надо нормальный данные получить, сделал чтобы ошибки исправить
+                            Console.WriteLine();
                         }
+                        newFileInfo.Data = data;
+                        filesInfo.Add(newFileInfo);
                     }
                 }
+                Console.WriteLine();
             }
             else if (ext == "xlsx")
             {
-                using (var package = new ExcelPackage(fileInfo.Path))
+                using (var package = new ExcelPackage(path))
                 {
                     var lines = new List<List<string>>();
                     var ws = package.Workbook.Worksheets[0];
-
+                    var newFileInfo = new FileInfo(path, suppliers) { FileType = ext };
                     int lastRow = 0;
                     int lastColumn = 0;
                     if (ws.Dimension != null)
@@ -98,8 +90,8 @@ namespace ExcelFileParser
                         }
                         lines.Add(new List<string>(temp));
                     }
-                    fileInfo.Data = lines;
-
+                    newFileInfo.Data = lines;
+                    filesInfo.Add(newFileInfo);
                 }
             }
             else

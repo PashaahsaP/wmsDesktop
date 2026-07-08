@@ -134,13 +134,13 @@ namespace WmsDesktop
             FileType = fileType;
             parseData = new RelayCommand(o =>
             {
-                var selectedSupplier = Reader.fileInfo.Suppliers.FirstOrDefault(inner => inner.Item2 == true);
+                var selectedSupplier = Reader.filesInfo[0].Suppliers.FirstOrDefault(inner => inner.Item2 == true);
                 var result = new List<IncomeItemVm>();
-                Reader.fileInfo.Data.RemoveAt(0);
+                Reader.filesInfo[0].Data.RemoveAt(0);
                 //
                
                 //
-                foreach (var line in Reader.fileInfo.Data)
+                foreach (var line in Reader.filesInfo[0].Data)
                 {
                     if(selectedSupplier.Item1.SupplierType == 1)
                     {
