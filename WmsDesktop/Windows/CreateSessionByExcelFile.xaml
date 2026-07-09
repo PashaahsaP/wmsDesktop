@@ -19,11 +19,11 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock 
                     Grid.Column="0"
-                    Text="{Binding FieldName}"></TextBlock>
+                    Text="{Binding FieldName, Mode=TwoWay}"></TextBlock>
                 <ComboBox 
                     Grid.Column="1"
-                    ItemsSource="{Binding FileField}"
-                    SelectedItem="{Binding SelectedItem}"
+                    ItemsSource="{Binding FileField, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                     ></ComboBox>
             </Grid>
             
@@ -40,7 +40,7 @@
         <ComboBox
             Visibility="{Binding FileType, Mode=TwoWay, Converter={StaticResource FileTypeToVisibilityConverter}}"
             ItemsSource="{Binding TablesList}"
-            SelectedItem="{Binding SelectedTable}"
+            SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
             Grid.Row="0"
             Height="25"
             HorizontalAlignment="Left"
@@ -48,8 +48,7 @@
         </ComboBox>
         <ItemsControl
             Grid.Row="1"
-            ItemsSource="{Binding Data}">
-
+            ItemsSource="{Binding Data, Mode=TwoWay}">
         </ItemsControl>
         <Button
             Command="{Binding parseData}"

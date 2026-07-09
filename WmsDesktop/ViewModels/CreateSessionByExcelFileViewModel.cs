@@ -1,19 +1,20 @@
 ﻿using ExcelFileParser;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
-using WmsDesktop.vm;
-using WmsDesktop.Windows;
-
 using Tabula;
 using Tabula.Extractors;
 using UglyToad.PdfPig;
+using WmsDesktop.vm;
+using WmsDesktop.Windows;
 
 namespace WmsDesktop
 {
@@ -66,12 +67,14 @@ namespace WmsDesktop
     
     public class CreateSessionByExcelFileViewModel : INotifyPropertyChanged
     {
-        private List<AddingExcelFile> _data = new List<AddingExcelFile>();
+        #region var
+        private ObservableCollection<AddingExcelFile> _data = new ObservableCollection<AddingExcelFile>();
         private string _fileType;
         private List<string> _tablesList = new List<string>() {};
-        private string _selectedList;
-
-        public List<AddingExcelFile >Data 
+        private string _selectedTable;
+        #endregion
+        #region prop
+        public ObservableCollection<AddingExcelFile >Data 
         {
             get
             {
@@ -96,6 +99,34 @@ namespace WmsDesktop
                 }
             }
         }
+
+        public string SelectedTable
+        {
+            get => _selectedTable;
+            set
+            {
+                if (_selectedTable != value)
+                {
+                    _selectedTable = value;
+                    OnPropertyChanged(nameof(SelectedTable));
+                    //обновление столбцов для каждого элемента
+                    var count = 0;
+                    for (int i = 0; i < TablesList.Count; i++)
+                    {
+                        if (TablesList[i] == value)
+                            count = i;
+                    }
+                    _data.Clear();
+                    foreach (var item in Reader.filesInfo[count].SessionField)
+                    {
+                        
+                        _data.Add(new AddingExcelFile() { FieldName = item, FileField = Reader.filesInfo[count].FileField });
+                    }
+                    OnPropertyChanged(nameof(Data));
+
+                }
+            }
+        }
         public string FileType
         {
             get => _fileType;
@@ -108,27 +139,13 @@ namespace WmsDesktop
                 }
             }
         }
-
-        public string SelectedList
-        {
-            get => _selectedList;
-            set
-            {
-                if (_selectedList != value)
-                {
-                    _selectedList = value;
-                    OnPropertyChanged(nameof(SelectedList)); // Уведомляем UI об изменении выбранного элемента
-                }
-            }
-        }
         public FileReader Reader { get; set; }
         public CreateSessionByExcelFile Dialog { get; set; }
-
-
-
+        #endregion
+        #region command
         public ICommand parseData { get; set; }
-        
-
+        #endregion
+        #region OnPropChanged
         public CreateSessionByExcelFileViewModel(string fileType)
         {
             FileType = fileType;
@@ -193,5 +210,6 @@ namespace WmsDesktop
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 }
