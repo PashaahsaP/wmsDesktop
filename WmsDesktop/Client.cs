@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WmsDesktop;
+using WmsDesktop.Classes;
 
 namespace WmsDesktop
 {
@@ -23,9 +24,9 @@ namespace WmsDesktop
             
 
         }
-        internal async Task<ID> SendCell(string name, string ip)
+        internal async Task<StringID> SendCell(string name, string ip)
         {
-            ID result = null;
+            StringID result = null;
             try
             {
                 var json = JsonConvert.SerializeObject(new Name() { name = name });
@@ -33,7 +34,7 @@ namespace WmsDesktop
                 var response = await client.PostAsync($"http://{ip}:3000/cell", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<ID>(data);
+                result = JsonConvert.DeserializeObject<StringID>(data);
             }
             catch (Exception ex)
             {
@@ -41,15 +42,15 @@ namespace WmsDesktop
 
             return result;
         }
-        internal async Task<ID> GetCellIdByName(string cellName, string ip)
+        internal async Task<StringID> GetCellIdByName(string cellName, string ip)
         {
-            ID result = null;
+            StringID result = null;
             try
             {
                 var response = await client.GetAsync($"http://{ip}:3000/cell/name/{cellName}");
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<ID>(data);
+                result = JsonConvert.DeserializeObject<StringID>(data);
             }
             catch (Exception ex)
             {
@@ -93,9 +94,49 @@ namespace WmsDesktop
 
             return sessionId;
         }
+        internal async Task<StringID> SendIncomeSession(IncomeSession session, string ip)
+        {
+
+            StringID sessionId = null;
+            try
+            {
+                var json = JsonConvert.SerializeObject(session);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"http://{ip}:3000/income_session", content);
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                sessionId = JsonConvert.DeserializeObject<StringID>(data);
+            }
+            catch (Exception ex)
+            {
+                return sessionId;
+            }
+
+            return sessionId;
+        }
+        internal async Task<StringID> SendIncomeItem(IncomeItem item, string ip)
+        {
+
+            StringID sessionId = null;
+            try
+            {
+                var json = JsonConvert.SerializeObject(item);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"http://{ip}:3000/income_item", content);
+                response.EnsureSuccessStatusCode();
+                string data = await response.Content.ReadAsStringAsync();
+                sessionId = JsonConvert.DeserializeObject<StringID>(data);
+            }
+            catch (Exception ex)
+            {
+                return sessionId;
+            }
+
+            return sessionId;
+        }
         internal async Task<Int32> GetGoodsBorkBalance(string catalogId, string ip)
         {
-            ID cellId = await GetCellIdByName("Z900", ip);
+            StringID cellId = await GetCellIdByName("Z900", ip);
             if (cellId == null)
             {
                 cellId = await SendCell("Z900", ip);
@@ -235,17 +276,17 @@ namespace WmsDesktop
 
             return resultId;
         }
-        internal async Task<ID> SendGoodsBork(GoodsBorkItem goods, string ip)
+        internal async Task<StringID> SendGoods(Goods goods, string ip)
         {
-            ID result = null;
+            StringID result = null;
             try
             {
                 var json = JsonConvert.SerializeObject(goods);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync($"http://{ip}:3000/goodsBork", content);
+                var response = await client.PostAsync($"http://{ip}:3000/goods", content);
                 response.EnsureSuccessStatusCode();
                 string data = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<ID>(data);
+                result = JsonConvert.DeserializeObject<StringID>(data);
             }
             catch (Exception ex)
             {

@@ -126,7 +126,6 @@ namespace WmsDesktop.ViewModels
         }
         public List<Cell> IncomeCells {  get; set; } = new List<Cell>();
         public List<Cell> Cells { get; set; } = new List<Cell>();
-        public List<Goods> Goods {  get; set; } = new List<Goods> ();
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
         public PageStates PageState => PageStates.CreateSessionPage;
         public bool IsSupplierSelected
@@ -156,7 +155,7 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches, string goods, string cellTypes, Window window)
+        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches, string cellTypes, Window window)
         {
             _window = window;
             Items = new ObservableCollection<IncomeItemVm>();
@@ -192,7 +191,72 @@ namespace WmsDesktop.ViewModels
             });
             createSession = new RelayCommand(async o =>
             {
-               
+                // Проверить что все элементы валидные
+                bool isOkElements = Items.All(inner => inner.isValid);
+                // Проверить что ячейка выбрана для приемки
+                bool isSelectedCell = SelectedCell != null;
+                if (!isOkElements)
+                {
+                    MessageBox.Show("Не все элементы валидны");
+                }
+                if (!isSelectedCell)
+                {
+                    MessageBox.Show("Ячейка не выбрана");
+                }
+
+                if (isSelectedCell && isOkElements)
+                {
+                    // Найти нужную ячейку приемки
+                    var jsonIp = File.ReadAllText("config.json");
+                    var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
+                    var ip = setting["Ip"];
+                    var cell = await client.GetCellIdByName(SelectedCell.name, ip);
+                    // Создать заявку на приемку
+                    var session = new IncomeSession()
+                    {
+                        SupplierId = SelectedSupplier.Id,
+                        IncomeCellId = cell.id,
+                        Status = (int)StatusType.Created,
+                        CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                        UpdatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                        IsDeleted = false
+                    };
+                    var sessionId = await client.SendIncomeSession(session, ip);
+                    Console.WriteLine(sessionId);
+                    // Создать goods в ячейке на приемку
+                    var resultGoods = Items.Select(inner =>
+                        new Goods()
+                        {
+                            Amount = inner.Count,
+                            CatalogId = inner.CatalogId,
+                            CellId = cell.id,
+                            IsDeleted = false,
+                            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                            UpdatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                        }
+                    );
+                    var incomeItems = new List<IncomeItem>();
+                    foreach (var item in resultGoods)
+                    {
+                        item.Id = (await client.SendGoods(item, ip)).id;
+                        incomeItems.Add(
+                            new IncomeItem()
+                            {
+                                GoodsId = item.Id,
+                                CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                                UpdatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                                IsDeleted= false,
+                                SessionId = sessionId.id,
+
+                            });
+                    }
+                    foreach (var item in incomeItems)
+                    {
+                        await client.SendIncomeItem(item, ip);
+                    }
+                    // Создать IncomeItem в ячейке на приемку
+                }
+
                 foreach (var item in Items)
                 {
                    /* var func = AdapterHelper.getGoodsBalance[_supplier];
@@ -377,13 +441,6 @@ namespace WmsDesktop.ViewModels
             }
            
             Filter.Cells = Cells;
-            //parse goods
-            var parsedGoods = JsonConvert.DeserializeObject<List<Goods>>(goods);
-            foreach (var item in parsedGoods)
-            {
-                Goods.Add(item);
-
-            }
             //parse cellTypes
             var parsedCellTypes = JsonConvert.DeserializeObject<List<CellTypes>>(cellTypes);
             var parsedData = JsonConvert.DeserializeObject<ObservableCollection<IncomeItemEntity>>(catalogAndSuppliers);
@@ -494,9 +551,8 @@ namespace WmsDesktop.ViewModels
             var batches = await client.GetBatches(ip);
             var barcodes = await client.GetBarcodes(ip);
             var incomeCells = await client.GetIncomeCells(ip);
-            var goods = await client.GetGoodsIncomeSession(ip);
             var cellTypes = await client.GetCellTypes(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches, goods, cellTypes, window);
+            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches,cellTypes, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
