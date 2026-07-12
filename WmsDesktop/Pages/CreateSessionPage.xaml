@@ -347,6 +347,46 @@
                 </TextBox>
             </Grid>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:WrongItemVm}">
+            <Border
+                Margin="0 0 5 0"
+                BorderBrush="Red"
+                BorderThickness="2">
+                <Grid 
+                    MouseDown="Grid_MouseDown_1"
+                    Background="Red"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.05*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock 
+                Padding="5"
+                Grid.Column="0"
+                Text="{Binding Sku}"
+                ></TextBlock>
+                    <TextBlock 
+                 Padding="5"
+                 Grid.Column="1"
+                 Text="{Binding TE}"
+                 ></TextBlock>
+                    <TextBlock 
+                Padding="5"
+                Grid.Column="2"
+                Text="{Binding Name}"
+                ></TextBlock>
+                    <TextBlock 
+                Padding="5"
+                Grid.Column="4"
+                HorizontalAlignment="Center"
+                Text="{Binding Count}"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
 

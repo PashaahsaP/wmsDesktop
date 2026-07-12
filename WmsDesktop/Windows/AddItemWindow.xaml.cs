@@ -23,11 +23,11 @@ namespace WmsDesktop.Windows
     public partial class AddItemWindow : Window
     {
         public AddItemViewModel localVm = null;
-        public OrderItem orderItem = null;
-        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<IncomeItemEntity> catalogItems)
+        public IncomeItemVm orderItem = null;
+        public AddItemWindow(System.Collections.ObjectModel.ObservableCollection<IncomeItemEntity> catalogItems, List<IncomeItemEntity> catalogData)
         {
             InitializeComponent();
-            localVm = new AddItemViewModel(new System.Collections.ObjectModel.ObservableCollection<IncomeItemVm>(catalogItems.ToVmList()));
+            localVm = new AddItemViewModel(new System.Collections.ObjectModel.ObservableCollection<IncomeItemVm>(catalogItems.ToVmList()),catalogData);
             DataContext = localVm;
             
         }

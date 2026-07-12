@@ -159,9 +159,12 @@ namespace WmsDesktop
                 }
             }
     }
-
-    //Selected. Для отображения от типа класса DataTemplate. via binding
     public class SelectedIncomeItemVm : IncomeItemVm {}
     public class SelectedIncomeItemWithDateVm: IncomeItemWithDateVm { }
     public class SelectedIncomeItemWithBatchVM: IncomeItemWithBatchVm { }
+    public class WrongItemVm : IncomeItemVm
+    {
+        public DateTime Date { get; set; }
+        public string Batches {  get; set; }
+    }  
 }

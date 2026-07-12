@@ -15,7 +15,19 @@ namespace WmsDesktop.ViewModels
         public string _tbText = string.Empty;
         public ObservableCollection<IncomeItemVm> _items = new ObservableCollection<IncomeItemVm>();
 
-        public OrderItem SelectedItem { get; set; }
+        private IncomeItemVm _selectedItem;
+        public IncomeItemVm SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    _selectedItem = value;
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
         public ObservableCollection<IncomeItemVm>  Items
         {
             get
@@ -46,10 +58,10 @@ namespace WmsDesktop.ViewModels
             }
         }
 
-        public AddItemViewModel(ObservableCollection<IncomeItemVm> items)
+        public AddItemViewModel(ObservableCollection<IncomeItemVm> items, List<IncomeItemEntity> catalogData)
         {
             Items = items;
-            Filter.Items = items.ToEntityList();
+            Filter.Items = items.ToEntityList(catalogData);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using WmsDesktop.Converter;
+using WmsDesktop.Enums;
 using WmsDesktop.ViewModels;
 using WmsDesktop.vm;
 using WmsDesktop.Windows;
@@ -339,22 +340,68 @@ namespace WmsDesktop.Pages
 
         private void Grid_MouseDown_1(object sender, MouseButtonEventArgs e)// когда элемента нет в каталоге
         {
-            var dialog = new AddItemWindow(new ObservableCollection<Classes.IncomeItemEntity>(localVm.CatalogItems.ToEntityList()));
+            var dialog = new AddItemWindow(new ObservableCollection<Classes.IncomeItemEntity>(localVm.CatalogItems.ToEntityList(localVm.CatalogData)), localVm.CatalogData);
             var uiItem = (sender as FrameworkElement).DataContext as IncomeItemVm;//wrong item was
             dialog.Owner = _window;
 
             bool? result = dialog.ShowDialog();
-            OrderItem data = null;
+            IncomeItemVm data = null;
             if (result == true)
             {
                 data = dialog.orderItem;
-
+                var entityItem = localVm.CatalogData.First(inner => inner.CatalogId == data.CatalogId);
+                var supplier = localVm.Suppliers.First(inner => inner.Id == entityItem.SupplierId);
 
                 var resultCollection = new ObservableCollection<IncomeItemVm>();
                 foreach (var item in localVm.Items)
                 {
                     if (item == uiItem)
-                        resultCollection.Add(new IncomeItemVm() { Count = uiItem.Count, isValid = true, Name = data.name, Sku = data.sku, TE = "", CatalogId = data.id });
+                    {
+                        switch (supplier.SupplierType)
+                        {
+                            
+                            case (int)SupplierTypes.Atomy:
+                                resultCollection.Add(new IncomeItemWithDateVm() { 
+                                    Count = uiItem.Count, 
+                                    isValid = true, 
+                                    Name = data.Name, 
+                                    Sku = data.Sku, 
+                                    TE = item.TE, 
+                                    CatalogId = data.CatalogId, 
+                                    isSelected = false, 
+                                    Barcode = item.Barcode, 
+                                    Date = (uiItem as WrongItemVm).Date,
+                                    Other = item.Other 
+                                });
+                                break;
+                            case (int)SupplierTypes.FidConsalt:
+                                resultCollection.Add(new IncomeItemWithBatchVm() { 
+                                    Count = uiItem.Count, 
+                                    isValid = true, 
+                                    Name = data.Name, 
+                                    Sku = data.Sku, 
+                                    TE = item.TE, 
+                                    CatalogId = data.CatalogId, 
+                                    Barcode= item.Barcode,
+                                    Batches = (uiItem as WrongItemVm).Batches,
+                                    isSelected = false,
+                                    Other = item.Other
+                                });
+                                break;
+                            default:
+                                resultCollection.Add(new IncomeItemVm() { 
+                                    Count = uiItem.Count, 
+                                    isValid = true, 
+                                    Name = data.Name, 
+                                    Sku = data.Sku, 
+                                    TE = item.TE, 
+                                    CatalogId = data.CatalogId, 
+                                    isSelected = false 
+                                });
+                                break;
+
+                        }
+                    }
                     else
                         resultCollection.Add(item);
 
@@ -397,5 +444,7 @@ namespace WmsDesktop.Pages
 
             localVm.Items = new ObservableCollection<IncomeItemVm>(result);
         }
+
+      
     }
 }

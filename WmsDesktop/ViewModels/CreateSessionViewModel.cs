@@ -257,7 +257,35 @@ namespace WmsDesktop.ViewModels
                             }
                             item.isValid = isValid;
                         }
+                        // надо проверить по артикулу и шк в бд
                         Items = new ObservableCollection<IncomeItemVm>(innerDialog.Result);
+                        var updateCollection = new ObservableCollection<IncomeItemVm>();
+                        foreach (var item in innerDialog.Result)
+                        {
+                            if((item.Sku != ""  && CatalogData.Any(inner => inner.Sku == item.Sku)) || (Barcodes.Any(bar => bar.Name == item.Barcode) && item.Barcode != ""))
+                            {
+                                updateCollection.Add(item);
+                            }
+                            else
+                            {
+                                updateCollection.Add(new WrongItemVm()
+                                {
+                                    Barcode = item.Barcode,
+                                    CatalogId = item.CatalogId,
+                                    Count = item.Count,
+                                    isSelected = item.isSelected,
+                                    isValid = item.isValid,
+                                    Name = item.Name,
+                                    Other = item.Other,
+                                    Sku = item.Sku,
+                                    TE = item.TE,
+                                    Date = item is IncomeItemWithDateVm ? (item as IncomeItemWithDateVm).Date : DateTime.Now,
+                                    Batches= item is IncomeItemWithBatchVm? (item as IncomeItemWithBatchVm).Batches: ""
+                                }
+                                );
+                            }
+                        }
+                        Items = updateCollection;
                 }
             }
             });
