@@ -179,6 +179,23 @@ namespace WmsDesktop.Pages
                     Batches = ((IncomeItemWithBatchVm)item).Batches
                 };
             }
+            else if (item is WrongItemVm)
+            {
+                temp = new WrongItemVm()
+                {
+                    Count = item.Count,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    isValid = item.isValid,
+                    TE = item.TE,
+                    CatalogId = item.CatalogId,
+                    isSelected = false,
+                    Other = item.Other,
+                    Batches = ((WrongItemVm)item).Batches,
+                    Date = ((WrongItemVm)item).Date,
+                    Barcode = item.Barcode,
+                };
+            }
             else
             {
                 temp = new IncomeItemVm()

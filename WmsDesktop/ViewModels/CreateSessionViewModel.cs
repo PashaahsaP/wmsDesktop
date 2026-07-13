@@ -398,6 +398,21 @@ namespace WmsDesktop.ViewModels
                                 Other = element.Other
                             };
                         }
+                        else if (element is WrongItemVm)
+                        {
+                            temprary = new WrongItemVm()
+                            {
+                                Count = element.Count,
+                                Sku = element.Sku,
+                                Name = element.Name,
+                                isValid = element.isValid,
+                                TE = element.TE,
+                                CatalogId = element.CatalogId,
+                                Batches = ((WrongItemVm)element).Batches,
+                                isSelected = element.isSelected,
+                                Other = element.Other
+                            };
+                        }
                         else
                         {
                             temprary = new IncomeItemVm()
