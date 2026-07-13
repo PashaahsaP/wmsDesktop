@@ -9,7 +9,9 @@ namespace WmsDesktop
     public enum PageStates
     {
         HomePage,
-        CreateSessionPage,
-        AddingCatalogPage
+        CreateIncomeSessionPage,
+        CreateAssemblySessionPage,
+        AddingCatalogPage,
+        
     }
 }

@@ -23,6 +23,7 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Column="1" Background="White">
+            <Button Command="{Binding callCreateAssemblySessionPage}" Margin="5" Width="155">Создать заявку на сборку</Button>
             <Button Command="{Binding callCreateIncomeSessionPage}" Margin="5" Width="155">Создать заявку на приход</Button>
             <Button Command="{Binding callAddingPage}" Margin="5" Width="105">Добавить каталог</Button>
         </StackPanel>

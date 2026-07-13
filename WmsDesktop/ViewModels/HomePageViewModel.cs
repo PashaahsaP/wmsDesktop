@@ -31,6 +31,8 @@ namespace WmsDesktop.ViewModels
         public ICommand closePage { get; set; }
         public ICommand callAddingPage { get; set; }
         public ICommand callCreateIncomeSessionPage { get; set; }
+        public ICommand callCreateAssemblySessionPage { get; set; }
+        
         public PageStates PageState { get => PageStates.HomePage;}
         #endregion
         #region ctor
@@ -54,20 +56,33 @@ namespace WmsDesktop.ViewModels
             });
             callCreateIncomeSessionPage = new RelayCommand(async (o) =>
             {
-                var sessionVm = await CreateSessionViewModel.CreateAsync(window);
+                var sessionVm = await CreateIncomeSessionViewModel.CreateAsync(window);
                 var newMenuItem = new MenuItem
                 {
                     IsSelected = true,
-                    Title = "Создать заявку",
-                    Page = new CreateSessionPage(vm, window, sessionVm),
+                    Title = "Создать заявку на приход",
+                    Page = new CreateIncomeSessionPage(vm, window, sessionVm),
                     State = sessionVm
-                    
+
                 };
                 AppendPage(newMenuItem, vm);
             });
-           
-       
-            
+            callCreateAssemblySessionPage = new RelayCommand(async (o) =>
+            {
+                var sessionVm = await CreateAssemblySessionViewModel.CreateAsync(window);
+                var newMenuItem = new MenuItem
+                {
+                    IsSelected = true,
+                    Title = "Создать заявку на сборку",
+                    Page = new CreateAssemblySessionPage(vm, window, sessionVm),
+                    State = sessionVm
+
+                };
+                AppendPage(newMenuItem, vm);
+            });
+
+
+
         }
         #region helper methods
         private void AppendPage(MenuItem menuItem, MainViewModel vm)

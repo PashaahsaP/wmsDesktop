@@ -25,9 +25,9 @@ namespace WmsDesktop
     {
         private object Sender{ get; set; }
         private List<CatalogItemBase> Items { get; set; }
-        CreateSessionViewModel MainViewModel { get; set; }
+        CreateIncomeSessionViewModel MainViewModel { get; set; }
         ObservableCollection<IncomeItemVm> UiItems { get; set; }
-        internal DialogWindow(object sender, List<CatalogItemBase> items, CreateSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IncomeItemVm> uiItems)
+        internal DialogWindow(object sender, List<CatalogItemBase> items, CreateIncomeSessionViewModel createSessionViewModel, System.Collections.ObjectModel.ObservableCollection<IncomeItemVm> uiItems)
         {
             InitializeComponent();
             Sender = sender;

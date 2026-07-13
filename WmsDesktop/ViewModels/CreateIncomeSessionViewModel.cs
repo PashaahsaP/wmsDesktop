@@ -22,7 +22,7 @@ using WmsDesktop.Windows;
 
 namespace WmsDesktop.ViewModels
 {
-    internal class CreateSessionViewModel : INotifyPropertyChanged,IState
+    internal class CreateIncomeSessionViewModel : INotifyPropertyChanged,IState
     {
         public Filter Filter { get; set; } = new Filter(new List<IncomeItemEntity>(), new List<Barcode>());
         private Window _window;
@@ -127,7 +127,7 @@ namespace WmsDesktop.ViewModels
         public List<Cell> IncomeCells {  get; set; } = new List<Cell>();
         public List<Cell> Cells { get; set; } = new List<Cell>();
         public List<Barcode> Barcodes {  get; set; } = new List<Barcode>();
-        public PageStates PageState => PageStates.CreateSessionPage;
+        public PageStates PageState => PageStates.CreateIncomeSessionPage;
         public bool IsSupplierSelected
         {
             get
@@ -155,7 +155,7 @@ namespace WmsDesktop.ViewModels
 
 
 
-        public CreateSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches, string cellTypes, Window window)
+        public CreateIncomeSessionViewModel(string catalogAndSuppliers, string suppliers, string barcodes, string incomeCells, string batches, string cellTypes, Window window)
         {
             _window = window;
             Items = new ObservableCollection<IncomeItemVm>();
@@ -238,7 +238,8 @@ namespace WmsDesktop.ViewModels
                     var incomeItems = new List<IncomeItem>();
                     foreach (var item in resultGoods)
                     {
-                        item.Id = (await client.SendGoods(item, ip)).id;
+                        var id = await client.SendGoods(item, ip);
+                        item.Id = id.id;
                         incomeItems.Add(
                             new IncomeItem()
                             {
@@ -326,7 +327,8 @@ namespace WmsDesktop.ViewModels
                         var updateCollection = new ObservableCollection<IncomeItemVm>();
                         foreach (var item in innerDialog.Result)
                         {
-                            if((item.Sku != ""  && CatalogData.Any(inner => inner.Sku == item.Sku)) || (Barcodes.Any(bar => bar.Name == item.Barcode) && item.Barcode != ""))
+                            if((item.Sku != ""  && CatalogData.Any(inner => inner.Sku == item.Sku))
+                            || (Barcodes.Any(bar => bar.Name == item.Barcode) && item.Barcode != ""))
                             {
                                 updateCollection.Add(item);
                             }
@@ -556,7 +558,7 @@ namespace WmsDesktop.ViewModels
             return t;
         }
 
-        public static async Task<CreateSessionViewModel> CreateAsync(Window window)
+        public static async Task<CreateIncomeSessionViewModel> CreateAsync(Window window)
         {
             var jsonIp = File.ReadAllText("config.json");
             var setting = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonIp);
@@ -567,7 +569,7 @@ namespace WmsDesktop.ViewModels
             var barcodes = await client.GetBarcodes(ip);
             var incomeCells = await client.GetIncomeCells(ip);
             var cellTypes = await client.GetCellTypes(ip);
-            return new CreateSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches,cellTypes, window);
+            return new CreateIncomeSessionViewModel(catalogAndSuppliers, suppliers, barcodes, incomeCells, batches,cellTypes, window);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
